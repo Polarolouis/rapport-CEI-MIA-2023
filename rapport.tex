@@ -1,0 +1,111 @@
+
+\documentclass[12pt,a4paper]{rapport1}
+
+%====En-tête====
+% Ajout des packages
+\usepackage[french]{babel} % pour dire que le texte est en francais
+\usepackage{a4} % pour la taille
+\usepackage[T1]{fontenc} % pour les font postscript
+\usepackage[cyr]{aeguill} % Police vectorielle TrueType, guillemets francais
+\usepackage{epsfig} % pour gérer les images
+\usepackage{amsmath,amsthm} % très bon mode mathématique
+\usepackage{amsfonts,amssymb,bm, bbold}% permet la definition des ensembles
+\usepackage{float} % pour le placement des figure
+\usepackage{url} % pour une gestion efficace des url
+\usepackage{hyperref} % pour les hyperliens dans le document
+
+% Nouvelles commandes
+\newcommand{\Tau}{\mathcal{T}}
+
+% titre et auteur
+\title{Rapport de stage dans l'UMR MIA Paris-Saclay}
+\author{Louis Lacoste}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\chapter{Présentation de l'UMR}
+
+\chapter{Adaption au cas bipartite : colBiSBM}
+
+\section{Etape VE de l'algorithme}
+Formule du point fixe pour la distribution de Bernoulli
+% Repasser à l'exponentielle pour la présentation du point fixe
+\begin{itemize}
+    \item \textit{iid} :
+    \[ \log(\bm{\tau}^{m,1}) = ~^{t}\log(\pi) + (\text{Mask}^{m} \odot A^{m})
+        \bm{\tau}^{m,2} ~^{t}(\text{logit}(\alpha)) + \text{Mask}^{m} 
+        \bm{\tau}^{m,2} ~^{t}\log(\bm{1} - \alpha) \]
+    \[ \log(\bm{\tau}^{m,2}) = ~^{t}\log(\rho) + ~^{t}(\text{Mask}^{m} \odot A^{m}) 
+    \bm{\tau}^{m,1} \text{logit}(\alpha) + ~^{t}\text{Mask}^{m} 
+        \bm{\tau}^{m,1} \log(\bm{1} - \alpha) \]
+    \item $\rho\pi$ :
+        \[ \log(\bm{\tau}^{m,1}) = ~^{t}\log(\pi^{m}) + (\text{Mask}^{m} \odot A^{m})
+            \bm{\tau}^{m,2} ~^{t}(\text{logit}(\alpha)) + \text{Mask}^{m} 
+            \bm{\tau}^{m,2} ~^{t}\log(\bm{1} - \alpha) \]
+        \[ \log(\bm{\tau}^{m,2}) = ~^{t}\log(\rho^{m}) + ~^{t}(\text{Mask}^{m} \odot A^{m}) 
+        \bm{\tau}^{m,1} \text{logit}(\alpha) + ~^{t}\text{Mask}^{m} 
+            \bm{\tau}^{m,1} \log(\bm{1} - \alpha) \]
+\end{itemize}
+
+avec $\text{Mask}^{m}$ la matrice qui contient des $0$ si la valeur est un NA et
+des $1$ sinon.
+
+\section{Calcul des pénalités}
+
+\paragraph*{\textit{iid-colBiSBM}}
+Dans le cas \textit{iid-colBiSBM} les pénalités sont à adapter de la manière 
+suivante :
+
+\begin{itemize}
+    \item Pour les $\pi$ et les $\rho$ :
+    \[\text{pen}_{\pi}(Q_1) = (Q_1 - 1)\log(\sum_{m=1}^{M}n_{r}^{(m)})\]
+    \[\text{pen}_{\rho}(Q_2) = (Q_2 - 1)\log(\sum_{m=1}^{M}n_{c}^{(m)})\]
+    \item Pour les $\alpha$ :
+    \[\text{pen}_{\alpha}(Q_1, Q_2) = Q_1 \times Q_2 \log(N_M)\]
+    avec
+    \[ N_M = \sum_{m = 1}^{M} n_{r}^{(m)} \times n_{c}^{(m)} \]
+\end{itemize}
+Le BIC-L devient donc :
+\[ \text{BIC-L}(\bm{X},Q_1, Q_2) = \max_{\theta} \mathcal{J} (\mathcal{\hat{R}}, \bm{\theta}) 
+- \frac{1}{2} [\text{pen}_{\pi}(Q_1) + \text{pen}_{\rho}(Q_2) + \text{pen}_{\alpha}(Q_1, Q_2)]\]
+
+\paragraph*{\textit{$\rho\pi$-colBiSBM}}
+Dans le cas \textit{$\rho\pi$-colBiSBM} les pénalités deviennent les suivantes :
+
+\begin{itemize}
+    \item Pour les pénalités dûes aux supports :
+    \[ \text{pen}_{S_1}(Q_1) = -2 \log p_{Q_1} (S_1) \]
+    \[ \text{pen}_{S_2}(Q_2) = -2 \log p_{Q_2} (S_2) \]
+    avec
+    \[ \log p_{Q_1}(S_1) = - M \log(Q_1) - \sum_{m=1}^{M} \log {Q_1 \choose Q_1^{(m)}} \]
+    \[ \log p_{Q_2}(S_2) = - M \log(Q_2) - \sum_{m=1}^{M} \log {Q_2 \choose Q_2^{(m)}} \]
+    \item Pour les pénalités dûes aux $\rho$ et $\pi$ :
+    \[ \text{pen}_{\pi}(Q_1, S_1) = \sum_{m=1}^{M} (Q_{1}^{(m)} - 1) \log n_{r}^{(m)} \]
+    \[ \text{pen}_{\rho}(Q_2, S_2) = \sum_{m=1}^{M} (Q_{2}^{(m)} - 1) \log n_{c}^{(m)} \]
+    \item Pour les pénalités dûes aux $\alpha$ :
+    \[ \text{pen}_{\alpha}(Q_1, Q_2, S_1, S_2) = (\sum_{q=1}^{Q_1} \sum_{r=1}^{Q_2} \mathbb{1}_{(S_1)'S_2 > 0}) \log (N_M) \]
+\end{itemize}
+Et alors le BIC-L est égal à :
+\[
+    \begin{aligned}
+        \text{BIC-L}(\bm{X},Q_1, Q_2) = 
+        \max_{S_1,S_2} [
+            & \max_{\theta_{S_1,S_2} \in \Theta_{S_1,S_2}} \mathcal{J}(\mathcal{\hat{R}},\theta_{S_1,S_2})\\
+            - \frac{1}{2} & (\text{pen}_{\pi}(Q_1, S_1)  + \text{pen}_{\rho}(Q_2, S_2)\\
+            &+ \text{pen}_{\alpha}(Q_1, Q_2, S_1, S_2)\\
+            &+ \text{pen}_{S_1}(Q_1) + \text{pen}_{S_2}(Q_2))]\\
+    \end{aligned}
+\]
+
+\section{Exploration de l'espace latent}
+\subsection{Initialisation et appariemment des modèles}
+
+\subsection{Exploration gloutonne pour trouver une estimation du mode}
+
+\subsection{Fenêtre glissante pour mettre à jour les clusterings et les BIC-L}
+
+\listoffigures
+\listoftables
+\end{document}
