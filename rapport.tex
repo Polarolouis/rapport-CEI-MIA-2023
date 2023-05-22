@@ -10,6 +10,8 @@
 \usepackage{epsfig} % pour gérer les images
 \usepackage{amsmath,amsthm} % très bon mode mathématique
 \usepackage{amsfonts,amssymb,bm, bbold}% permet la definition des ensembles
+\usepackage{algorithm2e} % pour les algorithmes
+\usepackage{algpseudocode} % pour les algorithmes
 \usepackage{float} % pour le placement des figure
 \usepackage{url} % pour une gestion efficace des url
 \usepackage{hyperref} % pour les hyperliens dans le document
@@ -34,9 +36,9 @@ Formule du point fixe pour la distribution de Bernoulli
 % Repasser à l'exponentielle pour la présentation du point fixe
 \begin{itemize}
     \item \textit{iid} :
-    \[ \log(\bm{\tau}^{m,1}) = ~^{t}\log(\pi) + (\text{Mask}^{m} \odot A^{m})
+    \[ \bm{\tau}^{m,1} = ~^{t}\pi + \exp[(\text{Mask}^{m} \odot A^{m})
         \bm{\tau}^{m,2} ~^{t}(\text{logit}(\alpha)) + \text{Mask}^{m} 
-        \bm{\tau}^{m,2} ~^{t}\log(\bm{1} - \alpha) \]
+        \bm{\tau}^{m,2} ~^{t}\log(\bm{1} - \alpha)] \]
     \[ \log(\bm{\tau}^{m,2}) = ~^{t}\log(\rho) + ~^{t}(\text{Mask}^{m} \odot A^{m}) 
     \bm{\tau}^{m,1} \text{logit}(\alpha) + ~^{t}\text{Mask}^{m} 
         \bm{\tau}^{m,1} \log(\bm{1} - \alpha) \]
@@ -52,45 +54,48 @@ Formule du point fixe pour la distribution de Bernoulli
 avec $\text{Mask}^{m}$ la matrice qui contient des $0$ si la valeur est un NA et
 des $1$ sinon.
 
-\section{Calcul des pénalités}
+\section{M step of the algorithm}
+
+\section{Computation of the variational bound}
+
+\section{Penalties}
 
 \paragraph*{\textit{iid-colBiSBM}}
-Dans le cas \textit{iid-colBiSBM} les pénalités sont à adapter de la manière 
-suivante :
+For the \textit{iid-colBiSBM} the penalties were modified in the following way :
 
 \begin{itemize}
-    \item Pour les $\pi$ et les $\rho$ :
+    \item For the $\pi$s and $\rho$s:
     \[\text{pen}_{\pi}(Q_1) = (Q_1 - 1)\log(\sum_{m=1}^{M}n_{r}^{(m)})\]
     \[\text{pen}_{\rho}(Q_2) = (Q_2 - 1)\log(\sum_{m=1}^{M}n_{c}^{(m)})\]
-    \item Pour les $\alpha$ :
+    \item For the $\alpha$s :
     \[\text{pen}_{\alpha}(Q_1, Q_2) = Q_1 \times Q_2 \log(N_M)\]
     avec
     \[ N_M = \sum_{m = 1}^{M} n_{r}^{(m)} \times n_{c}^{(m)} \]
 \end{itemize}
-Le BIC-L devient donc :
-\[ \text{BIC-L}(\bm{X},Q_1, Q_2) = \max_{\theta} \mathcal{J} (\mathcal{\hat{R}}, \bm{\theta}) 
+And thus the $BIC-L$ formula is now:
+\[ \text{$BIC-L$}(\bm{X},Q_1, Q_2) = \max_{\theta} \mathcal{J} (\mathcal{\hat{R}}, \bm{\theta}) 
 - \frac{1}{2} [\text{pen}_{\pi}(Q_1) + \text{pen}_{\rho}(Q_2) + \text{pen}_{\alpha}(Q_1, Q_2)]\]
 
 \paragraph*{\textit{$\rho\pi$-colBiSBM}}
-Dans le cas \textit{$\rho\pi$-colBiSBM} les pénalités deviennent les suivantes :
+For the \textit{$\rho\pi$-colBiSBM} the penalties are the following:
 
 \begin{itemize}
-    \item Pour les pénalités dûes aux supports :
+    \item The support penalties are:
     \[ \text{pen}_{S_1}(Q_1) = -2 \log p_{Q_1} (S_1) \]
     \[ \text{pen}_{S_2}(Q_2) = -2 \log p_{Q_2} (S_2) \]
-    avec
+    with
     \[ \log p_{Q_1}(S_1) = - M \log(Q_1) - \sum_{m=1}^{M} \log {Q_1 \choose Q_1^{(m)}} \]
     \[ \log p_{Q_2}(S_2) = - M \log(Q_2) - \sum_{m=1}^{M} \log {Q_2 \choose Q_2^{(m)}} \]
-    \item Pour les pénalités dûes aux $\rho$ et $\pi$ :
+    \item Penalties for the $\rho$s and $\pi$s:
     \[ \text{pen}_{\pi}(Q_1, S_1) = \sum_{m=1}^{M} (Q_{1}^{(m)} - 1) \log n_{r}^{(m)} \]
     \[ \text{pen}_{\rho}(Q_2, S_2) = \sum_{m=1}^{M} (Q_{2}^{(m)} - 1) \log n_{c}^{(m)} \]
-    \item Pour les pénalités dûes aux $\alpha$ :
+    \item Penalties for the $\alpha$s:
     \[ \text{pen}_{\alpha}(Q_1, Q_2, S_1, S_2) = (\sum_{q=1}^{Q_1} \sum_{r=1}^{Q_2} \mathbb{1}_{(S_1)'S_2 > 0}) \log (N_M) \]
 \end{itemize}
-Et alors le BIC-L est égal à :
+And the corresponding $BIC-L$ formula:
 \[
     \begin{aligned}
-        \text{BIC-L}(\bm{X},Q_1, Q_2) = 
+        \text{$BIC-L$}(\bm{X},Q_1, Q_2) = 
         \max_{S_1,S_2} [
             & \max_{\theta_{S_1,S_2} \in \Theta_{S_1,S_2}} \mathcal{J}(\mathcal{\hat{R}},\theta_{S_1,S_2})\\
             - \frac{1}{2} & (\text{pen}_{\pi}(Q_1, S_1)  + \text{pen}_{\rho}(Q_2, S_2)\\
@@ -99,12 +104,67 @@ Et alors le BIC-L est égal à :
     \end{aligned}
 \]
 
-\section{Exploration de l'espace latent}
-\subsection{Initialisation et appariemment des modèles}
+\section{Latent space exploration and model selection}
+In order to explorer the bi-dimensional latent space $(Q_1,Q_2)$
+we use the following strategies.
 
-\subsection{Exploration gloutonne pour trouver une estimation du mode}
+\subsection{Model selection}
+In the following steps the model selection consists of using the $BIC-L$ 
+criterion to select the model. We choose among the proposed models the one that
+maximizes the $BIC-L$
 
-\subsection{Fenêtre glissante pour mettre à jour les clusterings et les BIC-L}
+\subsection{Initialization and pairing of the models}
+First to combine the information from the $M$ networks we fit a collection model
+for each network at the two points $Q = (1, 2)$ and $Q = (2, 1)$. Using the 
+previously described VEM algorithm we obtain for each network its parameters 
+($\rho,\pi,\alpha$).
+
+We then compute the marginal laws for each dimension, for each network. Then 
+we order the network blocks by the probabilities obtained in decreasing order.
+\begin{itemize}
+    \item For the memberships on the columns: 
+    $col~order_m = order\left(\pi_m \times \alpha_m\right)$ 
+    \item For the memberships on the rows:
+    $row~order_m = order\left(\rho_m \times ~^{t}(\alpha_m)\right)$ 
+\end{itemize}
+
+Using this order we relabel the memberships for the $M$ fitted collection of a
+single network.
+Then we use the $M$ memberships to fit a collection containing the $M$ networks.
+\subsection{Greedy exploration to find an estimation of the mode}
+Using the previously fitted models for $Q = (1,2)$ and $Q = (2,1)$ we choose to
+perform a greedy exploration to find a first mode.
+
+Meaning that for a given $Q = (Q_1, Q_2)$ we will compute all the possible 
+memberships for the points $Q = (Q_1 + 1, Q_2)$ and $Q = (Q_1, Q_2 + 1)$, fit
+the corresponding models and choose the one that maximizes the $BIC-L$ as the 
+next point from which to repeat the procedure. We repeat the procedure until the
+$BIC-L$ stops increasing $3$ times in a row.
+
+% \begin{algorithm}
+%     \caption{Greedy exploration of the latent space $Q_1$, $Q_2$}
+%     \label{alg:greedy_explotation}
+%     \textbf{Commencer} initialisation
+%     \begin{itemize}
+%         \item Pour chacun des $M$ réseaux, inférer les paramètre avec $Q_1 = q_{1,0}$ et $Q_2 = q_{2,0}$
+%         \item Apparier les clusterings obtenus en utilisant les probabilités marginales, afin de faire correspondre les étiquettes des clusters obtenus.
+%     \end{itemize}
+%     \textbf{tant que} le BICL du meilleur voisin sélectionné à chaque itération n'a pas augmenté durant 3 itérations consécutives, continuer :
+%     \begin{itemize}
+%         \item Calculer toutes les séparations possible de chacun des
+%     \end{itemize}
+% \end{algorithm}
+
+When this first estimation of the $BIC-L$ mode has been find we apply the moving
+window on it.
+\subsection{Fenêtre glissante pour mettre à jour les clusterings et les $BIC-L$}
+
+\section{Clustering des réseaux}
+\subsection{Adaptation de la distance entre les paramètres du modèle}
+La distance pondère désormais avec les $\pi$ et les $\rho$.
+\[ 
+    D_{\mathcal{M}}(m,m') = \sum_{q = 1}^{Q_1} \sum_{r = 1}^{Q_2} \max(\widetilde{\pi}_{q}^{m}, \widetilde{\pi}_{q}^{m'}) \left( \frac{\widetilde{\alpha}_{qr}^{m}}{\widehat{\delta}_{m}} - \frac{\widetilde{\alpha}_{qr}^{m'}}{\widehat{\delta}_{m'}}\right)^{2} \max(\widetilde{\rho}_{r}^{m}, \widetilde{\rho}_{r}^{m'}) 
+\]
 
 \listoffigures
 \listoftables
