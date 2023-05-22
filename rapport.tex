@@ -1,5 +1,4 @@
-
-\documentclass[12pt,a4paper]{rapport1}
+\documentclass[12pt,a4paper]{report}
 
 %====En-tête====
 % Ajout des packages
@@ -15,6 +14,7 @@
 \usepackage{float} % pour le placement des figure
 \usepackage{url} % pour une gestion efficace des url
 \usepackage{hyperref} % pour les hyperliens dans le document
+\usepackage{tocbibind} % Pour avoir des index pour table des matières, biblio
 
 % Nouvelles commandes
 \newcommand{\Tau}{\mathcal{T}}
@@ -29,10 +29,10 @@
 
 \chapter{Présentation de l'UMR}
 
-\chapter{Adaption au cas bipartite : colBiSBM}
+\chapter{Adjustment of colSBM to the bipartite case: colBiSBM}
 
-\section{Etape VE de l'algorithme}
-Formule du point fixe pour la distribution de Bernoulli
+\section{Variational Expectation step}
+Fixed point formula for the Bernoulli distribution:
 % Repasser à l'exponentielle pour la présentation du point fixe
 \begin{itemize}
     \item \textit{iid} :
@@ -157,15 +157,79 @@ $BIC-L$ stops increasing $3$ times in a row.
 
 When this first estimation of the $BIC-L$ mode has been find we apply the moving
 window on it.
-\subsection{Fenêtre glissante pour mettre à jour les clusterings et les $BIC-L$}
+\subsection{Moving window to update the block memberships and the $BIC-L$}
+The \emph{moving window} is used to update the block memberships on rows and 
+columns and fit new models with those changes.
+To define the window, we use a center point and a \emph{depth}, giving us the 
+bottom left corner ($Q_{1,center} - depth, Q_{2,center} - depth$) and the top right corner of the 
+window ($Q_{1,center} + depth, Q_{2,center} + depth$). All the points in this square will be 
+updated and contribute to the update of the others.
+This procedure is repeated until convergence of the $BIC-L$.
 
-\section{Clustering des réseaux}
-\subsection{Adaptation de la distance entre les paramètres du modèle}
-La distance pondère désormais avec les $\pi$ et les $\rho$.
+The procedure consists of two alternating steps:
+\begin{itemize}
+    \item the \emph{forward pass}: repeatedly computing the possible splits to 
+    fit the current model.
+    \item the \emph{backward pass}: computing the possible merges to fit the current model.
+\end{itemize}
+
+\paragraph*{Forward pass} The forward pass consists for a model at $(Q_1, Q_2)$ 
+to compute the possible splits from the block memberships of its "predecessors". 
+The predecessors are the point at the left $(Q_1 - 1, Q_2)$ and below 
+$(Q_1, Q_2 - 1)$ the current model (if they exist). To update the current model,
+we take its predecessors block memberships and try to split one of the blocks in
+two. Then the current model is fitted using this clustering as a starting 
+clustering. Once all the possible splits are fitted, they are compared, keeping 
+the best, in the sense of the $BIC-L$. If a model was already present it is also
+compared and the best is chosen as the model for this round at $(Q_1, Q_2)$.\\
+The procedure then repeats for the point at $(Q_1 + 1, Q_2)$ until it reaches 
+$(Q_{1,center} + depth, Q_2)$ from which it repeats from 
+$(Q_{1,center} - depth, Q_2 + 1)$. This repeats until computing the best model
+for $(Q_{1,center} + depth, Q_{2,center} + depth)$.
+\textit{Note on the initialization:} The forward pass starts from the point 
+$(Q_{1,center} + depth, Q_{2,center} + depth)$, so this points needs to have at 
+least a model fitted. In the best case, the greedy exploration will have visited
+this point. But if the point has not been visited, a model will be fitted from
+a spectral initialization (i.e the block memberships is computed by using a 
+spectral clustering). From this point, the next model will have at least one
+predecessor and the procedure can iterate.
+
+\paragraph*{Backward pass} The backward pass consists for a model at $(Q_1, Q_2)$ 
+to compute the possible merges from the block memberships of its "predecessors". 
+The predecessors are the point at the right $(Q_1 + 1, Q_2)$ and on top 
+$(Q_1, Q_2 + 1)$ of the current model (if the predecessors exist). To update the
+current model, we take its predecessors block memberships and try to merge two 
+blocks in one. Then the current model is fitted using this clustering as
+a starting clustering. Once all the possible merges are fitted, they are
+compared, keeping the best, in the sense of the $BIC-L$.
+If a model was already present it is also
+compared and the best is chosen as the model for this round at $(Q_1, Q_2)$.\\
+The procedure then repeats for the point at $(Q_1 - 1, Q_2)$ until it reaches 
+$(Q_{1,center} - depth, Q_2)$ from which it repeats from 
+$(Q_{1,center} - depth, Q_2 - 1)$. This repeats until computing the best model
+for ($Q_{1,center} - depth, Q_{2,center} - depth$).
+\textit{Note on the initialization:} The backward pass starts from
+$(Q_{1,center} + depth, Q_{2,center} + depth)$, we know it was initialized at
+least by the forward pass, no special case here.\\
+
+At the end of the moving window pass, the model of max $BIC-L$ is the new best
+fit and the procedure can repeat until convergence.
+
+\section{Networks clustering}
+As in \cite{chabert-liddellLearningCommonStructures2023} we use a recursive
+algorithm to determine the best clustering of the given networks. The procedure
+being the same, only the technical modifications for the bipartite case will be
+explained below.
+\subsection{Distance between two networks}
+The distance weights uses $\pi$ and $\rho$.
 \[ 
     D_{\mathcal{M}}(m,m') = \sum_{q = 1}^{Q_1} \sum_{r = 1}^{Q_2} \max(\widetilde{\pi}_{q}^{m}, \widetilde{\pi}_{q}^{m'}) \left( \frac{\widetilde{\alpha}_{qr}^{m}}{\widehat{\delta}_{m}} - \frac{\widetilde{\alpha}_{qr}^{m'}}{\widehat{\delta}_{m'}}\right)^{2} \max(\widetilde{\rho}_{r}^{m}, \widetilde{\rho}_{r}^{m'}) 
 \]
 
+
+\nocite{*}
+\bibliographystyle{plain}
+\bibliography{references.bib}
 \listoffigures
 \listoftables
 \end{document}
