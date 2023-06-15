@@ -2,7 +2,7 @@
 
 %====En-tête====
 % Ajout des packages
-\usepackage[french]{babel} % pour dire que le texte est en francais
+\usepackage[english]{babel} % pour dire que le texte est en francais
 \usepackage{a4} % pour la taille
 \usepackage[T1]{fontenc} % pour les font postscript
 \usepackage[cyr]{aeguill} % Police vectorielle TrueType, guillemets francais
@@ -15,6 +15,39 @@
 \usepackage{url} % pour une gestion efficace des url
 \usepackage{hyperref} % pour les hyperliens dans le document
 \usepackage{tocbibind} % Pour avoir des index pour table des matières, biblio
+\usepackage{tikz} % For graph plots
+
+%% Bibliography
+\usepackage[style=authoryear]{biblatex}
+\addbibresource{references.bib}
+
+
+%% Tikz Related
+\usetikzlibrary{calc,shapes,backgrounds,arrows,automata,shadows,positioning}
+\usetikzlibrary{arrows,shapes,positioning,shadows,trees,calc,backgrounds,automata,positioning}
+
+
+
+\tikzset{
+    basic/.style  = {draw, text width=3cm, font=\sffamily, rectangle},
+    root/.style   = {basic, rounded corners=2pt, thin, align=center,
+            fill=green!30},
+    level 2/.style = {basic, rounded corners=6pt, thin,align=center, fill=green!60,
+            text width=8em},
+    level 3/.style = {basic, thin, align=left, fill=pink!60, text width=3.5cm}
+}
+
+
+% pour tickz multilevel
+\definecolor{redorg}{RGB}{215,48,39}
+\definecolor{orangeorg}{RGB}{253,174,97}
+\definecolor{blueind}{RGB}{69,117,233}
+\definecolor{cyanind}{RGB}{116,173,209}
+\definecolor{greenind}{RGB}{112,130,56}
+\definecolor{grassgreen}{RGB}{124, 252, 0}
+\definecolor{shamrockgreen}{RGB}{0, 158, 96}
+\definecolor{peargreen}{RGB}{201, 204, 63}
+\definecolor{gray}{RGB}{128,128,128}
 
 % Nouvelles commandes
 \newcommand{\Tau}{\mathcal{T}}
@@ -31,7 +64,155 @@
 
 \chapter{Context}
 
-Develop on what is the SBM, colSBM, etc.
+\section{Usage and importance of bipartite graphs}
+
+Bipartite graphs, denoted as $G = (U,V,E)$ with $U$ and $V$ two disjoint and
+independent sets of vertices and $E$ the set of edges connecting $U$ vertices to
+$V$ vertices.
+
+\begin{minipage}{0.5\linewidth}
+    \centering
+    Bipartite network\\
+\begin{tikzpicture}[scale=.6]
+    \tikzstyle{every edge}=[-,>=stealth',shorten >=1pt,auto,draw,line width=1.5pt]
+    \tikzstyle{every state}=[draw, text=white,scale=0.95, transform shape]
+    \tikzstyle{every state}=[draw=none,text=white,scale=0.75, transform shape]
+    \tikzstyle{every node}=[fill=orangeorg]
+
+    \node[state, draw=black!50] (A1) at (0,5) {\textbf{R1}};
+    \node[state, draw=black!50] (A2) at (2.5,5) {\textbf{R2}};
+    \node[state, draw=black!50] (A3) at (5,5) {\textbf{R3}};
+
+    \tikzstyle{every node}=[fill=greenind, shape=rectangle]
+    \tikzstyle{every state}=[draw=none,text=white,scale=0.75, transform shape, shape=rectangle]
+    \node[state, draw=black!50] (B1) at (0,0) {\textbf{C1}};
+    \node[state, draw=black!50] (B2) at (1.25,0) {\textbf{C2}};
+    \node[state, draw=black!50] (B3) at (2.5,0) {\textbf{C3}};
+    \node[state, draw=black!50] (B4) at (3.75,0) {\textbf{C4}};
+    \node[state, draw=black!50] (B5) at (5,0) {\textbf{C5}};
+    \path (A1) edge [] (B1);
+    \path (A1) edge  (B2);
+    \path (A1) edge  (B3);
+    \path (A1) edge  (B4);
+    \path (A2) edge  (B3);
+    \path (A2) edge  (B4);
+    \path (A3) edge  (B5);
+    \path (A2) edge  (B5);
+\end{tikzpicture}
+\end{minipage}
+\begin{minipage}{0.5\linewidth}
+\begin{center}
+Incidence matrix
+$B=\left(
+\begin{array}{rrrrr}
+1 &   1 &   1 &   1 &   0 \\ 
+    0 &   0 &   1 &   1 &   1 \\ 
+    0 &   0 &   0 &   0 &   1 \\  
+\end{array}\right)
+$\\
+\end{center}
+\end{minipage}
+
+
+
+This representation can be used to represent various forms of interactions were
+two kinds of ''actors'' interact. Those interactions can be binary or valued and
+a numeric representation is the incidence matrix, in the above example $B$.\\
+
+Among the use case of bipartite graphs one can find the Netflix Problem, which
+was a prize organized by Netflix to improve its Recommender system. The row 
+nodes are the movies and the columns are the user, at the intersection the value
+is the review of the user $j$ for the movie $i$.\\
+
+Another use is the representation of ecological interactions like 
+plant-pollinator \parencite{ramos-jilibertoTopologicalChangeAndean2010}, birds-seed
+dispersion, prey-predator or
+host-parasite \parencite{kaszewska-gilasGlobalStudiesHostParasite2021}.
+In those cases, the rows are pollinator species and the columns are plant 
+species, and the intersection is a value, binary if it is a presence/absence or
+a value if it is an abundance count.
+
+Bipartite graphs are widely used in biology, in various fields, among which the
+previously cited ecological networks, but also in medicine with biomedical
+networks, biomolecular networks or epidemiological 
+networks. \parencite{pavlopoulosBipartiteGraphsSystems2018}
+
+\section{Latent Block Model}
+
+The Latent Block Model (LBM) introduced by \cite{govaertLatentBlockModel2010} 
+adapt the Stochastic Block Model (SBM) 
+(\cite{hollandStochasticBlockmodelsFirst1983};\cite{snijdersEstimationPredictionStochastic1997})
+to bipartite graphs. 
+
+
+This model supposes that:
+\begin{itemize}
+    \item Row nodes are members of row blocks and column nodes are members of 
+    column blocks.
+    \item The connectivity of two individuals is determined by their block 
+    memberships.
+    \item An interaction can only occur between a row and a column node.
+\end{itemize}
+
+\begin{figure}[H]
+    \center
+    \begin{tikzpicture}[scale=.6]
+        \tikzstyle{every state}=[draw, text=white,scale=0.95, transform shape]
+        \tikzstyle{every state}=[draw=none,text=white,scale=0.75, transform shape]
+        
+        \tikzstyle{every node}=[fill=blueind]
+        \node[state, draw=black!50] (R11) at (0,5) {\textbf{R11}};
+        \node[state, draw=black!50] (R12) at (1,5) {\textbf{R12}};
+        \node[state, draw=black!50] (R13) at (2,5) {\textbf{R13}};
+        
+        \tikzstyle{every node}=[fill=cyanind]
+        \node[state, draw=black!50] (R21) at (6,5) {\textbf{R21}};
+        \node[state, draw=black!50] (R22) at (7,5) {\textbf{R22}};
+        
+        \tikzstyle{every node}=[fill=orangeorg]
+        \node[state, draw=black!50] (R31) at (10,5) {\textbf{R3}};
+    
+        \tikzstyle{every node}=[fill=grassgreen, shape=rectangle]
+        \tikzstyle{every state}=[draw=none,text=white,scale=0.75, transform shape, shape=rectangle]
+        \node[state, draw=black!50] (B1) at (0,0) {\textbf{C11}};
+        \node[state, draw=black!50] (B2) at (1,0) {\textbf{C12}};
+        \tikzstyle{every node}=[fill=shamrockgreen, shape=rectangle]
+        \node[state, draw=black!50] (B3) at (4,0) {\textbf{C21}};
+        \node[state, draw=black!50] (B4) at (5,0) {\textbf{C22}};
+        \tikzstyle{every node}=[fill=peargreen, shape=rectangle]
+        \node[state, draw=black!50] (B5) at (10,0) {\textbf{C31}};
+
+        \tikzstyle{every edge}=[-,>=stealth',shorten >=1pt,auto,draw,line width=1.5pt,draw opacity=0.2]
+
+        \path (R11) edge[-,>=stealth',shorten >=1pt,auto,draw=gray,line width=1.5pt, fill=gray, opacity=1] node[anchor=center, fill=none] {$\alpha_{{\color{blueind}\bullet}{\color{grassgreen}\bullet}}$} (B1);
+        \path (R11) edge (B2);
+        \path (R11) edge  (B3);
+        \path (R11) edge  (B4);
+
+        \path (R12) edge [] (B1);
+        \path (R12) edge  (B2);
+        \path (R12) edge  (B3);
+        \path (R12) edge  (B4);
+
+        \path (R13) edge [] (B1);
+        \path (R13) edge  (B2);
+        \path (R13) edge  (B3);
+        \path (R13) edge[-,>=stealth',shorten >=1pt,auto,draw=gray,line width=1.5pt, fill=gray, opacity=1] node[anchor=center, fill=none] {$\alpha_{{\color{blueind}\bullet}{\color{shamrockgreen}\bullet}}$} (B4);
+
+        \path (R21) edge[-,>=stealth',shorten >=1pt,auto,draw=gray,line width=1.5pt, fill=gray, opacity=1] node[anchor=center, fill=none] {$\alpha_{{\color{cyanind}\bullet}{\color{shamrockgreen}\bullet}}$} (B3);
+        \path (R21) edge  (B4);
+        \path (R21) edge  (B5);
+        
+        \path (R22) edge  (B3);
+        \path (R22) edge  (B4);
+        \path (R22) edge[-,>=stealth',shorten >=1pt,auto,draw=gray,line width=1.5pt, fill=gray, opacity=1] node[anchor=center, fill=none] {$\alpha_{{\color{cyanind}\bullet}{\color{peargreen}\bullet}}$} (B5);
+
+        \path (R31) edge[-,>=stealth',shorten >=1pt,auto,draw=gray,line width=1.5pt, fill=gray, opacity=1] node[anchor=center, fill=none] {$\alpha_{{\color{orangeorg}\bullet}{\color{peargreen}\bullet}}$} (B5);
+
+    \end{tikzpicture}
+\caption[LBMvisu]{An LBM model visualization}
+\end{figure}
+
 
 \chapter{Adjustment of colSBM to the bipartite case: colBiSBM}
 
@@ -60,7 +241,7 @@ otherwise.
 
 \section{M step of the algorithm}
 
-Incorporate the equations from \cite{chabert-liddellLearningCommonStructures2023}
+Incorporate the equations from \parencite{chabert-liddellLearningCommonStructures2023}
 
 \section{Computation of the variational bound}
 
@@ -292,7 +473,7 @@ At the end of the moving window pass, the model of max BIC-L is the new best
 fit and the procedure can repeat until convergence.
 
 \section{Networks clustering}
-As in \cite{chabert-liddellLearningCommonStructures2023} we use a recursive
+As in \parencite{chabert-liddellLearningCommonStructures2023} we use a recursive
 algorithm to determine the best clustering of the given networks. The procedure
 being the same, only the technical modifications for the bipartite case will be
 explained below.
@@ -303,9 +484,7 @@ The distance weights uses $\pi$ and $\rho$.
 \]
 
 
-\nocite{*}
-\bibliographystyle{plain}
-\bibliography{references.bib}
+\printbibliography
 \listoffigures
 \listoftables
 \end{document}
