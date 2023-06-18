@@ -1,0 +1,223 @@
+\documentclass{beamer}
+\usetheme{Boadilla}
+
+% importations
+\usepackage[french]{babel} % pour dire que le texte est en francais
+\usepackage{csquotes}
+\usepackage[T1]{fontenc} % pour les font postscript
+\usepackage[cyr]{aeguill} % Police vectorielle TrueType, guillemets francais
+\usepackage{epsfig} % pour gérer les images
+\usepackage{amsmath,amsthm} % très bon mode mathématique
+\usepackage{amsfonts,amssymb,bm, bbold}% permet la definition des ensembles
+\usepackage{algorithm2e} % pour les algorithmes
+\usepackage{algpseudocode} % pour les algorithmes
+\usepackage{float} % pour le placement des figure
+\usepackage{url} % pour une gestion efficace des url
+\usepackage{hyperref}  % pour les hyperliens dans le document
+\usepackage{tikz} % For graph plots
+% bibliographie
+\usepackage[style=apa]{biblatex}
+\addbibresource{references.bib}
+
+
+% Tikz
+%% Tikz Related
+\usetikzlibrary{calc,shapes,backgrounds,arrows,automata,shadows,positioning}
+\usetikzlibrary{arrows,shapes,positioning,shadows,trees,calc,backgrounds,automata,positioning}
+
+
+
+\tikzset{
+    basic/.style  = {draw, text width=3cm, font=\sffamily, rectangle},
+    root/.style   = {basic, rounded corners=2pt, thin, align=center,
+            fill=green!30},
+    level 2/.style = {basic, rounded corners=6pt, thin,align=center, fill=green!60,
+            text width=8em},
+    level 3/.style = {basic, thin, align=left, fill=pink!60, text width=3.5cm}
+}
+% Couleurs
+% pour tickz multilevel
+\definecolor{redorg}{RGB}{215,48,39}
+\definecolor{orangeorg}{RGB}{253,174,97}
+
+\definecolor{blueind}{RGB}{69,117,233}
+\definecolor{cyanind}{RGB}{116,173,209}
+\definecolor{electricblue}{RGB}{125, 249, 255}
+
+\definecolor{greenind}{RGB}{112,130,56}
+
+\definecolor{burntorange}{RGB}{204, 85, 0}
+\definecolor{goldenyellow}{RGB}{255, 192, 0}
+\definecolor{peach}{RGB}{255, 229, 180}
+
+\definecolor{gray}{RGB}{128,128,128}
+
+
+\title{Séminaire des stagiaires}
+\subtitle{Adaptation de colSBM aux réseaux bipartites}
+\author[L. Lacoste]{Louis \textsc{Lacoste}}
+\date{29 juin 2023}
+
+\begin{document}
+
+% titre
+\begin{frame}
+\maketitle
+\end{frame}
+
+\section{Contexte du modèle}
+\begin{frame}
+    \frametitle{Contexte écologique}
+    \begin{itemize}
+        \item De nombreux réseaux disponibles \parencite{WebLifeEcological} et décrivant des interactions similaires
+        \item Re-grouper les réseaux selon leur similarité (\emph{clustering} de réseaux)
+        \item Déterminer des structures d'interactions fines de manière agnostique
+        \item Vérifier si le regroupement est lié à des co-variables
+    \end{itemize}
+\end{frame}
+\begin{frame}
+    \frametitle{Réseaux bipartites\footnote{Ou \emph{bipartis}. Voir \cite{larousseDefinitionsBipartiBipartite}.}}
+    \begin{columns}[c]
+    \begin{column}{0.48\textwidth}
+        \centering
+        Réseau bipartite\\
+    \begin{tikzpicture}[scale=.6]
+        \tikzstyle{every edge}=[-,>=stealth',shorten >=1pt,auto,draw,line width=1.5pt]
+        \tikzstyle{every state}=[draw, text=white,scale=0.95, transform shape]
+        \tikzstyle{every state}=[draw=none,text=white,scale=0.75, transform shape]
+        \tikzstyle{every node}=[fill=blueind]
+    
+        \node[state, draw=black!50] (A1) at (0,5) {\textbf{R1}};
+        \node[state, draw=black!50] (A2) at (2.5,5) {\textbf{R2}};
+        \node[state, draw=black!50] (A3) at (5,5) {\textbf{R3}};
+    
+        \tikzstyle{every node}=[fill=greenind, shape=rectangle]
+        \tikzstyle{every state}=[draw=none,text=white,scale=0.75, transform shape, shape=rectangle]
+        \node[state, draw=black!50] (B1) at (0,0) {\textbf{C1}};
+        \node[state, draw=black!50] (B2) at (1.25,0) {\textbf{C2}};
+        \node[state, draw=black!50] (B3) at (2.5,0) {\textbf{C3}};
+        \node[state, draw=black!50] (B4) at (3.75,0) {\textbf{C4}};
+        \node[state, draw=black!50] (B5) at (5,0) {\textbf{C5}};
+        \path (A1) edge [] (B1);
+        \path (A1) edge  (B2);
+        \path (A1) edge  (B3);
+        \path (A1) edge  (B4);
+        \path (A2) edge  (B3);
+        \path (A2) edge  (B4);
+        \path (A3) edge  (B5);
+        \path (A2) edge  (B5);
+    \end{tikzpicture}
+    \end{column}
+    \hfill
+    \begin{column}{0.48\linewidth}
+    Matrice d'incidence
+    \smallskip
+    $B=\left(
+    \begin{array}{rrrrr}
+    1 &   1 &   1 &   1 &   0 \\ 
+        0 &   0 &   1 &   1 &   1 \\ 
+        0 &   0 &   0 &   0 &   1 \\  
+    \end{array}\right)
+    $\\
+    \end{column}
+    \end{columns}
+    \smallskip
+    Permet de décrire toute interaction impliquant deux agents dont les rôles
+    sont de natures différentes.\\
+    Par exemple : hôtes-parasites, plantes-pollinisateurs, graines-disperseurs \dots
+\end{frame}
+\begin{frame}
+    \frametitle{Latent Block Model (LBM)}
+    Proposé par \cite{govaertEMAlgorithmBlock2005}.
+
+    \begin{figure}[H]
+        \center
+        \begin{tikzpicture}[scale=.6]
+            \tikzstyle{every state}=[draw, text=white,scale=0.95, transform shape]
+            \tikzstyle{every state}=[draw=none,text=white,scale=0.75, transform shape]
+            
+            \tikzstyle{every node}=[fill=blueind]
+            \node[state, draw=white, fill=none, text=black, scale=2] (pi1) at (1,5.7) {\textbf{$\pi_{{\color{blueind}\bullet}}$}};
+            \node[state, draw=black!50] (R11) at (0,5) {\textbf{R11}};
+            \node[state, draw=black!50] (R12) at (1,5) {\textbf{R12}};
+            \node[state, draw=black!50] (R13) at (2,5) {\textbf{R13}};
+            
+            \tikzstyle{every node}=[fill=cyanind]
+            \node[state, draw=white, fill=none, text=black, scale=2] (pi2) at (6.5,5.7) {\textbf{$\pi_{{\color{cyanind}\bullet}}$}};
+            \node[state, draw=black!50] (R21) at (6,5) {\textbf{R21}};
+            \node[state, draw=black!50] (R22) at (7,5) {\textbf{R22}};
+            
+            \tikzstyle{every node}=[fill=electricblue]
+            \node[state, draw=white, fill=none, text=black, scale=2] (pi3) at (10,5.7) {\textbf{$\pi_{{\color{electricblue}\bullet}}$}};
+            \node[state, draw=black!50] (R31) at (10,5) {\textbf{R31}};
+        
+            \tikzstyle{every node}=[fill=burntorange, shape=rectangle]
+            \node[state, draw=white, fill=none, text=black, scale=2] (pi3) at (0.5,-0.7) {\textbf{$\rho_{{\color{burntorange}\bullet}}$}};
+            \tikzstyle{every state}=[draw=none,text=white,scale=0.75, transform shape, shape=rectangle]
+            \node[state, draw=black!50] (B1) at (0,0) {\textbf{C11}};
+            \node[state, draw=black!50] (B2) at (1,0) {\textbf{C12}};
+            \tikzstyle{every node}=[fill=goldenyellow, shape=rectangle]
+            \node[state, draw=white, fill=none, text=black, scale=2] (pi3) at (4.5,-0.7) {\textbf{$\rho_{{\color{goldenyellow}\bullet}}$}};
+            \node[state, draw=black!50] (B3) at (4,0) {\textbf{C21}};
+            \node[state, draw=black!50] (B4) at (5,0) {\textbf{C22}};
+            \tikzstyle{every node}=[fill=peach, shape=rectangle]
+            \node[state, draw=white, fill=none, text=black, scale=2] (pi3) at (10,-0.7) {\textbf{$\rho_{{\color{peach}\bullet}}$}};
+            \node[state, draw=black!50] (B5) at (10,0) {\textbf{C31}};
+    
+            \tikzstyle{every edge}=[-,>=stealth',shorten >=1pt,auto,draw,line width=1.5pt,draw opacity=0.2]
+    
+            \path (R11) edge[-,>=stealth',shorten >=1pt,auto,draw=gray,line width=1.5pt, fill=gray, opacity=1] node[anchor=center, fill=none] {$\alpha_{{\color{blueind}\bullet}{\color{burntorange}\bullet}}$} (B1);
+            \path (R11) edge (B2);
+            \path (R11) edge  (B3);
+            \path (R11) edge  (B4);
+    
+            \path (R12) edge [] (B1);
+            \path (R12) edge  (B2);
+            \path (R12) edge  (B3);
+            \path (R12) edge  (B4);
+    
+            \path (R13) edge [] (B1);
+            \path (R13) edge  (B2);
+            \path (R13) edge  (B3);
+            \path (R13) edge[-,>=stealth',shorten >=1pt,auto,draw=gray,line width=1.5pt, fill=gray, opacity=1] node[anchor=center, fill=none] {$\alpha_{{\color{blueind}\bullet}{\color{goldenyellow}\bullet}}$} (B4);
+    
+            \path (R21) edge[-,>=stealth',shorten >=1pt,auto,draw=gray,line width=1.5pt, fill=gray, opacity=1] node[anchor=center, fill=none] {$\alpha_{{\color{cyanind}\bullet}{\color{goldenyellow}\bullet}}$} (B3);
+            \path (R21) edge  (B4);
+            \path (R21) edge  (B5);
+            
+            \path (R22) edge  (B3);
+            \path (R22) edge  (B4);
+            \path (R22) edge[-,>=stealth',shorten >=1pt,auto,draw=gray,line width=1.5pt, fill=gray, opacity=1] node[anchor=center, fill=none] {$\alpha_{{\color{cyanind}\bullet}{\color{peach}\bullet}}$} (B5);
+    
+            \path (R31) edge[-,>=stealth',shorten >=1pt,auto,draw=gray,line width=1.5pt, fill=gray, opacity=1] node[anchor=center, fill=none] {$\alpha_{{\color{electricblue}\bullet}{\color{peach}\bullet}}$} (B5);
+    
+        \end{tikzpicture}
+    \caption{Exemple de LBM}
+    \label{fig:LBMvisu}
+    \end{figure}
+
+\end{frame}
+\begin{frame}
+    \frametitle{Extension de \emph{colSBM} aux réseaux bipartites}
+    Le modèle \emph{colSBM} \parencite{chabert-liddellLearningCommonStructures2023}
+
+    \begin{equation*}
+        \overbrace{
+        }^\text{Collection}
+    \end{equation*}
+    
+
+\end{frame}
+\begin{frame}
+    \frametitle{Collections en bipartites}
+
+
+\end{frame}
+
+\section*{Bibliographie}
+\begin{frame}
+    \frametitle{Bibliographie}
+    \printbibliography
+\end{frame}
+
+\end{document}

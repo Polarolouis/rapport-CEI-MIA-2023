@@ -13,12 +13,12 @@
 \usepackage{algpseudocode} % pour les algorithmes
 \usepackage{float} % pour le placement des figure
 \usepackage{url} % pour une gestion efficace des url
-\usepackage{hyperref} % pour les hyperliens dans le document
+\usepackage[colorlinks,citecolor=blueind,urlcolor=blue,bookmarks=false,hypertexnames=true]{hyperref}  % pour les hyperliens dans le document
 \usepackage{tocbibind} % Pour avoir des index pour table des matières, biblio
 \usepackage{tikz} % For graph plots
 
 %% Bibliography
-\usepackage[style=authoryear]{biblatex}
+\usepackage[style=apa,citestyle=authoryear-comp]{biblatex}
 \addbibresource{references.bib}
 
 
@@ -82,7 +82,7 @@ $V$ vertices.
     \tikzstyle{every edge}=[-,>=stealth',shorten >=1pt,auto,draw,line width=1.5pt]
     \tikzstyle{every state}=[draw, text=white,scale=0.95, transform shape]
     \tikzstyle{every state}=[draw=none,text=white,scale=0.75, transform shape]
-    \tikzstyle{every node}=[fill=electricblue]
+    \tikzstyle{every node}=[fill=blueind]
 
     \node[state, draw=black!50] (A1) at (0,5) {\textbf{R1}};
     \node[state, draw=black!50] (A2) at (2.5,5) {\textbf{R2}};
@@ -143,7 +143,7 @@ networks, biomolecular networks or epidemiological
 networks. \parencite{pavlopoulosBipartiteGraphsSystems2018}
 
 
-Some interesting results can arise when using a tool widely used on a particular
+Some interesting results can arise when applying a tool widely used on a particular
 kind of interactions is used on another kind of interactions. Companies like
 Netflix use recommender system, to recommend another product to consumers based
 on their previous interactions.
