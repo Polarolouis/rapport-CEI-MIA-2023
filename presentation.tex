@@ -16,7 +16,7 @@
 \usepackage{hyperref}  % pour les hyperliens dans le document
 \usepackage{tikz} % For graph plots
 % bibliographie
-\usepackage[style=apa]{biblatex}
+\usepackage[style=apa,sorting=none]{biblatex}
 \addbibresource{references.bib}
 
 
@@ -24,6 +24,7 @@
 %% Tikz Related
 \usetikzlibrary{calc,shapes,backgrounds,arrows,automata,shadows,positioning}
 \usetikzlibrary{arrows,shapes,positioning,shadows,trees,calc,backgrounds,automata,positioning}
+\usetikzlibrary{decorations.pathreplacing,calligraphy}
 
 
 
@@ -61,8 +62,8 @@
 \begin{document}
 
 % titre
-\begin{frame}
-\maketitle
+\begin{frame}[noframenumbering,plain]
+    \maketitle
 \end{frame}
 
 \section{Contexte du modèle}
@@ -71,153 +72,484 @@
     \begin{itemize}
         \item De nombreux réseaux disponibles \parencite{WebLifeEcological} et décrivant des interactions similaires
         \item Re-grouper les réseaux selon leur similarité (\emph{clustering} de réseaux)
+        \item Compléter d'éventuelles informations manquantes grâce à la collection
         \item Déterminer des structures d'interactions fines de manière agnostique
         \item Vérifier si le regroupement est lié à des co-variables
     \end{itemize}
+    \footnotetext[0]{Pour combler les lacunes de\\\cite{chabert-liddellLearningCommonStructures2023}}
 \end{frame}
 \begin{frame}
     \frametitle{Réseaux bipartites\footnote{Ou \emph{bipartis}. Voir \cite{larousseDefinitionsBipartiBipartite}.}}
     \begin{columns}[c]
-    \begin{column}{0.48\textwidth}
-        \centering
-        Réseau bipartite\\
-    \begin{tikzpicture}[scale=.6]
-        \tikzstyle{every edge}=[-,>=stealth',shorten >=1pt,auto,draw,line width=1.5pt]
-        \tikzstyle{every state}=[draw, text=white,scale=0.95, transform shape]
-        \tikzstyle{every state}=[draw=none,text=white,scale=0.75, transform shape]
-        \tikzstyle{every node}=[fill=blueind]
-    
-        \node[state, draw=black!50] (A1) at (0,5) {\textbf{R1}};
-        \node[state, draw=black!50] (A2) at (2.5,5) {\textbf{R2}};
-        \node[state, draw=black!50] (A3) at (5,5) {\textbf{R3}};
-    
-        \tikzstyle{every node}=[fill=greenind, shape=rectangle]
-        \tikzstyle{every state}=[draw=none,text=white,scale=0.75, transform shape, shape=rectangle]
-        \node[state, draw=black!50] (B1) at (0,0) {\textbf{C1}};
-        \node[state, draw=black!50] (B2) at (1.25,0) {\textbf{C2}};
-        \node[state, draw=black!50] (B3) at (2.5,0) {\textbf{C3}};
-        \node[state, draw=black!50] (B4) at (3.75,0) {\textbf{C4}};
-        \node[state, draw=black!50] (B5) at (5,0) {\textbf{C5}};
-        \path (A1) edge [] (B1);
-        \path (A1) edge  (B2);
-        \path (A1) edge  (B3);
-        \path (A1) edge  (B4);
-        \path (A2) edge  (B3);
-        \path (A2) edge  (B4);
-        \path (A3) edge  (B5);
-        \path (A2) edge  (B5);
-    \end{tikzpicture}
-    \end{column}
-    \hfill
-    \begin{column}{0.48\linewidth}
-    Matrice d'incidence
-    \smallskip
-    $B=\left(
-    \begin{array}{rrrrr}
-    1 &   1 &   1 &   1 &   0 \\ 
-        0 &   0 &   1 &   1 &   1 \\ 
-        0 &   0 &   0 &   0 &   1 \\  
-    \end{array}\right)
-    $\\
-    \end{column}
+        \begin{column}{0.48\textwidth}
+            \centering
+            Réseau bipartite\\
+            \begin{tikzpicture}[scale=.6]
+                \tikzstyle{every edge}=[-,>=stealth',shorten >=1pt,auto,draw,line width=1.5pt]
+                \tikzstyle{every state}=[draw, text=white,scale=0.95, transform shape]
+                \tikzstyle{every state}=[draw=none,text=white,scale=0.75, transform shape]
+                \tikzstyle{every node}=[fill=blueind]
+
+                \node[state, draw=black!50] (A1) at (0,5) {\textbf{R1}};
+                \node[state, draw=black!50] (A2) at (2.5,5) {\textbf{R2}};
+                \node[state, draw=black!50] (A3) at (5,5) {\textbf{R3}};
+
+                \tikzstyle{every node}=[fill=greenind, shape=rectangle]
+                \tikzstyle{every state}=[draw=none,text=white,scale=0.75, transform shape, shape=rectangle]
+                \node[state, draw=black!50] (B1) at (0,0) {\textbf{C1}};
+                \node[state, draw=black!50] (B2) at (1.25,0) {\textbf{C2}};
+                \node[state, draw=black!50] (B3) at (2.5,0) {\textbf{C3}};
+                \node[state, draw=black!50] (B4) at (3.75,0) {\textbf{C4}};
+                \node[state, draw=black!50] (B5) at (5,0) {\textbf{C5}};
+                \path (A1) edge [] (B1);
+                \path (A1) edge  (B2);
+                \path (A1) edge  (B3);
+                \path (A1) edge  (B4);
+                \path (A2) edge  (B3);
+                \path (A2) edge  (B4);
+                \path (A3) edge  (B5);
+                \path (A2) edge  (B5);
+            \end{tikzpicture}
+        \end{column}
+        \hfill
+        \begin{column}{0.48\linewidth}
+            Matrice d'incidence
+            \smallskip
+            $B=\left(
+                \begin{array}{rrrrr}
+                        1 & 1 & 1 & 1 & 0 \\
+                        0 & 0 & 1 & 1 & 1 \\
+                        0 & 0 & 0 & 0 & 1 \\
+                    \end{array}\right)
+            $\\
+        \end{column}
     \end{columns}
     \smallskip
-    Permet de décrire toute interaction impliquant deux agents dont les rôles
+    Permet de décrire des interactions impliquant deux agents dont les rôles
     sont de natures différentes.\\
     Par exemple : hôtes-parasites, plantes-pollinisateurs, graines-disperseurs \dots
 \end{frame}
 \begin{frame}
     \frametitle{Latent Block Model (LBM)}
     Proposé par \cite{govaertEMAlgorithmBlock2005}.
+    \begin{columns}
+        \begin{column}{0.5\linewidth}
+            \begin{figure}[H]
+                \center
+                \begin{tikzpicture}[scale=.45]
+                    \tikzstyle{every state}=[draw, text=white,scale=0.95, transform shape]
+                    \tikzstyle{every state}=[draw=none,text=white,scale=0.75, transform shape]
+                    \tikzset{edge_proba/.style={draw=white, fill=none, text=black}}
 
-    \begin{figure}[H]
-        \center
-        \begin{tikzpicture}[scale=.6]
+                    \tikzstyle{every node}=[fill=blueind]
+                    \node[edge_proba] (pi1) at (1,5.7) {\textbf{$\pi_{{\color{blueind}\bullet}}$}};
+                    \node[state, draw=black!50] (R11) at (0,5) {\textbf{R11}};
+                    \node[state, draw=black!50] (R12) at (1,5) {\textbf{R12}};
+                    \node[state, draw=black!50] (R13) at (2,5) {\textbf{R13}};
+
+                    \tikzstyle{every node}=[fill=cyanind]
+                    \node[edge_proba] (pi2) at (6.75,5.7) {\textbf{$\pi_{{\color{cyanind}\bullet}}$}};
+                    \node[state, draw=black!50] (R21) at (6.25,5) {\textbf{R21}};
+                    \node[state, draw=black!50] (R22) at (7.25,5) {\textbf{R22}};
+
+                    \tikzstyle{every node}=[fill=electricblue]
+                    \node[edge_proba] (pi3) at (10,5.7) {\textbf{$\pi_{{\color{electricblue}\bullet}}$}};
+                    \node[state, draw=black!50] (R31) at (10,5) {\textbf{R31}};
+
+                    \tikzstyle{every node}=[fill=burntorange, shape=rectangle]
+                    \node[edge_proba] (pi3) at (0.5,-0.7) {\textbf{$\rho_{{\color{burntorange}\bullet}}$}};
+                    \tikzstyle{every state}=[draw=none,text=white,scale=0.75, transform shape, shape=rectangle]
+                    \node[state, draw=black!50] (B1) at (0,0) {\textbf{C11}};
+                    \node[state, draw=black!50] (B2) at (1,0) {\textbf{C12}};
+                    \tikzstyle{every node}=[fill=goldenyellow, shape=rectangle]
+                    \node[edge_proba] (pi3) at (4,-0.7) {\textbf{$\rho_{{\color{goldenyellow}\bullet}}$}};
+                    \node[state, draw=black!50] (B3) at (3.5,0) {\textbf{C21}};
+                    \node[state, draw=black!50] (B4) at (4.5,0) {\textbf{C22}};
+                    \tikzstyle{every node}=[fill=peach, shape=rectangle]
+                    \node[edge_proba] (pi3) at (10,-0.7) {\textbf{$\rho_{{\color{peach}\bullet}}$}};
+                    \node[state, draw=black!50] (B5) at (10,0) {\textbf{C31}};
+
+                    \tikzstyle{every edge}=[-,>=stealth',shorten >=1pt,auto,draw,line width=1.5pt,draw opacity=0.2]
+
+                    \path (R11) edge[-,>=stealth',shorten >=1pt,auto,draw=gray,line width=1.5pt, fill=gray, opacity=1] node[left, fill=none] {$\alpha_{{\color{blueind}\bullet}{\color{burntorange}\bullet}}$} (B1);
+                    \path (R11) edge (B2);
+                    \path (R11) edge  (B3);
+                    \path (R11) edge  (B4);
+
+                    \path (R12) edge [] (B1);
+                    \path (R12) edge  (B2);
+                    \path (R12) edge  (B3);
+                    \path (R12) edge  (B4);
+
+                    \path (R13) edge [] (B1);
+                    \path (R13) edge  (B2);
+                    \path (R13) edge  (B3);
+                    \path (R13) edge[-,>=stealth',shorten >=1pt,auto,draw=gray,line width=1.5pt, fill=gray, opacity=1] node[midway, left, fill=none] {$\alpha_{{\color{blueind}\bullet}{\color{goldenyellow}\bullet}}$} (B4);
+
+                    \path (R21) edge[-,>=stealth',shorten >=1pt,auto,draw=gray,line width=1.5pt, fill=gray, opacity=1] node[midway, right, fill=none] {$\alpha_{{\color{cyanind}\bullet}{\color{goldenyellow}\bullet}}$} (B3);
+                    \path (R21) edge  (B4);
+                    \path (R21) edge  (B5);
+
+                    \path (R22) edge  (B3);
+                    \path (R22) edge  (B4);
+                    \path (R22) edge[-,>=stealth',shorten >=1pt,auto,draw=gray,line width=1.5pt, fill=gray, opacity=1] node[midway, left, fill=none] {$\alpha_{{\color{cyanind}\bullet}{\color{peach}\bullet}}$} (B5);
+
+                    \path (R31) edge[-,>=stealth',shorten >=1pt,auto,draw=gray,line width=1.5pt, fill=gray, opacity=1] node[midway, right, fill=none] {$\alpha_{{\color{electricblue}\bullet}{\color{peach}\bullet}}$} (B5);
+
+                \end{tikzpicture}
+                \caption{Exemple de LBM}
+                \label{fig:LBMvisu}
+            \end{figure}
+        \end{column}
+        \begin{column}{0.5\linewidth}
+            \begin{block}{Paramètres}
+                \begin{itemize}
+                    \item $\mathcal{K}_1 = \{{\color{blueind}\bullet},{\color{cyanind}\bullet},{\color{electricblue}\bullet}\}$ blocs en ligne
+                    \item $\mathcal{K}_2 = \{{\color{burntorange}\bullet},{\color{goldenyellow}\bullet},{\color{peach}\bullet}\}$ blocs en colonne
+                    \item $\pi_{\bullet} = \mathbb{P}(i\in\bullet)$ en ligne et $\rho_{\bullet} = \mathbb{P}(j\in\bullet)$ en colonne
+                    \item $\alpha_{{\color{blueind}\bullet}{\color{burntorange}\bullet}} = \mathbb{P}(i \leftrightarrow j | i \in {\color{blueind}\bullet}, j \in {\color{burntorange}\bullet})$
+                \end{itemize}
+            \end{block}
+        \end{column}
+    \end{columns}
+
+
+\end{frame}
+\begin{frame}
+    \frametitle{\emph{colSBM}}
+    Le modèle \emph{colSBM} \parencite{chabert-liddellLearningCommonStructures2023}.\\
+    \smallskip
+
+    \definecolor{yellow}{RGB}{255,190,60}
+    \begin{tikzpicture}[scale=.33]
+        \tikzstyle{every edge}=[-,>=stealth',shorten >=1pt,auto,draw,line width=.5pt, bend left]
+        \tikzstyle{every state}=[draw, text=white,scale=0.95, transform shape]
+        \tikzset{edge_proba/.style={draw=white, fill=none, text=black}}
+
+        \tikzstyle{every node}=[fill=yellow]
+        \node[state, draw=black!50] (A1) at (0,2) {\textbf{A1}};
+        \node[state, draw=black!50] (A2) at (1.5, 2) {\textbf{A2}};
+        \node[state, draw=black!50] (A3) at (0.75,3.25) {\textbf{A3}};
+
+        \tikzstyle{every node}=[fill=blueind]
+        \node[state, draw=black!50] (B1) at (4.5,3) {\textbf{B1}};
+        \node[state, draw=black!50] (B2) at (4,4.75) {\textbf{B2}};
+        \node[state, draw=black!50] (B3) at (5.5,6) {\textbf{B3}};
+        \node[state, draw=black!50] (B4) at (7,4.75) {\textbf{B4}};
+        \node[state, draw=black!50] (B5) at (6.5,3) {\textbf{B5}};
+
+        \tikzstyle{every node}=[fill=greenind]
+        \node[state, draw=black!50] (C1) at (5,0) {\textbf{C1}};
+        \node[state, draw=black!50] (C2) at (7,1) {\textbf{C2}};
+
+
+        \path (A1) edge[bend right] (A2);
+        \path (A1) edge node[midway, left, fill=none] {$\alpha_{{\color{yellow}\bullet}{\color{yellow}\bullet}}$} (A3);
+        \path (A3) edge (A2);
+
+        \path (A3) edge node[midway, above, fill=none] {$\alpha_{{\color{yellow}\bullet}{\color{blueind}\bullet}}$} (B3);
+
+        \path (B1) edge (B2);
+        \path (B2) edge (B3);
+        \path (B3) edge (B4);
+        \path (B4) edge (B5);
+        \path (B5) edge (B1);
+
+        \path (B1) edge[bend left=0] (B4);
+        \path (B5) edge[bend left=0] (B2);
+
+        \path (A2) edge[bend right] node[midway, below, fill=none] {$\alpha_{{\color{yellow}\bullet}{\color{greenind}\bullet}}$} (C1);
+        \path (C1) edge[bend right] node[midway, below, fill=none] {$\alpha_{{\color{greenind}\bullet}{\color{greenind}\bullet}}$} (C2);
+        \path (C2) edge[bend right] node[midway, right, fill=none] {$\alpha_{{\color{greenind}\bullet}{\color{blueind}\bullet}}$} (B4);
+
+        \node[font=\small, text justified,draw=none, fill=none] at (4.5,-1.5) {SBM};
+
+        \node[font=\small, text justified, fill=none] at (11.5, 1.5) {$\Longrightarrow$};
+
+        % Sampled network
+        \begin{scope}[xshift=14.5cm, yshift=4cm]
+            \tikzstyle{every node}=[fill=gray, scale=0.95]
+            \tikzstyle{every edge}=[-,>=stealth',shorten >=1pt,auto,draw,line width=.5pt, bend left]
             \tikzstyle{every state}=[draw, text=white,scale=0.95, transform shape]
-            \tikzstyle{every state}=[draw=none,text=white,scale=0.75, transform shape]
-            
-            \tikzstyle{every node}=[fill=blueind]
-            \node[state, draw=white, fill=none, text=black, scale=2] (pi1) at (1,5.7) {\textbf{$\pi_{{\color{blueind}\bullet}}$}};
-            \node[state, draw=black!50] (R11) at (0,5) {\textbf{R11}};
-            \node[state, draw=black!50] (R12) at (1,5) {\textbf{R12}};
-            \node[state, draw=black!50] (R13) at (2,5) {\textbf{R13}};
-            
-            \tikzstyle{every node}=[fill=cyanind]
-            \node[state, draw=white, fill=none, text=black, scale=2] (pi2) at (6.5,5.7) {\textbf{$\pi_{{\color{cyanind}\bullet}}$}};
-            \node[state, draw=black!50] (R21) at (6,5) {\textbf{R21}};
-            \node[state, draw=black!50] (R22) at (7,5) {\textbf{R22}};
-            
-            \tikzstyle{every node}=[fill=electricblue]
-            \node[state, draw=white, fill=none, text=black, scale=2] (pi3) at (10,5.7) {\textbf{$\pi_{{\color{electricblue}\bullet}}$}};
-            \node[state, draw=black!50] (R31) at (10,5) {\textbf{R31}};
-        
-            \tikzstyle{every node}=[fill=burntorange, shape=rectangle]
-            \node[state, draw=white, fill=none, text=black, scale=2] (pi3) at (0.5,-0.7) {\textbf{$\rho_{{\color{burntorange}\bullet}}$}};
-            \tikzstyle{every state}=[draw=none,text=white,scale=0.75, transform shape, shape=rectangle]
-            \node[state, draw=black!50] (B1) at (0,0) {\textbf{C11}};
-            \node[state, draw=black!50] (B2) at (1,0) {\textbf{C12}};
-            \tikzstyle{every node}=[fill=goldenyellow, shape=rectangle]
-            \node[state, draw=white, fill=none, text=black, scale=2] (pi3) at (4.5,-0.7) {\textbf{$\rho_{{\color{goldenyellow}\bullet}}$}};
-            \node[state, draw=black!50] (B3) at (4,0) {\textbf{C21}};
-            \node[state, draw=black!50] (B4) at (5,0) {\textbf{C22}};
-            \tikzstyle{every node}=[fill=peach, shape=rectangle]
-            \node[state, draw=white, fill=none, text=black, scale=2] (pi3) at (10,-0.7) {\textbf{$\rho_{{\color{peach}\bullet}}$}};
-            \node[state, draw=black!50] (B5) at (10,0) {\textbf{C31}};
-    
-            \tikzstyle{every edge}=[-,>=stealth',shorten >=1pt,auto,draw,line width=1.5pt,draw opacity=0.2]
-    
-            \path (R11) edge[-,>=stealth',shorten >=1pt,auto,draw=gray,line width=1.5pt, fill=gray, opacity=1] node[anchor=center, fill=none] {$\alpha_{{\color{blueind}\bullet}{\color{burntorange}\bullet}}$} (B1);
-            \path (R11) edge (B2);
-            \path (R11) edge  (B3);
-            \path (R11) edge  (B4);
-    
-            \path (R12) edge [] (B1);
-            \path (R12) edge  (B2);
-            \path (R12) edge  (B3);
-            \path (R12) edge  (B4);
-    
-            \path (R13) edge [] (B1);
-            \path (R13) edge  (B2);
-            \path (R13) edge  (B3);
-            \path (R13) edge[-,>=stealth',shorten >=1pt,auto,draw=gray,line width=1.5pt, fill=gray, opacity=1] node[anchor=center, fill=none] {$\alpha_{{\color{blueind}\bullet}{\color{goldenyellow}\bullet}}$} (B4);
-    
-            \path (R21) edge[-,>=stealth',shorten >=1pt,auto,draw=gray,line width=1.5pt, fill=gray, opacity=1] node[anchor=center, fill=none] {$\alpha_{{\color{cyanind}\bullet}{\color{goldenyellow}\bullet}}$} (B3);
-            \path (R21) edge  (B4);
-            \path (R21) edge  (B5);
-            
-            \path (R22) edge  (B3);
-            \path (R22) edge  (B4);
-            \path (R22) edge[-,>=stealth',shorten >=1pt,auto,draw=gray,line width=1.5pt, fill=gray, opacity=1] node[anchor=center, fill=none] {$\alpha_{{\color{cyanind}\bullet}{\color{peach}\bullet}}$} (B5);
-    
-            \path (R31) edge[-,>=stealth',shorten >=1pt,auto,draw=gray,line width=1.5pt, fill=gray, opacity=1] node[anchor=center, fill=none] {$\alpha_{{\color{electricblue}\bullet}{\color{peach}\bullet}}$} (B5);
-    
-        \end{tikzpicture}
-    \caption{Exemple de LBM}
-    \label{fig:LBMvisu}
-    \end{figure}
+
+            \node[state, draw=black!50] (A1) at (0,0) {\textbf{10}};
+            \node[state, draw=black!50] (A2) at (1, 0) {\textbf{2}};
+            \node[state, draw=black!50] (A3) at (0.5,1) {\textbf{5}};
+
+            \node[state, draw=black!50] (B1) at (2.5,1) {\textbf{1}};
+            \node[state, draw=black!50] (B2) at (2,2.75) {\textbf{9}};
+            \node[state, draw=black!50] (B3) at (3.5,4) {\textbf{6}};
+            \node[state, draw=black!50] (B4) at (5,2.75) {\textbf{3}};
+            \node[state, draw=black!50] (B5) at (4.5,1) {\textbf{7}};
+
+            \node[state, draw=black!50] (C1) at (3,-0.5) {\textbf{4}};
+            \node[state, draw=black!50] (C2) at (5,0) {\textbf{8}};
+
+            \path (A1) edge[bend right] (A2);
+            \path (A1) edge (A3);
+            \path (A3) edge (A2);
+
+            \path (A3) edge (B3);
+
+            \path (B1) edge (B2);
+            \path (B2) edge (B3);
+            \path (B3) edge (B4);
+            \path (B4) edge (B5);
+            \path (B5) edge (B1);
+
+            \path (B1) edge[bend left=0] (B4);
+            \path (B5) edge[bend left=0] (B2);
+
+            \path (A2) edge[bend right] (C1);
+            \path (C1) edge[bend right] (C2);
+            \path (C2) edge[bend right] (B4);
+
+            \node[text width=3cm,font=\small, text justified, rotate=90, fill=none, below = -0.8cm of C1] (dots) {\dots};
+            \draw [decorate, decoration = {brace}] (6, 4) --  (6,-8.5);
+            \node[text width=3cm, font=\small, text justified, fill=none] at (11.5,-2.25) {$M$ réalisations indépendantes du SBM};
+
+
+        \end{scope}
+        \begin{scope}[xshift=14.5cm, yshift=-4cm]
+            \tikzstyle{every node}=[fill=gray, scale=0.95]
+            \tikzstyle{every edge}=[-,>=stealth',shorten >=1pt,auto,draw,line width=.5pt, bend left]
+            \tikzstyle{every state}=[draw, text=white,scale=0.95, transform shape]
+
+            \node[state, draw=black!50] (A1) at (0,0) {\textbf{9}};
+            \node[state, draw=black!50] (A2) at (1, 0) {\textbf{2}};
+            \node[state, draw=black!50] (A3) at (0.5,1) {\textbf{1}};
+
+            \node[state, draw=black!50] (B1) at (2.5,1) {\textbf{5}};
+            \node[state, draw=black!50] (B2) at (2,2.75) {\textbf{10}};
+            \node[state, draw=black!50] (B3) at (3.5,4) {\textbf{4}};
+            \node[state, draw=black!50] (B4) at (5,2.75) {\textbf{8}};
+            \node[state, draw=black!50] (B5) at (4.5,1) {\textbf{7}};
+
+            \node[state, draw=black!50] (C1) at (3,-0.5) {\textbf{6}};
+            \node[state, draw=black!50] (C2) at (5,0) {\textbf{3}};
+
+
+            \path (A1) edge[bend right] (A2);
+            \path (A1) edge (A3);
+            \path (A3) edge (A2);
+
+            \path (A3) edge (B3);
+
+            \path (B1) edge (B2);
+            \path (B2) edge (B3);
+            \path (B3) edge (B4);
+            \path (B4) edge (B5);
+            \path (B5) edge (B1);
+
+            \path (B1) edge[bend left=0] (B4);
+            \path (B5) edge[bend left=0] (B2);
+
+            \path (A2) edge[bend right] (C1);
+            \path (C1) edge[bend right] (C2);
+            \path (C2) edge[bend right] (B4);
+        \end{scope}
+    \end{tikzpicture}
+    \begin{columns}
+        \begin{column}{0.48\linewidth}
+            \begin{block}{Paramètres}
+                \begin{itemize}
+                    \item $\mathcal{K} = \{{\color{yellow}\bullet},{\color{blueind}\bullet},{\color{greenind}\bullet}\}$ blocs
+                    \item $\pi_{\bullet} = \mathbb{P}(i\in\bullet)$
+                    \item $\alpha_{{\color{greenind}\bullet}{\color{blueind}\bullet}} = \mathbb{P}(i \leftrightarrow j | i \in {\color{greenind}\bullet}, j \in {\color{blueind}\bullet})$
+                \end{itemize}
+            \end{block}
+        \end{column}
+        \begin{column}{0.52\linewidth}
+        \end{column}
+    \end{columns}
 
 \end{frame}
+\section{Extension de \emph{colSBM} aux réseaux bipartites}
 \begin{frame}
-    \frametitle{Extension de \emph{colSBM} aux réseaux bipartites}
-    Le modèle \emph{colSBM} \parencite{chabert-liddellLearningCommonStructures2023}
+    \frametitle{Collections bipartites}
+    \begin{columns}
+        \begin{column}{0.5\linewidth}
+            \begin{tikzpicture}[scale=.38]
+                \tikzstyle{every state}=[draw, text=white,scale=0.95, transform shape]
+                \tikzstyle{every state}=[draw=none,text=white,scale=0.75, transform shape]
+                \tikzset{edge_proba/.style={draw=white, fill=none, text=black}}
 
-    \begin{equation*}
-        \overbrace{
-        }^\text{Collection}
-    \end{equation*}
-    
+                \tikzstyle{every node}=[fill=blueind]
+                \node[edge_proba] (pi1) at (1,5.7) {\textbf{$\pi_{{\color{blueind}\bullet}}$}};
+                \node[state, draw=black!50] (R11) at (0,5) {\textbf{R11}};
+                \node[state, draw=black!50] (R12) at (1,5) {\textbf{R12}};
+                \node[state, draw=black!50] (R13) at (2,5) {\textbf{R13}};
 
-\end{frame}
-\begin{frame}
-    \frametitle{Collections en bipartites}
+                \tikzstyle{every node}=[fill=cyanind]
+                \node[edge_proba] (pi2) at (6.75,5.7) {\textbf{$\pi_{{\color{cyanind}\bullet}}$}};
+                \node[state, draw=black!50] (R21) at (6.25,5) {\textbf{R21}};
+                \node[state, draw=black!50] (R22) at (7.25,5) {\textbf{R22}};
 
+                \tikzstyle{every node}=[fill=electricblue]
+                \node[edge_proba] (pi3) at (10,5.7) {\textbf{$\pi_{{\color{electricblue}\bullet}}$}};
+                \node[state, draw=black!50] (R31) at (10,5) {\textbf{R31}};
+
+                \tikzstyle{every node}=[fill=burntorange, shape=rectangle]
+                \node[edge_proba] (pi3) at (0.5,-0.7) {\textbf{$\rho_{{\color{burntorange}\bullet}}$}};
+                \tikzstyle{every state}=[draw=none,text=white,scale=0.75, transform shape, shape=rectangle]
+                \node[state, draw=black!50] (B1) at (0,0) {\textbf{C11}};
+                \node[state, draw=black!50] (B2) at (1,0) {\textbf{C12}};
+                \tikzstyle{every node}=[fill=goldenyellow, shape=rectangle]
+                \node[edge_proba] (pi3) at (4,-0.7) {\textbf{$\rho_{{\color{goldenyellow}\bullet}}$}};
+                \node[state, draw=black!50] (B3) at (3.5,0) {\textbf{C21}};
+                \node[state, draw=black!50] (B4) at (4.5,0) {\textbf{C22}};
+                \tikzstyle{every node}=[fill=peach, shape=rectangle]
+                \node[edge_proba] (pi3) at (10,-0.7) {\textbf{$\rho_{{\color{peach}\bullet}}$}};
+                \node[state, draw=black!50] (B5) at (10,0) {\textbf{C31}};
+
+                \tikzstyle{every edge}=[-,>=stealth',shorten >=1pt,auto,draw,line width=1.5pt,draw opacity=0.2]
+
+                \path (R11) edge[-,>=stealth',shorten >=1pt,auto,draw=gray,line width=1.5pt, fill=gray, opacity=1] node[left, fill=none] {$\alpha_{{\color{blueind}\bullet}{\color{burntorange}\bullet}}$} (B1);
+                \path (R11) edge (B2);
+                \path (R11) edge  (B3);
+                \path (R11) edge  (B4);
+
+                \path (R12) edge [] (B1);
+                \path (R12) edge  (B2);
+                \path (R12) edge  (B3);
+                \path (R12) edge  (B4);
+
+                \path (R13) edge [] (B1);
+                \path (R13) edge  (B2);
+                \path (R13) edge  (B3);
+                \path (R13) edge[-,>=stealth',shorten >=1pt,auto,draw=gray,line width=1.5pt, fill=gray, opacity=1] node[midway, left, fill=none] {$\alpha_{{\color{blueind}\bullet}{\color{goldenyellow}\bullet}}$} (B4);
+
+                \path (R21) edge[-,>=stealth',shorten >=1pt,auto,draw=gray,line width=1.5pt, fill=gray, opacity=1] node[midway, right, fill=none] {$\alpha_{{\color{cyanind}\bullet}{\color{goldenyellow}\bullet}}$} (B3);
+                \path (R21) edge  (B4);
+                \path (R21) edge  (B5);
+
+                \path (R22) edge  (B3);
+                \path (R22) edge  (B4);
+                \path (R22) edge[-,>=stealth',shorten >=1pt,auto,draw=gray,line width=1.5pt, fill=gray, opacity=1] node[midway, left, fill=none] {$\alpha_{{\color{cyanind}\bullet}{\color{peach}\bullet}}$} (B5);
+
+                \path (R31) edge[-,>=stealth',shorten >=1pt,auto,draw=gray,line width=1.5pt, fill=gray, opacity=1] node[midway, right, fill=none] {$\alpha_{{\color{electricblue}\bullet}{\color{peach}\bullet}}$} (B5);
+
+            \end{tikzpicture}
+            \begin{block}{Paramètres}
+                \begin{itemize}
+                    \item $\mathcal{K}_1 = \{{\color{blueind}\bullet},{\color{cyanind}\bullet},{\color{electricblue}\bullet}\}$ blocs en ligne
+                    \item $\mathcal{K}_2 = \{{\color{burntorange}\bullet},{\color{goldenyellow}\bullet},{\color{peach}\bullet}\}$ blocs en colonne
+                    \item $\pi_{\bullet} = \mathbb{P}(i\in\bullet)$ en ligne et $\rho_{\bullet} = \mathbb{P}(j\in\bullet)$ en colonne
+                    \item $\alpha_{{\color{blueind}\bullet}{\color{burntorange}\bullet}} = \mathbb{P}(i \leftrightarrow j | i \in {\color{blueind}\bullet}, j \in {\color{burntorange}\bullet})$
+                \end{itemize}
+            \end{block}
+        \end{column}
+        \begin{column}{0.5\linewidth}
+            \centering
+            \begin{tikzpicture}[scale=0.6]
+                \begin{scope}[yshift = 4cm]
+                    \tikzstyle{every state}=[draw, text=white,scale=0.75, transform shape]
+
+                    \tikzstyle{every node}=[fill=gray]
+                    \node[state, draw=black!50] (R11) at (0,1.25) {\textbf{1}};
+                    \node[state, draw=black!50] (R12) at (1,1.25) {\textbf{2}};
+                    \node[state, draw=black!50] (R13) at (2,1.25) {\textbf{3}};
+                    \node[state, draw=black!50] (R21) at (3,1.25) {\textbf{4}};
+                    \node[state, draw=black!50] (R22) at (4,1.25) {\textbf{5}};
+                    \node[state, draw=black!50] (R31) at (5,1.25) {\textbf{6}};
+
+                    \tikzstyle{every state}=[draw=none,text=white,scale=0.75, transform shape, shape=rectangle]
+                    \node[state, draw=black!50] (B1) at (0.5,0) {\textbf{1}};
+                    \node[state, draw=black!50] (B2) at (1.5,0) {\textbf{2}};
+
+                    \node[state, draw=black!50] (B31) at (2.5,0) {\textbf{3}};
+                    \node[state, draw=black!50] (B4) at (3.5,0) {\textbf{4}};
+
+                    \node[state, draw=black!50] (B5) at (4.5,0) {\textbf{5}};
+
+                    \tikzstyle{every edge}=[-,>=stealth',shorten >=1pt,auto,draw,line width=1pt, draw=gray, fill=gray]
+                    \path (R11) edge (B1);
+                    \path (R11) edge (B2);
+                    \path (R11) edge  (B31);
+                    \path (R11) edge  (B4);
+
+                    \path (R12) edge [] (B1);
+                    \path (R12) edge  (B2);
+                    \path (R12) edge  (B31);
+                    \path (R12) edge  (B4);
+
+                    \path (R13) edge [] (B1);
+                    \path (R13) edge  (B2);
+                    \path (R13) edge  (B31);
+                    \path (R13) edge (B4);
+
+                    \path (R21) edge (B31);
+                    \path (R21) edge  (B4);
+                    \path (R21) edge  (B5);
+
+                    \path (R22) edge  (B31);
+                    \path (R22) edge  (B4);
+                    \path (R22) edge (B5);
+
+                    \path (R31) edge (B5);
+                \end{scope}
+                \node[text width=3cm,font=\small, text justified, rotate=90, fill=none] (dots) at (2.5, 4.75){\dots};
+
+                \begin{scope}[yshift = 0cm]
+                    \tikzstyle{every state}=[draw, text=white,scale=0.75, transform shape]
+
+                    \tikzstyle{every node}=[fill=gray]
+                    \node[state, draw=black!50] (R11) at (0,1.25) {\textbf{4}};
+                    \node[state, draw=black!50] (R12) at (1,1.25) {\textbf{1}};
+                    \node[state, draw=black!50] (R13) at (2,1.25) {\textbf{6}};
+                    \node[state, draw=black!50] (R21) at (3,1.25) {\textbf{3}};
+                    \node[state, draw=black!50] (R22) at (4,1.25) {\textbf{5}};
+                    \node[state, draw=black!50] (R31) at (5,1.25) {\textbf{2}};
+
+                    \tikzstyle{every state}=[draw=none,text=white,scale=0.75, transform shape, shape=rectangle]
+                    \node[state, draw=black!50] (B1) at (0.5,0) {\textbf{5}};
+                    \node[state, draw=black!50] (B2) at (1.5,0) {\textbf{1}};
+
+                    \node[state, draw=black!50] (B3) at (2.5,0) {\textbf{3}};
+                    \node[state, draw=black!50] (B4) at (3.5,0) {\textbf{2}};
+
+                    \node[state, draw=black!50] (B5) at (4.5,0) {\textbf{4}};
+
+                    \tikzstyle{every edge}=[-,>=stealth',shorten >=1pt,auto,draw,line width=1pt, draw=gray, fill=gray]
+                    \path (R11) edge (B1);
+                    \path (R11) edge (B2);
+                    \path (R11) edge  (B3);
+                    \path (R11) edge  (B4);
+
+                    \path (R12) edge [] (B1);
+                    \path (R12) edge  (B2);
+                    \path (R12) edge  (B3);
+                    \path (R12) edge  (B4);
+
+                    \path (R13) edge [] (B1);
+                    \path (R13) edge  (B2);
+                    \path (R13) edge  (B3);
+                    \path (R13) edge (B4);
+
+                    \path (R21) edge (B3);
+                    \path (R21) edge  (B4);
+                    \path (R21) edge  (B5);
+
+                    \path (R22) edge  (B3);
+                    \path (R22) edge  (B4);
+                    \path (R22) edge (B5);
+
+                    \path (R31) edge (B5);
+                \end{scope}
+
+            \end{tikzpicture}
+        \end{column}
+    \end{columns}
 
 \end{frame}
 
 \section*{Bibliographie}
-\begin{frame}
+\begin{frame}[noframenumbering,plain,allowframebreaks]
     \frametitle{Bibliographie}
-    \printbibliography
+    \hfill
+    \begin{minipage}{0.9\textwidth}
+        \printbibliography
+    \end{minipage}
 \end{frame}
 
 \end{document}
