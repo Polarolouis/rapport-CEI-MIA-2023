@@ -13,7 +13,7 @@
 \usepackage{algpseudocode} % pour les algorithmes
 \usepackage{float} % pour le placement des figure
 \usepackage{url} % pour une gestion efficace des url
-\usepackage[colorlinks,citecolor=blueind,urlcolor=blue,bookmarks=false,hypertexnames=true]{hyperref}  % pour les hyperliens dans le document
+\usepackage[citecolor=blueind,urlcolor=blue,bookmarks=false,hypertexnames=true]{hyperref}  % pour les hyperliens dans le document
 \usepackage{tocbibind} % Pour avoir des index pour table des matières, biblio
 \usepackage{tikz} % For graph plots
 
@@ -50,7 +50,7 @@
 
 \definecolor{burntorange}{RGB}{204, 85, 0}
 \definecolor{goldenyellow}{RGB}{255, 192, 0}
-\definecolor{peach}{RGB}{255, 229, 180}
+\definecolor{yellow}{RGB}{255,255,0}
 
 \definecolor{gray}{RGB}{128,128,128}
 
@@ -80,8 +80,8 @@ $V$ vertices.
     Bipartite network\\
 \begin{tikzpicture}[scale=.6]
     \tikzstyle{every edge}=[-,>=stealth',shorten >=1pt,auto,draw,line width=1.5pt]
-    \tikzstyle{every state}=[draw, text=white,scale=0.95, transform shape]
-    \tikzstyle{every state}=[draw=none,text=white,scale=0.75, transform shape]
+    \tikzstyle{every state}=[draw, text=black,scale=0.95, transform shape]
+    \tikzstyle{every state}=[draw=none,text=black,scale=0.75, transform shape]
     \tikzstyle{every node}=[fill=blueind]
 
     \node[state, draw=black!50] (A1) at (0,5) {\textbf{R1}};
@@ -89,7 +89,7 @@ $V$ vertices.
     \node[state, draw=black!50] (A3) at (5,5) {\textbf{R3}};
 
     \tikzstyle{every node}=[fill=greenind, shape=rectangle]
-    \tikzstyle{every state}=[draw=none,text=white,scale=0.75, transform shape, shape=rectangle]
+    \tikzstyle{every state}=[draw=none,text=black,scale=0.75, transform shape, shape=rectangle]
     \node[state, draw=black!50] (B1) at (0,0) {\textbf{C1}};
     \node[state, draw=black!50] (B2) at (1.25,0) {\textbf{C2}};
     \node[state, draw=black!50] (B3) at (2.5,0) {\textbf{C3}};
@@ -175,8 +175,8 @@ This model supposes that:
 \begin{figure}[H]
     \center
     \begin{tikzpicture}[scale=.6]
-        \tikzstyle{every state}=[draw, text=white,scale=0.95, transform shape]
-        \tikzstyle{every state}=[draw=none,text=white,scale=0.75, transform shape]
+        \tikzstyle{every state}=[draw, text=black,scale=0.95, transform shape]
+        \tikzstyle{every state}=[draw=none,text=black,scale=0.75, transform shape]
         \tikzset{edge_proba/.style={draw=white, fill=none, text=black}}
         
         \tikzstyle{every node}=[fill=blueind]
@@ -196,20 +196,19 @@ This model supposes that:
     
         \tikzstyle{every node}=[fill=burntorange, shape=rectangle]
         \node[edge_proba] (pi3) at (0.5,-0.7) {\textbf{$\rho_{{\color{burntorange}\bullet}}$}};
-        \tikzstyle{every state}=[draw=none,text=white,scale=0.75, transform shape, shape=rectangle]
+        \tikzstyle{every state}=[draw=none,text=black,scale=0.75, transform shape, shape=rectangle]
         \node[state, draw=black!50] (B1) at (0,0) {\textbf{C11}};
         \node[state, draw=black!50] (B2) at (1,0) {\textbf{C12}};
         \tikzstyle{every node}=[fill=goldenyellow, shape=rectangle]
         \node[edge_proba] (pi3) at (4,-0.7) {\textbf{$\rho_{{\color{goldenyellow}\bullet}}$}};
         \node[state, draw=black!50] (B3) at (3.5,0) {\textbf{C21}};
         \node[state, draw=black!50] (B4) at (4.5,0) {\textbf{C22}};
-        \tikzstyle{every node}=[fill=peach, shape=rectangle]
-        \node[edge_proba] (pi3) at (10,-0.7) {\textbf{$\rho_{{\color{peach}\bullet}}$}};
+        \tikzstyle{every node}=[fill=yellow, shape=rectangle]
+        \node[edge_proba] (pi3) at (10,-0.7) {\textbf{$\rho_{{\color{yellow}\bullet}}$}};
         \node[state, draw=black!50] (B5) at (10,0) {\textbf{C31}};
 
         \tikzstyle{every edge}=[-,>=stealth',shorten >=1pt,auto,draw,line width=1.5pt,draw opacity=0.2]
 
-        \path (R11) edge[-,>=stealth',shorten >=1pt,auto,draw=gray,line width=1.5pt, fill=gray, opacity=1] node[left, fill=none] {$\alpha_{{\color{blueind}\bullet}{\color{burntorange}\bullet}}$} (B1);
         \path (R11) edge (B2);
         \path (R11) edge  (B3);
         \path (R11) edge  (B4);
@@ -222,17 +221,19 @@ This model supposes that:
         \path (R13) edge [] (B1);
         \path (R13) edge  (B2);
         \path (R13) edge  (B3);
-        \path (R13) edge[-,>=stealth',shorten >=1pt,auto,draw=gray,line width=1.5pt, fill=gray, opacity=1] node[midway, left, fill=none] {$\alpha_{{\color{blueind}\bullet}{\color{goldenyellow}\bullet}}$} (B4);
 
-        \path (R21) edge[-,>=stealth',shorten >=1pt,auto,draw=gray,line width=1.5pt, fill=gray, opacity=1] node[midway, right, fill=none] {$\alpha_{{\color{cyanind}\bullet}{\color{goldenyellow}\bullet}}$} (B3);
+
         \path (R21) edge  (B4);
         \path (R21) edge  (B5);
-        
+
         \path (R22) edge  (B3);
         \path (R22) edge  (B4);
-        \path (R22) edge[-,>=stealth',shorten >=1pt,auto,draw=gray,line width=1.5pt, fill=gray, opacity=1] node[midway, left, fill=none] {$\alpha_{{\color{cyanind}\bullet}{\color{peach}\bullet}}$} (B5);
 
-        \path (R31) edge[-,>=stealth',shorten >=1pt,auto,draw=gray,line width=1.5pt, fill=gray, opacity=1] node[midway, right, fill=none] {$\alpha_{{\color{electricblue}\bullet}{\color{peach}\bullet}}$} (B5);
+        \path (R11) edge[-,>=stealth',shorten >=1pt,auto,draw=gray,line width=1.5pt, fill=gray, opacity=1] node[left, fill=none] {$\alpha_{{\color{blueind}\bullet}{\color{burntorange}\bullet}}$} (B1);
+        \path (R13) edge[-,>=stealth',shorten >=1pt,auto,draw=gray,line width=1.5pt, fill=gray, opacity=1] node[midway, left, fill=none] {$\alpha_{{\color{blueind}\bullet}{\color{goldenyellow}\bullet}}$} (B4);
+        \path (R21) edge[-,>=stealth',shorten >=1pt,auto,draw=gray,line width=1.5pt, fill=gray, opacity=1] node[midway, right, fill=none] {$\alpha_{{\color{cyanind}\bullet}{\color{goldenyellow}\bullet}}$} (B3);
+        \path (R22) edge[-,>=stealth',shorten >=1pt,auto,draw=gray,line width=1.5pt, fill=gray, opacity=1] node[midway, left, fill=none] {$\alpha_{{\color{cyanind}\bullet}{\color{yellow}\bullet}}$} (B5);
+        \path (R31) edge[-,>=stealth',shorten >=1pt,auto,draw=gray,line width=1.5pt, fill=gray, opacity=1] node[midway, right, fill=none] {$\alpha_{{\color{electricblue}\bullet}{\color{yellow}\bullet}}$} (B5);
 
     \end{tikzpicture}
 \caption{An LBM model visualization}
@@ -241,9 +242,9 @@ This model supposes that:
 
 Parameters
 \begin{itemize}
-    \item $\mathcal{K}_1 = \{{\color{blueind}\bullet},{\color{cyanind}\bullet},{\color{electricblue}\bullet}\}$ blocks in rows
-    \item $\mathcal{K}_2 = \{{\color{burntorange}\bullet},{\color{goldenyellow}\bullet},{\color{peach}\bullet}\}$ blocks in columns
-    \item $\pi_{\bullet} = \mathbb{P}(i\in\bullet)$ in row et $\rho_{\bullet} = \mathbb{P}(j\in\bullet)$ in column
+    \item $Q_1 = \{{\color{blueind}\bullet},{\color{cyanind}\bullet},{\color{electricblue}\bullet}\}$ blocks in rows
+    \item $Q_2 = \{{\color{burntorange}\bullet},{\color{goldenyellow}\bullet},{\color{yellow}\bullet}\}$ blocks in columns
+    \item $\pi_{\bullet} = \mathbb{P}(i\in\bullet)$ in row and $\rho_{\bullet} = \mathbb{P}(j\in\bullet)$ in column
     \item $\alpha_{{\color{blueind}\bullet}{\color{burntorange}\bullet}} = \mathbb{P}(i \leftrightarrow j | i \in {\color{blueind}\bullet}, j \in {\color{burntorange}\bullet})$ connectivity probability between two nodes, given their clustering
 \end{itemize}
 
