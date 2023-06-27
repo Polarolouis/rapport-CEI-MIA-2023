@@ -7,7 +7,7 @@
 \usepackage[T1]{fontenc} % pour les font postscript
 \usepackage[cyr]{aeguill} % Police vectorielle TrueType, guillemets francais
 \usepackage{epsfig} % pour gérer les images
-\usepackage{amsmath,amsthm} % très bon mode mathématique
+\usepackage{amsmath,amsthm, mathtools} % très bon mode mathématique
 \usepackage{amsfonts,amssymb,bm, bbold}% permet la definition des ensembles
 \usepackage{algorithm2e} % pour les algorithmes
 \usepackage{algpseudocode} % pour les algorithmes
@@ -16,6 +16,8 @@
 \usepackage[citecolor=blueind,urlcolor=blue,bookmarks=false,hypertexnames=true]{hyperref}  % pour les hyperliens dans le document
 \usepackage{tocbibind} % Pour avoir des index pour table des matières, biblio
 \usepackage{tikz} % For graph plots
+\usepackage{caption} % Figures
+\usepackage{subcaption} % And Subfigures
 
 %% Bibliography
 \usepackage[style=apa,citestyle=authoryear-comp]{biblatex}
@@ -121,7 +123,7 @@ $V$ vertices.
 
 
 This representation can be used to represent various forms of interactions were
-two kinds of "actors" interact. Those interactions can be binary or valued and
+two kinds of ``actors`` interact. Those interactions can be binary or valued and
 a numeric representation is the incidence matrix, in the above example $B$.\\
 
 Among the use case of bipartite graphs one can find the Netflix Problem, which
@@ -159,7 +161,7 @@ adapts the Stochastic Block Model (SBM)
 to bipartite graphs.
 
 \begin{small}
-    Please note that we prefer the term "BiSBM" and will use both LBM and BiSBM to
+    Please note that we prefer the term ``BiSBM`` and will use both LBM and BiSBM to
     designate the Stochastic Block model applied on bipartite networks.
 \end{small}
 
@@ -276,15 +278,27 @@ collections with common structures.
 The next step after designing this collection model for unipartite was to adapt
 it to the bipartite case.
 
-\chapter{Adjustment of colSBM to the bipartite case: colBiSBM}
+\chapter{Structure detection in a collection of bipartite networks : Adjustment of colSBM to the bipartite case}
+\section{Separate BiSBM (sepBiSBM)}\label{sec:separate-bisbm-sepbisbm}
+
+A first approach to deal with a collection of networks is to adjust separate
+BiSBM for each network of the collection.
+
+For network $m$, let $n_1^m$ (resp. $n_2^m$) be the number of nodes in row
+(resp. column) divided into $Q_{1,m}$ row clusters (resp. $Q_{2,m}$ column
+clusters).\\
+Let $Z^m~=~(Z^m_i, \dots, Z^m_{n_1^m})$ and $W^m~=~(W^m_j, \dots, W^m_{n_2^m})$
+be independent latent variables such that $Z^m_i = q$ if row node $i$ of network
+$m$ belongs to cluster $q$
+
+% TODO Finish explaining
 
 \section{Definition of the model}
 \label{sec:definition-of-the-model}
 Here are some common notations and conventions that we will use in the following
 sections.
 
-\subsection{A collection of i.i.d Bipartite SBM}
-\label{ssec:a-collection-of-i-i-d-bipartite-sbm}
+\subsection{A collection of i.i.d bipartite SBM}\label{ssec:a-collection-of-i-i-d-bipartite-sbm}
 As for \emph{colSBM} this first model is the most constrained. It assumes
 that all the networks are the independent realizations of the same $Q_1$-$Q_2$-BiSBM
 with identical parameters. The \emph{iid-colBiSBM} is defined as follows:
@@ -294,10 +308,51 @@ with identical parameters. The \emph{iid-colBiSBM} is defined as follows:
     X^m \sim \mathcal{F}-BiSBM_{n_1,n_2} (Q_1, Q_2, \bm{\pi}, \bm{\rho}, \bm{\alpha}), \forall m = 1, \dots M,
 \end{align}
 
+% TODO Finish explaining
 
-\section{Variational Expectation step}
-\label{sec:variational-expectation-step}
-Fixed point formula for the Bernoulli distribution:
+\subsection{A collection of bipartite SBM with varying block size on either rows or columns}\label{ssec:a-collection-of-bipartite-sbm-with-varying-block-size-on-either-rows-or-columns}
+% TODO Finish explaining
+
+\section{Variational estimation of the parameters}\label{sec:variational-estimation-of-the-parameters}
+
+In practice, the estimation of the likelihood is not tractable. Following the
+classical approach defined in~\cite{daudinMixtureModelRandom2008}
+we use a variatonal version of the Expectation Maximization (VEM) algorithm.
+
+We maximize a variational lower bound of the log-likelihood of the observed data
+by approximating $p(\bm{Z,W}|\bm{X};\bm{\theta})$ with a distribution on $\bm{Z}$
+and $\bm{W}$ named $\mathcal{R}$ issued from a family of factorizable distribution
+\parencite{daudinMixtureModelRandom2008}:
+
+\[
+    \mathcal{J}(\mathcal{R};\bm{\theta}) \coloneqq \mathbb{E}_{\mathcal{R}}[\ell(\bm{X},\bm{Z},\bm{W};\bm{\theta})] + \mathcal{H}(\bm{Z,W}) \leq \ell(\bm{X};\bm{\theta})
+\]
+$\mathcal{H}$ is the entropy of the distribution. We define $\tau_{iq}^{1,m} = \mathbb{P}_{\mathcal{R}}(Z_{iq}^m = 1)$
+and $\tau_{jr}^{2,m} = \mathbb{P}_{\mathcal{R}}(W_{jr}^m = 1)$.
+
+% TODO Develop the formula
+
+The VEM algorithm alternates between two steps, the variational E step and the M step.
+The E steps consists in optimizing $\mathcal{J}(\mathcal{R};\bm{\theta})$ for a
+current value of $\bm{\theta}$ with respect to $\mathcal{R}$. And the M step
+consists of maximizing $\mathcal{J}(\mathcal{R};\bm{\theta})$ with respect to
+$\bm{\theta}$ and for a given variational distribution $\mathcal{R}$.
+
+\subsection{Variational E step}
+\label{ssec:variational-e-step}
+
+At this step we maximize with respect to $\bm{\tau}$:
+$$\widehat{\bm{\tau}}^{(t+1)} = \arg \max_{\bm{\tau}} \mathcal{J}(\mathcal{\bm{\tau}},\bm{\widehat{\theta}}^{(t)})$$
+
+And we obtain the following formulae for the $\bm{\tau^m}$:
+
+\begin{align*}
+    \widehat{\tau}_{iq}^{1,m} \propto \widehat{\pi}_{q}^{m(t)} \prod_{j=1}^{n_2^m}\prod_{r\in\mathcal{Q}_{2,m}} f(X_{ij}^m;\widehat{\alpha}_{qr}^{(t)})^{\widehat{\tau}_{jr}^{2,m(t+1)}}  & \forall i = 1, \dots , n_1^m, q \in \mathcal{Q}_{1,m} \\
+    \widehat{\tau}_{jr}^{2,m} \propto \widehat{\rho}_{r}^{m(t)} \prod_{i=1}^{n_1^m}\prod_{q\in\mathcal{Q}_{1,m}} f(X_{ij}^m;\widehat{\alpha}_{qr}^{(t)})^{\widehat{\tau}_{iq}^{1,m(t+1)}} & \forall j = 1, \dots , n_2^m, r \in \mathcal{Q}_{2,m}
+\end{align*}
+
+
+From the above formulae we obtain for the Bernoulli distribution:
 \begin{itemize}
     \item[-] \textit{iid} :
         \[ \bm{\tau}^{m,1} = ~^{t}\pi + \exp((\text{Mask}^{m} \odot A^{m})
@@ -318,26 +373,100 @@ Fixed point formula for the Bernoulli distribution:
 with $\text{Mask}^{m}$ the matrix containing $0$ if the value is a NA and a 1
 otherwise.
 
-\section{M step of the algorithm}
-\label{sec:m-step-of-the-algorithm}
-Incorporate the equations from \parencite{chabert-liddellLearningCommonStructures2023}
+\subsection{M step of the algorithm}
+\label{ssec:m-step-of-the-algorithm}
+At iteration $(t)$ the M-step maximizes the variational bound with respect to
+the model parameters $\bm{\theta}$:
+\[
+    \widehat{\bm{\theta}}^{(t+1)} = \arg \max_{\bm{\theta}} \mathcal{J}(\mathcal{\bm{\widehat{\tau}}}^{(t+1)},\bm{\theta})
+\]
 
-\section{Computation of the variational bound}
-\label{sec:computation-of-the-variational-bound}
+The following quantities are involved in the obtained formulae:
 
-\section{Penalties}
-\label{sec:penalties}
+\begin{align*}
+    e^{m}_{qr} = \sum_{i=1}^{n_1^m} \sum_{j=1}^{n_2^m} \tau_{iq}^{1,m} \tau_{jr}^{2,m} X_{ij}^m
+    &,& n^{m}_{qr} = \sum_{i=1}^{n_1^m} \sum_{j=1}^{n_2^m} \tau_{iq}^{1,m} \tau_{jr}^{2,m}
+    &,& n^{1,m}_{q} = \sum_{i=1}^{n_1^m} \tau_{iq}^{1,m}
+    &,& n^{2,m}_{r} = \sum_{j=1}^{n_2^m} \tau_{jr}^{2,m}
+\end{align*}
+
+The block proportions, in free mixture models,
+$(\pi_q^m)_{q\in\mathcal{Q}_{1,m}}, (\rho_r^m)_{r\in\mathcal{Q}_{2,m}}$ are estimated as
+\begin{align*}
+    \widehat{\pi}_q^{m}= \frac{n^{1,m}_{q}}{n_1^m} & & \text{for } \pi\text{-}colBiSBM \text{ and } \pi\rho\text{-}colBiSBM \\
+    \widehat{\rho}_r^{m}= \frac{n^{2,m}_{r}}{n_2^m} & & \text{for } \rho\text{-}colBiSBM \text{ and } \pi\rho\text{-}colBiSBM
+\end{align*}
+while on the other hand,
+\begin{align*}
+    \widehat{\pi}_q = \frac{\sum_{m=1}^{M} n^{1,m}_{q}}{\sum_{m=1}^{M} n_1^m} & & \text{for } iid\text{-}colBiSBM \text{ and } \rho\text{-}colBiSBM \\
+    \widehat{\rho}_r = \frac{\sum_{m=1}^{M} n^{2,m}_{r}}{\sum_{m=1}^{M} n_2^m} & & \text{for } iid\text{-}colBiSBM \text{ and } \pi\text{-}colBiSBM
+\end{align*}
+the parameters takes into account all the networks at the same time. The
+connectivity parameters $\alpha_{qr}$ for all models are estimated as the ratio
+of the number of interactions between row block $q$ and column block $r$ among
+all networks over the number of number of possible interactions:
+\begin{align*}
+    \widehat{\alpha}_{qr} = \frac{\sum_{m=1}^{M} e^{m}_{qr}}{\sum_{m=1}^{M} n^{m}_{qr}}
+\end{align*}
+
+\section{Model selection}\label{sec:model-selection}
+% DONE
+% Adapt bicl, methode explo car defi
+% 1 bicl 2 model exploration
+% Citer la conclusion de l'article de St Clair discussion sur bipartite
+As discussed in~\cite{chabert-liddellLearningCommonStructures2023}, the
+algorithmic aspect becomes complex when dealing with the bipartite case. Due to
+the size of the latent space being $\mathbb{N}^2$, conducting a complete
+exploration of the latent space is practically infeasible. Therefore, in
+addition to adapting the existing formulas, our contribution to addressing this
+challenge involved making significant choices, which are outlined below.
+
+The below procedures are implemented in the \emph{colSBM} package, available on \url{https://github.com/Chabert-Liddell/colSBM}.
+
+\subsection{The BIC-L criterion for model selection}
+\label{ssec:the-bic-l-criterion-for-model-selection}
+The Integrated Classified Likelihood (ICL) is a well-established tool in the SBM
+and LBM domains for selecting the appropriate number of blocks. It was
+introduced by~\cite{biernackiAssessingMixtureModel2000};
+~\cite{daudinMixtureModelRandom2008}. The ICL is derived from an asymptotic
+approximation of the marginal complete likelihood. In this approach, the model
+parameters are integrated out using a prior distribution, resulting in a
+penalized likelihood criterion. By employing the ICL, one can effectively
+determine the optimal number of blocks for the given problem in a systematic
+manner.
+We obtain the following expression
+\[
+    \text{ICL} = \max_{\theta} \mathbb{E}_{\widehat{\mathcal{R}}} [\ell(\bm{X,Z,W;\theta})] - \frac{1}{2}\text{pen}
+\]
+with pen the penalties.\\
+Using the formula $\mathbb{E}_{\widehat{\mathcal{R}}} [\ell(\bm{X,Z,W;\theta})] \approx \ell (\bm{X;\theta}) - \mathcal{H(\widehat{R})}$,
+it becomes evident, as highlighted in the existing literature, that the
+Integrated Classified Likelihood (ICL) gives preference to well-separated blocks
+by imposing a penalty on the entropy of node grouping. However, the objective of
+our study extends beyond grouping nodes into coherent blocks. We also aim to
+assess the similarity of connectivity patterns across different networks.
+Consequently, we aim to permit models that offer more flexible node grouping
+without penalizing entropy. This leads us to formulate a BIC-like criterion in
+the following manner:
+
+\[
+    \text{BIC-L} = \max_{\bm{\theta}} \mathbb{E}_{\widehat{\mathcal{R}}} [\ell(\bm{X,Z,W;\theta})] + \mathcal{H(\widehat{R})} - \frac{1}{2}\text{pen} = \max_{\bm{\theta}} \mathcal{J(\widehat{R}, \bm{\theta})} - \frac{1}{2}\text{pen}
+\]
+
+We provide below the expression for the penalties for the 4 models that we
+propose.
+
 \paragraph*{\textit{iid-colBiSBM}}
-For the \textit{iid-colBiSBM} the penalties were modified in the following way :
+For the \textit{iid-colBiSBM} the penalties were modified in the following way:
 
 \begin{itemize}
     \item For the $\pi$s and $\rho$s:
-          \[\text{pen}_{\pi}(Q_1) = (Q_1 - 1)\log(\sum_{m=1}^{M}n_{r}^{(m)})\]
-          \[\text{pen}_{\rho}(Q_2) = (Q_2 - 1)\log(\sum_{m=1}^{M}n_{c}^{(m)})\]
+          \[\text{pen}_{\pi}(Q_1) = (Q_1 - 1)\log(\sum_{m=1}^{M}n_{1}^{m})\]
+          \[\text{pen}_{\rho}(Q_2) = (Q_2 - 1)\log(\sum_{m=1}^{M}n_{2}^{m})\]
     \item For the $\alpha$s :
           \[\text{pen}_{\alpha}(Q_1, Q_2) = Q_1 \times Q_2 \log(N_M)\]
-          avec
-          \[ N_M = \sum_{m = 1}^{M} n_{r}^{(m)} \times n_{c}^{(m)} \]
+          with
+          \[ N_M = \sum_{m = 1}^{M} n_{1}^{m} \times n_{2}^{m} \]
 \end{itemize}
 And thus the $\text{BIC-L}$ formula is now:
 \[ \text{BIC-L}(\bm{X},Q_1, Q_2) = \max_{\theta} \mathcal{J} (\mathcal{\hat{R}}, \bm{\theta})
@@ -354,8 +483,8 @@ For the \textit{$\rho\pi$-colBiSBM} the penalties are the following:
           \[ \log p_{Q_1}(S_1) = - M \log(Q_1) - \sum_{m=1}^{M} \log {Q_1 \choose Q_1^{(m)}} \]
           \[ \log p_{Q_2}(S_2) = - M \log(Q_2) - \sum_{m=1}^{M} \log {Q_2 \choose Q_2^{(m)}} \]
     \item Penalties for the $\rho$s and $\pi$s:
-          \[ \text{pen}_{\pi}(Q_1, S_1) = \sum_{m=1}^{M} (Q_{1}^{(m)} - 1) \log n_{r}^{(m)} \]
-          \[ \text{pen}_{\rho}(Q_2, S_2) = \sum_{m=1}^{M} (Q_{2}^{(m)} - 1) \log n_{c}^{(m)} \]
+          \[ \text{pen}_{\pi}(Q_1, S_1) = \sum_{m=1}^{M} (Q_{1}^{(m)} - 1) \log n_{1}^{m} \]
+          \[ \text{pen}_{\rho}(Q_2, S_2) = \sum_{m=1}^{M} (Q_{2}^{(m)} - 1) \log n_{2}^{m} \]
     \item Penalties for the $\alpha$s:
           \[ \text{pen}_{\alpha}(Q_1, Q_2, S_1, S_2) = (\sum_{q=1}^{Q_1} \sum_{r=1}^{Q_2} \mathbb{1}_{(S_1)'S_2 > 0}) \log (N_M) \]
 \end{itemize}
@@ -371,23 +500,12 @@ And the corresponding BIC-L formula:
     \end{aligned}
 \]
 
-\section{Latent space exploration and model selection}
-\label{sec:latent-space-exploration-and-model-selection}
-In order to explorer the bi-dimensional latent space $(Q_1,Q_2)$
-we use the following strategies.
-
-\subsection{Model selection}
-\label{ssec:model-selection}
-In the following steps the model selection consists of using the BIC-L
-criterion to select the model. We choose among the proposed models the one that
-maximizes the BIC-L
-
 \subsection{Initialization and pairing of the models}
 \label{ssec:initialization-and-pairing-of-the-models}
 First to combine the information from the $M$ networks we fit a collection model
 for each network at the two points $Q = (1, 2)$ and $Q = (2, 1)$. Using the
 previously described VEM algorithm we obtain for each network its parameters
-($\rho,\pi,\alpha$).
+($\bm{\rho,\pi,\alpha}$).
 
 We then compute the marginal laws for each dimension, for each network. Then
 we order the network blocks by the probabilities obtained in decreasing order.
@@ -462,7 +580,7 @@ window ($Q_{1,center} + depth, Q_{2,center} + depth$). All the points in this sq
 updated and contribute to the update of the others.
 This procedure is repeated until convergence of the BIC-L.
 
-The procedure consists of two alternating steps:
+The figure \ref{fig:moving-window-procedure} illustrates the procedure. It consists of two alternating steps:
 \begin{itemize}
     \item the \emph{forward pass}: repeatedly computing the possible splits to
           fit the current model.
@@ -514,9 +632,98 @@ The procedure consists of two alternating steps:
     \textbf{Output:} Best model with maximum BIC-L in the window
 \end{algorithm}
 
+\begin{figure}[H]
+    \definecolor{mypurple}{RGB}{128,0,128}
+    \begin{subfigure}[b]{0.48\textwidth}
+        \begin{tikzpicture}[scale=1.5]
+            \tikzstyle{model}=[circle,draw=none,fill=gray]
+            \tikzstyle{split}=[>=stealth,->,thick, draw=blueind]
+            \tikzstyle{merge}=[>=stealth,->,thick, draw=red]
+            \draw[step=1cm, help lines] (-2,-2) grid (2,2);
+            \node[model] (mode) at (0,0) {{\color{red}X}};
+
+            \draw[color=red, line width=1pt, dashed] (-1.5,-1.5) rectangle ++(3,3);
+
+            \node[model] (bottom_left) at (-1,-1) {};
+            \node[model, draw=blue] (row_1) at (0,-1) {};
+            \node[model, draw=blue] (col_1) at (-1,0) {};
+            \node[model, draw=blue] (row_2) at (1,-1) {};
+            \node[model, draw=blue] (col_2) at (-1,1) {};
+            \node[model, draw=blue] (mode) at (0,0) {{\color{red}X}};
+            \node[model, draw=blue] (row_3) at (1,0) {};
+            \node[model, draw=blue] (col_3) at (0,1) {};
+            \node[model, draw=blue] (top_right) at (1,1) {};
+
+            \draw[split] (bottom_left) -- (col_1);
+            \draw[split] (-1.75,0) -- (col_1);
+            \draw[split] (bottom_left) -- (row_1);
+            \draw[split] (0,-1.75) -- (row_1);
+
+
+            \draw[split] (col_1) -- (col_2);
+            \draw[split] (-1.75,1) -- (col_2);
+            \draw[split] (row_1) -- (row_2);
+            \draw[split] (1,-1.75) -- (row_2);
+            \draw[split] (row_1) -- (mode);
+            \draw[split] (col_1) -- (mode);
+
+
+            \draw[split] (col_2) -- (col_3);
+            \draw[split] (row_2) -- (row_3);
+            \draw[split] (mode) -- (row_3);
+            \draw[split] (mode) -- (col_3);
+
+            \draw[split] (col_3) -- (top_right);
+            \draw[split] (row_3) -- (top_right);
+        \end{tikzpicture}
+        \caption[forward]{Visualisation of a forward pass of moving window}\label{fig:visualisation-forward-pass}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \begin{tikzpicture}[scale=1.5]
+            \tikzstyle{model}=[circle,draw=none,fill=gray]
+            \tikzstyle{split}=[>=stealth,->,thick, draw=blueind]
+            \tikzstyle{merge}=[>=stealth,->,thick, draw=red]
+            \draw[step=1cm, help lines] (-2,-2) grid (2,2);
+            \draw[color=red, line width=1pt, dashed] (-1.5,-1.5) rectangle ++(3,3);
+
+            \node[model, draw=mypurple] (top_right) at (1,1) {};
+            \node[model, draw=mypurple] (row_3) at (1,0) {};
+            \node[model, draw=mypurple] (col_3) at (0,1) {};
+            \node[model, draw=mypurple] (row_2) at (1,-1) {};
+            \node[model, draw=mypurple] (col_2) at (-1,1) {};
+            \node[model, draw=mypurple] (mode) at (0,0) {{\color{red}X}};
+            \node[model, draw=red] (bottom_left) at (-1,-1) {};
+            \node[model, draw=mypurple] (row_1) at (0,-1) {};
+            \node[model, draw=mypurple] (col_1) at (-1,0) {};
+
+            \draw[merge] (1,1.75) -- (top_right);
+            \draw[merge] (1.75,1) -- (top_right);
+            \draw[merge] (0,1.75) -- (col_3);
+            \draw[merge] (1.75,0) -- (row_3);
+            \draw[merge] (1.75,-1) -- (row_2);
+            \draw[merge] (-1,1.75) -- (col_2);
+
+            \draw[merge] (top_right) -- (col_3);
+            \draw[merge] (top_right) -- (row_3);
+            \draw[merge] (col_3) -- (col_2);
+            \draw[merge] (row_3) -- (row_2) ;
+            \draw[merge] (row_3) -- (mode);
+            \draw[merge] (col_3) -- (mode);
+            \draw[merge] (col_2) --(col_1);
+            \draw[merge] (row_2) -- (row_1);
+            \draw[merge] (mode) -- (row_1);
+            \draw[merge] (mode) -- (col_1);
+            \draw[merge] (col_1) -- (bottom_left);
+            \draw[merge] (row_1) -- (bottom_left);
+        \end{tikzpicture}
+        \caption[forward]{Visualisation of a backward pass of moving window}\label{fig:visualisation-backward-pass}
+    \end{subfigure}
+    \caption{Moving window procedure, the center node marked with an {\color{red}X} is the mode of BIC-L}\label{fig:moving-window-procedure}
+\end{figure}
 
 \paragraph*{Forward pass} The forward pass consists for a model at $(Q_1, Q_2)$
-to compute the possible splits from the block memberships of its "predecessors".
+to compute the possible splits from the block memberships of its ``predecessors``.
 The predecessors are the point at the left $(Q_1 - 1, Q_2)$ and below
 $(Q_1, Q_2 - 1)$ the current model (if they exist). To update the current model,
 we take its predecessors block memberships and try to split one of the blocks in
@@ -537,7 +744,7 @@ spectral clustering). From this point, the next model will have at least one
 predecessor and the procedure can iterate.
 
 \paragraph*{Backward pass} The backward pass consists for a model at $(Q_1, Q_2)$
-to compute the possible merges from the block memberships of its "predecessors".
+to compute the possible merges from the block memberships of its ``predecessors``.
 The predecessors are the point at the right $(Q_1 + 1, Q_2)$ and on top
 $(Q_1, Q_2 + 1)$ of the current model (if the predecessors exist). To update the
 current model, we take its predecessors block memberships and try to merge two
@@ -559,17 +766,99 @@ fit and the procedure can repeat until convergence.
 
 \section{Networks clustering}
 \label{sec:networks-clustering}
-As in \parencite{chabert-liddellLearningCommonStructures2023} we use a recursive
+As in~\cite{chabert-liddellLearningCommonStructures2023} we use a recursive
 algorithm to determine the best clustering of the given networks. The procedure
-being the same, only the technical modifications for the bipartite case will be
-explained below.
-\subsection{Distance between two networks}
-\label{ssec:distance-between-two-networks}
-The distance weights uses $\pi$ and $\rho$.
+being the same, we will present it briefly and focus on adjustments.
+
+When networks in a collection do not share the same mesoscale connectivity
+structure we want to be able to partition them correctly. For this we perform
+a clustering of networks.
+
+The process of clustering a collection of networks involves discovering a
+partition $\mathcal{G} = (\mathcal{M}_g)_{g=1,\dots,G}$ of $\{1,\dots, M\}$.
+Given $\mathcal{G}$ we set the following model on $\bm{X}$:
+
 \[
-    D_{\mathcal{M}}(m,m') = \sum_{q = 1}^{Q_1} \sum_{r = 1}^{Q_2} \max(\widetilde{\pi}_{q}^{m}, \widetilde{\pi}_{q}^{m'}) \left( \frac{\widetilde{\alpha}_{qr}^{m}}{\widehat{\delta}_{m}} - \frac{\widetilde{\alpha}_{qr}^{m'}}{\widehat{\delta}_{m'}}\right)^{2} \max(\widetilde{\rho}_{r}^{m}, \widetilde{\rho}_{r}^{m'})
+    \forall g \in \{1,\dots, G\}, \forall m \in \mathcal{M}_g, X^m \sim \mathcal{F}\text{-}BiSBM(Q_1^g, Q_2^g, \bm{\pi^m, \rho^m,} \bm{\alpha}^g)
 \]
 
+And we defined the score of a given partition $\mathcal{G}$:
+\[
+    Sc(\mathcal{G}) = \sum_{g=1}^{G} \max_{Q^g=1,\dots,Q_{\max}} \text{BIC-L}((X^m)_{m\in\mathcal{M}_g},Q_1^g, Q_2^g)
+\]
+Thus the score consists of the sum of the BIC-L of the sub-collections for the
+partition $\mathcal{G}$.
+
+\subsection{Dissimilarity between two networks}
+\label{ssec:dissimilarity-between-two-networks}
+The parameters for the dissimilarity are defined as follow:
+\begin{align*}
+    \widetilde{n}_{qr}^m = \sum_{i=1}^{n_1^m} \sum_{j=1}^{n_2^m} \widehat{\tau}_{iq}^{1,m} \widehat{\tau}_{jr}^{2,m},
+    && \widetilde{\alpha}_{qr}^m = \frac{\sum_{i=1}^{n_1^m} \sum_{j=1}^{n_2^m} \widehat{\tau}_{iq}^{1,m} \widehat{\tau}_{jr}^{2,m} X_{ij}^m}{\widetilde{n}_{qr}^m},\\
+    \widetilde{\pi}_q^m = \frac{\sum_{i=1}^{n_1^m} \widehat{\tau}_{iq}^{1,m}}{n_1^m},
+    && \widetilde{\rho}_r^m = \frac{\sum_{j=1}^{n_2^m} \widehat{\tau_{jr}}^{2,m}}{n_2^m}
+\end{align*}
+And the dissimilarity between any pair of networks $(m,m')\in\mathcal{M}^2$ is then:
+\[
+    D_{\mathcal{M}}(m,m') = \sum_{q = 1}^{Q_1} \sum_{r = 1}^{Q_2} \max(\widetilde{\pi}_{q}^{m}, \widetilde{\pi}_{q}^{m'}) \left( \widetilde{\alpha}_{qr}^{m} - \widetilde{\alpha}_{qr}^{m'}\right)^{2} \max(\widetilde{\rho}_{r}^{m}, \widetilde{\rho}_{r}^{m'})
+\]
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \tikzstyle{instruct}=[font=\small, text justified, rectangle,draw,fill=yellow!50]
+        \tikzstyle{first_col}=[rectangle, text justified, draw,fill=gray!50]
+        \tikzstyle{second_col}=[scale=0.55, circle, draw,fill=red!50]
+        \tikzstyle{test}=[font=\small, text justified, diamond, aspect=2.5,thick,
+        draw=blue,fill=yellow!50,text=blue]
+        \tikzstyle{es}=[font=\small, text justified, rectangle,draw,rounded corners=4pt,fill=cyanind!25]
+
+        \node[es] (liste) at (0,4) {Supply a collection to partition};
+        \node[instruct, text width=5cm, below = 0.45cm of liste] (1-collection) {Fit \emph{colBiSBM}};
+        \node[first_col, right = 0.5cm of 1-collection] (1-col-obj) {};
+        \node[instruct, text width=5cm, below = 0.45cm of 1-collection] (dissimi) {Compute a dissimilarity matrix over the collection};
+        \node[instruct, text width=5cm, below = 0.45cm of dissimi] (2-sous-collection) {Split the \emph{collection in 2 sub-collections} and fit the \emph{colBiSBM}};
+        \node[second_col, right = 0.25cm of 2-sous-collection] (1-sec-col-obj) {1};
+        \node[second_col, right = 0.25cm of 1-sec-col-obj] (1-sec-col-obj) {2};
+        \node[test,below = 0.45cm of 2-sous-collection, scale=0.7] (BICL-test) {$\sum_{i=1}^{2} (\text{BIC-L}(\tikz[baseline=-0.25cm]{\node[second_col] {i};} )) > \text{BIC-L}(\tikz[baseline=-0.25cm]{\node[first_col] {};})$?};
+        \node[es, right = 0.55cm of BICL-test] (sortie) {Output \tikz{\node[rectangle, draw, fill=gray!50, rounded corners=0pt] {};}};
+        \node[es, left = 0.45cm of dissimi, text width = 2cm] (recursion) {Loop over \tikz{\node[second_col] {1};} and \tikz{\node[second_col] {2};} };
+
+        \tikzstyle{suite}=[->,>=stealth,thick,rounded corners=4pt]
+        \draw[suite] (liste) -- (1-collection);
+        \draw[suite] (1-collection) -- (dissimi);
+        \draw[suite] (dissimi) -- (2-sous-collection);
+        \draw[suite] (2-sous-collection) -- (BICL-test);
+        \draw[suite] (BICL-test) -| node[near start, above, fill=none] {Yes} (recursion);
+        \draw[suite] (recursion.north) |- (1-collection.west);
+        \draw[suite] (BICL-test) -- node[near start, above, fill=none] {No} (sortie);
+    \end{tikzpicture}
+    \caption{Network clustering procedure}
+    \label{fig:netclustering-procedure}
+\end{figure}
+
+The above figure (\ref{fig:netclustering-procedure}) shows a condensed
+explanation of the network clustering algorithm.
+
+The idea is to adjust the \emph{colBiSBM} model over the full collection of $M$
+networks and then compute the dissimilarity matrix between all networks of the
+collection. We obtain the collection $\mathcal{G} = \{\mathcal{M}\}$ the trivial
+partition in a unique group.
+
+Then using the \emph{KNN} we split the collection in two sub-collections with
+the dissimilarity matrix. The two sub-collections are fitted and we compute
+the score of this new partition $\mathcal{G}^{*} = \{G_1, G_2\}$.
+
+If $Sc(\mathcal{G}^{*}) > Sc(\mathcal{G})$ then we repeat the same procedure on
+$G_1$ and $G_2$. Else we return $\mathcal{G}$.
+
+We illustrate our capacity to perform a partition of a collection for all
+colBiSBM models in \ref{ssec:network-clustering-of-simulated-networks}.
+
+\section{Simulation studies}\label{sec:simulation-studies}
+\subsection{Network clustering of simulated networks}\label{ssec:network-clustering-of-simulated-networks}
+
+\section{Application to~\cite{doreRelativeEffectsAnthropogenic2021} data}\label{sec:application-to-dorerelativeeffectsanthropogenic2021-data}
 
 \printbibliography
 \listoffigures
