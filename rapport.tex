@@ -110,7 +110,7 @@ $V$ vertices.
 \begin{minipage}{0.5\linewidth}
     \begin{center}
         Incidence matrix
-        $B=\left(
+        $X=\left(
             \begin{array}{rrrrr}
                 1 & 1 & 1 & 1 & 0 \\
                 0 & 0 & 1 & 1 & 1 \\
@@ -120,11 +120,21 @@ $V$ vertices.
     \end{center}
 \end{minipage}
 
-
+$X$ is the \emph{incidence matrix} and is the mathematical object on which
+computations are performed. It is filled with the following rule:
+\begin{equation*}
+    \begin{cases}
+        X_{ij} = 0 & \text{if no interaction is observed between species }i\text{ and }j\\
+        X_{ij} \neq 0 & \text{otherwise}
+    \end{cases}
+\end{equation*}
+If the network represents binary observation (like presence-absence observation) then
+$X_{ij}\in\mathcal{K}=\{0,1\},\forall(i,j)$; if the interactions are weighted
+(like an abundance count), $X_{ij}\in\mathcal{K}=\mathbb{N},\forall(i,j)$.
 
 This representation can be used to represent various forms of interactions were
 two kinds of ``actors`` interact. Those interactions can be binary or valued and
-a numeric representation is the incidence matrix, in the above example $B$.\\
+a numeric representation is the incidence matrix, in the above example $X$.\\
 
 Among the use case of bipartite graphs one can find the Netflix Problem, which
 was a prize organized by Netflix to improve its Recommender system. The row
@@ -279,24 +289,73 @@ The next step after designing this collection model for unipartite was to adapt
 it to the bipartite case.
 
 \chapter{Structure detection in a collection of bipartite networks : Adjustment of colSBM to the bipartite case}
+\section{Definition of a collection}\label{sec:definition-of-a-collection}
+
+We define a collection of bipartite networks as $\bm{X} = (X^1, \dots, X^M)$
+the collection of incidence matrix. Moreover, all the networks in the collection
+have the same type of interaction (e.g., all interactions are binary).
+
 \section{Separate BiSBM (sepBiSBM)}\label{sec:separate-bisbm-sepbisbm}
 
 A first approach to deal with a collection of networks is to adjust separate
 BiSBM for each network of the collection.
 
 For network $m$, let $n_1^m$ (resp. $n_2^m$) be the number of nodes in row
-(resp. column) divided into $Q_{1,m}$ row clusters (resp. $Q_{2,m}$ column
+(resp. column) divided into $Q_1^m$ row clusters (resp. $Q_2^m$ column
 clusters).\\
 Let $Z^m~=~(Z^m_i, \dots, Z^m_{n_1^m})$ and $W^m~=~(W^m_j, \dots, W^m_{n_2^m})$
 be independent latent variables such that $Z^m_i = q$ if row node $i$ of network
-$m$ belongs to cluster $q$
+$m$ belongs to row cluster $q$ ($q\in\{1,\dots,Q_1^m\}$) and $W^m_j = r$ if column node $j$ of network $m$
+belong to column block $r$ ($r\in\{1,\dots,Q_2^m\}$). And we have
+\begin{align}\label{eqn:lbm-block-membership-prob}
+    \mathbb{P}(Z_i^m=q)=\pi_q^m,&&\mathbb{P}(W_j^m=r)=\rho_r^m
+\end{align}
+where $\pi_q^m > 0$, $\rho_r^m > 0$, $\sum_{q=1}^{Q_1^m}\pi_q^m = 1$ and
+$\sum_{r=1}^{Q_2^m}\rho_r^m = 1$. Given the latent variables
+$Z^m, W^m$, the $X_{ij}^m$s are assumed to be independent and distributed
+as
 
-% TODO Finish explaining
+\begin{align}\label{eqn:lbm-conditional-to-latent}
+    X_{ij}^m|Z_i^m = q,W_j^m = r \sim \mathcal{F}(.;\alpha_{qr}^m)
+\end{align}
+where $\mathcal{F}$ is referred to as the emission distribution. $\mathcal{F}$ is chosen to
+be the Bernoulli distribution for binary interactions, and the Poisson
+distribution for weighted interactions such as counts. Let $f$ be the density of
+the emission distribution, then:
 
-\section{Definition of the model}
-\label{sec:definition-of-the-model}
-Here are some common notations and conventions that we will use in the following
-sections.
+\begin{equation}\label{eqn:lbm-emission}
+    \log f(X^m_{ij};\alpha_{qr}^m) =
+    \begin{cases}
+        X_{ij}^m \log(\alpha_{qr}^m) + (1-X_{ij}^m) \log(1-\alpha_{qr}^m) & \text{for Bernoulli emission} \\
+        -\alpha_{qr}^m + X_{ij}^m \log(\alpha_{qr}^m) - \log(X_{ij}^m!) & \text{for Poisson emission}
+    \end{cases}
+\end{equation}
+
+Equations \eqref{eqn:lbm-block-membership-prob}, \eqref{eqn:lbm-conditional-to-latent}
+and \eqref{eqn:lbm-emission} defines the BiSBM model and we will now use a short
+notation:
+
+\begin{equation}
+    \tag{\emph{sep-BiSBM}}
+    X^m \sim \mathcal{F}\text{-BiSBM}_{n_1^m,n_2^m}(Q_1^m, Q_2^m, \bm{\pi^m}, \bm{\rho^m}, \bm{\alpha^m})
+\end{equation}
+where $\mathcal{F}$ encodes the emission distribution, $n_1^m,n_2^m$ are the row
+and column nodes, $Q_1^m, Q_2^m$ are the number of row and column blocks in
+network $m$, $\bm{\pi}^m~=~{(\pi^m_q)}_{q=1,\dots,Q_1^m}$ and
+$\bm{\rho}^m~=~{(\rho^m_r)}_{r=1,\dots,Q_2^m}$ are the vectors  of their
+proportions. The $Q_1^m \times Q_2^m$ matrix
+$\bm{\alpha}^m = {(\alpha^m_{qr})}_{\substack{q = 1,\dots,Q_1^m \\ r = 1,\dots,Q_2^m}}$
+are the connectivity parameters, the parameters of the emission distribution.
+$\alpha^m_{qr}\in\mathcal{A}_{\mathcal{F}}$ where, for the Bernoulli
+(resp. Poisson) emission distribution, $\mathcal{A}_{\mathcal{F}} = (0,1)$ (resp.
+$\mathcal{A}_{\mathcal{F}} = \mathbb{R}^{*+}$). In this $sep$-$BiSBM$ each
+network $m$ is assumed to follow a $BiSBM$ with its own parameters ($\bm{\pi}^m,
+\bm{\rho}^m, \bm{\alpha}^m$).
+% DONE Finish explaining
+
+\section{Definition of the colBiSBM models}\label{sec:definition-of-the-colbisbm-models}
+% Here are some common notations and conventions that we will use in the following
+% sections.
 
 \subsection{A collection of i.i.d bipartite SBM}\label{ssec:a-collection-of-i-i-d-bipartite-sbm}
 As for \emph{colSBM} this first model is the most constrained. It assumes
@@ -305,13 +364,96 @@ with identical parameters. The \emph{iid-colBiSBM} is defined as follows:
 
 \begin{align}
     \tag{\emph{iid-colBiSBM}}
-    X^m \sim \mathcal{F}-BiSBM_{n_1,n_2} (Q_1, Q_2, \bm{\pi}, \bm{\rho}, \bm{\alpha}), \forall m = 1, \dots M,
+    X^m \sim \mathcal{F}-BiSBM_{n_1^m,n_2^m} (Q_1, Q_2, \bm{\pi}, \bm{\rho}, \bm{\alpha}), && \forall m = 1, \dots M
 \end{align}
+where $\forall (q,r) \in \{1,\dots,Q_1\}\times\{1,\dots,Q_2\}$, $\alpha_{qr} \in \mathcal{A}_{\mathcal{F}}$,
+$\pi_q \in \left( 0,1 \right], \sum_{q=1}^{Q_1} \pi_q = 1 $ and $\rho_r \in \left( 0,1 \right], \sum_{r=1}^{Q_2} \rho_r = 1 $.
+This model involves $(Q_1 - 1) + (Q_2 - 1) + Q_1\times Q_2$ parameters, the two
+first terms corresponding to block proportions on the row and column dimensions
+and the third term to connectivity parameters.
 
-% TODO Finish explaining
+But the assumption that block proportions are the same among the networks is a
+strong assumption. In plant-pollinator networks, the proportion of specialist
+species can differ between networks and thus the model may benefit from not
+having the same block proportions but sharing a common connectivity structure.
+The following models relaxes this assumption on either row, column or both.
 
 \subsection{A collection of bipartite SBM with varying block size on either rows or columns}\label{ssec:a-collection-of-bipartite-sbm-with-varying-block-size-on-either-rows-or-columns}
-% TODO Finish explaining
+% DONE Finish explaining
+
+$\pi$-colBiSBM model still assumes that the networks share a common connectivity
+structure represented by $\bm{\alpha}$ but that each network has its own row
+block proportions. For $m \in \{1,\dots,M\}$, the $X^m$ are independent and
+\begin{align}
+    \tag{\emph{$\pi$-colBiSBM}}
+    X^m \sim \mathcal{F}-BiSBM_{n_1^m,n_2^m} (Q_1, Q_2, \bm{\pi^m}, \bm{\rho}, \bm{\alpha}), && \forall m = 1, \dots, M
+\end{align}
+where $\forall (q,r) \in \{1,\dots,Q_1\}\times\{1,\dots,Q_2\}$, $\alpha_{qr} \in \mathcal{A}_{\mathcal{F}}$,
+$\pi^m_q \in \left[ 0,1 \right], \sum_{q=1}^{Q_1} \pi^m_q~=~1, \forall m \in \{1,\dots,M\}$ and $\rho_r \in \left( 0,1 \right], \sum_{r=1}^{Q_2} \rho_r = 1 $.
+This model is more flexible than the iid-colBiSBM as it allows some row block
+proportions to be null
+in certain networks ($\pi^m_q\in\left[ 0,1 \right]$): if $\pi_q^m = 0$ then the
+block $q$ is not represented in the network $m$. The connectivity structure is
+thus a subset of a large connectivity structure common to all networks. We face
+the same problems as~\cite{chabert-liddellLearningCommonStructures2023} and
+adapt the support $S$ they define for the $\pi$-colSBM to the bipartite case by
+having $S^1$ of size $M\times Q_1$ the support for the rows and $S^2$ of size
+$M\times Q_2$ the support for the columns. Thus
+$S^1_{mq} = \mathbb{1}_{\pi^m_q > 0}$ and
+$S^2_{mr} = \mathbb{1}_{\rho^m_r > 0}$. In this case, $S^2 = \bm{1}$, because
+there is no freedom on the column dimension.
+
+For a given number of blocks $Q_1$, $Q_2$ and matrix $S^1$ ($S^2$ being in this case the matrix full of ones), the number of
+parameters is:
+\begin{equation*}
+    \text{NP}(\pi\text{-}colBiSBM) = \sum_{m=1}^{M}\Bigg( \sum_{q=1}^{Q_1} S^1_{mq} - 1 \Bigg) + (Q_2 - 1) + \sum_{\substack{q=1,\dots,Q_1 \\ r=1,\dots,Q_2}} \mathbb{1}_{{(S^{1\prime}S^2)}_{qr}>0}
+\end{equation*}
+The first term corresponds to the non-null block proportions in each network.
+The third quantity accounts for the fact that some blocks may never be
+represented simultaneously in any network, so the corresponding connection
+parameters $\alpha_{qr}$ are not useful for defining the model.
+
+$\rho$-colBiSBM model still assumes that the networks share a common connectivity
+structure represented by $\bm{\alpha}$ but that each network has its own column
+block proportions. For $m \in \{1,\dots,M\}$, the $X^m$ are independent and
+\begin{align}
+    \tag{\emph{$\rho$-colBiSBM}}
+    X^m \sim \mathcal{F}-BiSBM_{n_1^m,n_2^m} (Q_1, Q_2, \bm{\pi}, \bm{\rho^m}, \bm{\alpha}), && \forall m = 1, \dots, M
+\end{align}
+where $\forall (q,r) \in \{1,\dots,Q_1\}\times\{1,\dots,Q_2\}$, $\alpha_{qr} \in \mathcal{A}_{\mathcal{F}}$,
+$\pi_q \in \left( 0,1 \right], \sum_{q=1}^{Q_1} \pi_q = 1 $ and
+$\rho^m_r \in \left[ 0,1 \right], \sum_{r=1}^{Q_2} \rho^m_r = 1 $.
+This model is more flexible than the iid-colBiSBM as it allows some column block
+proportions to be
+null in certain networks ($\rho^m_r\in\left[ 0,1 \right]$): if $\rho_r^m = 0$
+then the column block $r$ is not represented in the network $m$.
+"Mirroring" the formulas for the $\pi$-$colBiSBM$ we relax the constraints on
+the column dimension.
+
+For a given number of blocks $Q_1$, $Q_2$ and matrix $S^2$ ($S^1$ being in this case the matrix full of ones), the number of
+parameters is:
+\begin{equation*}
+    \text{NP}(\pi\text{-}colBiSBM) = (Q_1 - 1) + \sum_{m=1}^{M}\Bigg( \sum_{r=1}^{Q_2} S^2_{mr} - 1 \Bigg) + \sum_{\substack{q=1,\dots,Q_1 \\ r=1,\dots,Q_2}} \mathbb{1}_{{(S^{1\prime}S^2)}_{qr}>0}
+\end{equation*}
+
+$\pi\rho$-colBiSBM model still assumes that the networks share a common connectivity
+structure represented by $\bm{\alpha}$ but that each network has its own row and
+column block proportions, it is the less constrained model.
+For $m \in \{1,\dots,M\}$, the $X^m$ are independent and
+\begin{align}
+    \tag{\emph{$\pi\rho$-colBiSBM}}
+    X^m \sim \mathcal{F}-BiSBM_{n_1^m,n_2^m} (Q_1, Q_2, \bm{\pi^m}, \bm{\rho^m}, \bm{\alpha}), && \forall m = 1, \dots, M
+\end{align}
+where $\forall (q,r) \in \{1,\dots,Q_1\}\times\{1,\dots,Q_2\}$, $\alpha_{qr} \in \mathcal{A}_{\mathcal{F}}$,
+$\pi^m_q \in \left[ 0,1 \right], \sum_{q=1}^{Q_1} \pi^m_q~=~1, \forall m \in \{1,\dots,M\}$ and
+$\rho^m_r \in \left[ 0,1 \right], \sum_{r=1}^{Q_2} \rho^m_r = 1 $.
+
+For a given number of blocks $Q_1$, $Q_2$ and matrices $S^1$, $S^2$, the number of
+parameters is:
+\begin{equation*}
+    \text{NP}(\pi\text{-}colBiSBM) = \sum_{m=1}^{M}\Bigg( \sum_{q=1}^{Q_1} S^1_{mq} - 1 \Bigg) + \sum_{m=1}^{M}\Bigg( \sum_{r=1}^{Q_2} S^2_{mr} - 1 \Bigg) + \sum_{\substack{q=1,\dots,Q_1 \\ r=1,\dots,Q_2}} \mathbb{1}_{{(S^{1\prime}S^2)}_{qr}>0}
+\end{equation*}
+
 
 \section{Variational estimation of the parameters}\label{sec:variational-estimation-of-the-parameters}
 
@@ -327,8 +469,14 @@ and $\bm{W}$ named $\mathcal{R}$ issued from a family of factorizable distributi
 \[
     \mathcal{J}(\mathcal{R};\bm{\theta}) \coloneqq \mathbb{E}_{\mathcal{R}}[\ell(\bm{X},\bm{Z},\bm{W};\bm{\theta})] + \mathcal{H}(\bm{Z,W}) \leq \ell(\bm{X};\bm{\theta})
 \]
-$\mathcal{H}$ is the entropy of the distribution. We define $\tau_{iq}^{1,m} = \mathbb{P}_{\mathcal{R}}(Z_{iq}^m = 1)$
-and $\tau_{jr}^{2,m} = \mathbb{P}_{\mathcal{R}}(W_{jr}^m = 1)$.
+$\mathcal{H}$ is the entropy of the distribution. $\bm{Z}$ and $\bm{W}$ are
+redefined using the \emph{one-hot encoded} conversion (i.e., $Z_i^m = q
+\rightarrow Z_{iq}^m = 1$ and $W_j^m = r \rightarrow W_{jr}^m = 1$)
+We define $\tau_{iq}^{1,m} = \mathbb{P}_{\mathcal{R}}(Z_{iq}^m = 1|X_{ij}^m)$
+and $\tau_{jr}^{2,m} = \mathbb{P}_{\mathcal{R}}(W_{jr}^m = 1|X_{ij}^m)$ and the
+variational approximation is
+$\mathbb{P}_{\mathcal{R}} (Z_{iq}^m = 1, W_{jr}^m = 1|X_{ij}^m) =
+\mathbb{P}_{\mathcal{R}}(Z_{iq}^m = 1|X_{ij}^m) {\color{red}\times} \mathbb{P}_{\mathcal{R}}(W_{jr}^m = 1|X_{ij}^m) = \tau_{iq}^{1,m} {\color{red}\times} \tau_{jr}^{2,m}$.
 
 % TODO Develop the formula
 
@@ -347,31 +495,32 @@ $$\widehat{\bm{\tau}}^{(t+1)} = \arg \max_{\bm{\tau}} \mathcal{J}(\mathcal{\bm{\
 And we obtain the following formulae for the $\bm{\tau^m}$:
 
 \begin{align*}
-    \widehat{\tau}_{iq}^{1,m} \propto \widehat{\pi}_{q}^{m(t)} \prod_{j=1}^{n_2^m}\prod_{r\in\mathcal{Q}_{2,m}} f(X_{ij}^m;\widehat{\alpha}_{qr}^{(t)})^{\widehat{\tau}_{jr}^{2,m(t+1)}}  & \forall i = 1, \dots , n_1^m, q \in \mathcal{Q}_{1,m} \\
-    \widehat{\tau}_{jr}^{2,m} \propto \widehat{\rho}_{r}^{m(t)} \prod_{i=1}^{n_1^m}\prod_{q\in\mathcal{Q}_{1,m}} f(X_{ij}^m;\widehat{\alpha}_{qr}^{(t)})^{\widehat{\tau}_{iq}^{1,m(t+1)}} & \forall j = 1, \dots , n_2^m, r \in \mathcal{Q}_{2,m}
+    \widehat{\tau}_{iq}^{1,m} \propto \widehat{\pi}_{q}^{m(t)} \prod_{j=1}^{n_2^m}\prod_{r\in\mathcal{Q}_2^m} f(X_{ij}^m;\widehat{\alpha}_{qr}^{(t)})^{\widehat{\tau}_{jr}^{2,m(t+1)}}  & \forall i = 1, \dots , n_1^m, q \in \mathcal{Q}_1^m \\
+    \widehat{\tau}_{jr}^{2,m} \propto \widehat{\rho}_{r}^{m(t)} \prod_{i=1}^{n_1^m}\prod_{q\in\mathcal{Q}_1^m} f(X_{ij}^m;\widehat{\alpha}_{qr}^{(t)})^{\widehat{\tau}_{iq}^{1,m(t+1)}} & \forall j = 1, \dots , n_2^m, r \in \mathcal{Q}_2^m
 \end{align*}
 
 
 From the above formulae we obtain for the Bernoulli distribution:
-\begin{itemize}
-    \item[-] \textit{iid} :
-        \[ \bm{\tau}^{m,1} = ~^{t}\pi + \exp((\text{Mask}^{m} \odot A^{m})
-            \bm{\tau}^{m,2} ~^{t}(\text{logit}(\alpha)) + \text{Mask}^{m}
-            \bm{\tau}^{m,2} ~^{t}\log(\bm{1} - \alpha)) \]
-        \[ \bm{\tau}^{m,2} = ~^{t}\rho + \exp(~^{t}(\text{Mask}^{m} \odot A^{m})
-            \bm{\tau}^{m,1} \text{logit}(\alpha) + ~^{t}\text{Mask}^{m}
-            \bm{\tau}^{m,1} \log(\bm{1} - \alpha)) \]
-    \item[-] $\rho\pi$ :
-        \[ \bm{\tau}^{m,1} = ~^{t}\pi^{m} + \exp((\text{Mask}^{m} \odot A^{m})
-            \bm{\tau}^{m,2} ~^{t}(\text{logit}(\alpha)) + \text{Mask}^{m}
-            \bm{\tau}^{m,2} ~^{t}\log(\bm{1} - \alpha)) \]
-        \[ \bm{\tau}^{m,2} = ~^{t}\rho^{m} + \exp(~^{t}(\text{Mask}^{m} \odot A^{m})
-            \bm{\tau}^{m,1} \text{logit}(\alpha) + ~^{t}\text{Mask}^{m}
-            \bm{\tau}^{m,1} \log(\bm{1} - \alpha)) \]
-\end{itemize}
+% TODO move to technical.tex
+% \begin{itemize}
+%     \item[-] \textit{iid} :
+%         \[ \bm{\tau}^{m,1} = ~^{t}\pi + \exp((\text{Mask}^{m} \odot A^{m})
+%             \bm{\tau}^{m,2} ~^{t}(\text{logit}(\alpha)) + \text{Mask}^{m}
+%             \bm{\tau}^{m,2} ~^{t}\log(\bm{1} - \alpha)) \]
+%         \[ \bm{\tau}^{m,2} = ~^{t}\rho + \exp(~^{t}(\text{Mask}^{m} \odot A^{m})
+%             \bm{\tau}^{m,1} \text{logit}(\alpha) + ~^{t}\text{Mask}^{m}
+%             \bm{\tau}^{m,1} \log(\bm{1} - \alpha)) \]
+%     \item[-] $\rho\pi$ :
+%         \[ \bm{\tau}^{m,1} = ~^{t}\pi^{m} + \exp((\text{Mask}^{m} \odot A^{m})
+%             \bm{\tau}^{m,2} ~^{t}(\text{logit}(\alpha)) + \text{Mask}^{m}
+%             \bm{\tau}^{m,2} ~^{t}\log(\bm{1} - \alpha)) \]
+%         \[ \bm{\tau}^{m,2} = ~^{t}\rho^{m} + \exp(~^{t}(\text{Mask}^{m} \odot A^{m})
+%             \bm{\tau}^{m,1} \text{logit}(\alpha) + ~^{t}\text{Mask}^{m}
+%             \bm{\tau}^{m,1} \log(\bm{1} - \alpha)) \]
+% \end{itemize}
 
-with $\text{Mask}^{m}$ the matrix containing $0$ if the value is a NA and a 1
-otherwise.
+% with $\text{Mask}^{m}$ the matrix containing $0$ if the value is a NA and a 1
+% otherwise.
 
 \subsection{M step of the algorithm}
 \label{ssec:m-step-of-the-algorithm}
@@ -391,7 +540,7 @@ The following quantities are involved in the obtained formulae:
 \end{align*}
 
 The block proportions, in free mixture models,
-$(\pi_q^m)_{q\in\mathcal{Q}_{1,m}}, (\rho_r^m)_{r\in\mathcal{Q}_{2,m}}$ are estimated as
+$(\pi_q^m)_{q\in\mathcal{Q}_1^m}, (\rho_r^m)_{r\in\mathcal{Q}_2^m}$ are estimated as
 \begin{align*}
     \widehat{\pi}_q^{m}= \frac{n^{1,m}_{q}}{n_1^m} & & \text{for } \pi\text{-}colBiSBM \text{ and } \pi\rho\text{-}colBiSBM \\
     \widehat{\rho}_r^{m}= \frac{n^{2,m}_{r}}{n_2^m} & & \text{for } \rho\text{-}colBiSBM \text{ and } \pi\rho\text{-}colBiSBM
