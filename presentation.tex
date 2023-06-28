@@ -586,22 +586,22 @@
             \begin{tikzpicture}
                 \draw[step=1cm, help lines] (-2,-2) grid (2,2);
                 \draw[fill=gray, draw=gray] (0,0) circle [radius=0.225cm];
-                \draw[fill=red, draw=red] (1,0) circle [radius=0.225cm];
-                \draw[fill=red, draw=red] (0,1) circle [radius=0.225cm];
-                \draw[fill=blueind, draw=blueind] (-1,0) circle [radius=0.225cm];
-                \draw[fill=blueind, draw=blueind] (0,-1) circle [radius=0.225cm];
+                \draw[fill=blueind, draw=blueind] (1,0) circle [radius=0.225cm];
+                \draw[fill=blueind, draw=blueind] (0,1) circle [radius=0.225cm];
+                \draw[fill=red, draw=red] (-1,0) circle [radius=0.225cm];
+                \draw[fill=red, draw=red] (0,-1) circle [radius=0.225cm];
 
                 % Légende
-                \node[font=\tiny, text justified,fill=none, rotate=-45] (Splits) at (0.5,0.5){{\color{red} Splits}};
-                \node[font=\tiny, text justified,fill=none, rotate=-45] (Merges) at (-0.5,-0.5){{\color{blueind} Merges}};
+                \node[font=\tiny, text justified,fill=none, rotate=-45] (Splits) at (0.5,0.5){{\color{blueind} Splits}};
+                \node[font=\tiny, text justified,fill=none, rotate=-45] (Merges) at (-0.5,-0.5){{\color{red} Merges}};
 
                 % Splitting
-                \draw[>=stealth,->,thick, draw=red] (0.225,0) -- +(0.55,0);
-                \draw[>=stealth,->,thick, draw=red] (0,0.225) -- +(0,0.55);
+                \draw[>=stealth,->,thick, draw=blueind] (0.225,0) -- +(0.55,0);
+                \draw[>=stealth,->,thick, draw=blueind] (0,0.225) -- +(0,0.55);
 
                 % Merging
-                \draw[>=stealth,->,thick, draw=blueind] (-0.225,0) -- +(-0.55,0);
-                \draw[>=stealth,->,thick, draw=blueind] (0,-0.225) -- +(0,-0.55);
+                \draw[>=stealth,->,thick, draw=red] (-0.225,0) -- +(-0.55,0);
+                \draw[>=stealth,->,thick, draw=red] (0,-0.225) -- +(0,-0.55);
 
                 % Axes
                 \draw[>=to,->,thick] (-2,-2) -- +(1,0);
