@@ -1,0 +1,16 @@
+{
+    "emeraldwalk.runonsave": {
+        "commands": [
+            {
+                "match": ".*\\.Rmd",
+                "isAsync": true,
+                "cmd": "Rscript Rmd2Latex-fragment.R '${file}' "
+            },
+            {
+                "match": ".*",
+                "isAsync": true,
+                "cmd": "echo ${file} "
+            }
+        ]
+    }
+}
