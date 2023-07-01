@@ -1,3 +1,4 @@
+#!/usr/bin/env Rscript
 require("knitr")
 create_latex <- function(f) {
     knitr::knit(f, "/tmp/tmp-outputfile.md")
@@ -5,3 +6,6 @@ create_latex <- function(f) {
     mess <- paste("pandoc -f markdown -t latex -p -o", shQuote(newname), "/tmp/tmp-outputfile.md")
     system(mess)
 }
+args <- commandArgs(trailingOnly = TRUE)
+
+create_latex(args)
