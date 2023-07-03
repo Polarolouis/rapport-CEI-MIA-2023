@@ -1,71 +1,3 @@
-% Options for packages loaded elsewhere
-\PassOptionsToPackage{unicode}{hyperref}
-\PassOptionsToPackage{hyphens}{url}
-%
-\documentclass[
-]{article}
-\usepackage{lmodern}
-\usepackage{amssymb,amsmath}
-\usepackage{ifxetex,ifluatex}
-\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
-  \usepackage[T1]{fontenc}
-  \usepackage[utf8]{inputenc}
-  \usepackage{textcomp} % provide euro and other symbols
-\else % if luatex or xetex
-  \usepackage{unicode-math}
-  \defaultfontfeatures{Scale=MatchLowercase}
-  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
-\fi
-% Use upquote if available, for straight quotes in verbatim environments
-\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
-\IfFileExists{microtype.sty}{% use microtype if available
-  \usepackage[]{microtype}
-  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
-}{}
-\makeatletter
-\@ifundefined{KOMAClassName}{% if non-KOMA class
-  \IfFileExists{parskip.sty}{%
-    \usepackage{parskip}
-  }{% else
-    \setlength{\parindent}{0pt}
-    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
-}{% if KOMA class
-  \KOMAoptions{parskip=half}}
-\makeatother
-\usepackage{xcolor}
-\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
-\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
-\hypersetup{
-  pdftitle={Présentation de l'application de colSBM sur Doré et al.~2020},
-  hidelinks,
-  pdfcreator={LaTeX via pandoc}}
-\urlstyle{same} % disable monospaced font for URLs
-\usepackage[margin=1in]{geometry}
-\usepackage{graphicx}
-\makeatletter
-\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
-\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
-\makeatother
-% Scale images if necessary, so that they will not overflow the page
-% margins by default, and it is still possible to overwrite the defaults
-% using explicit options in \includegraphics[width, height, ...]{}
-\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
-% Set default figure placement to htbp
-\makeatletter
-\def\fps@figure{htbp}
-\makeatother
-\setlength{\emergencystretch}{3em} % prevent overfull lines
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
-
-\title{Présentation de l'application de colSBM sur Doré et al.~2020}
-\author{}
-\date{\vspace{-2.5em}}
-
-\begin{document}
-\maketitle
-
 \hypertarget{clustering-avec-le-moduxe8le-iid}{%
 \subsection{Clustering avec le modèle
 iid}\label{clustering-avec-le-moduxe8le-iid}}
@@ -77,317 +9,205 @@ Pour la collection 1
 
 \begin{figure}
 \centering
-\includegraphics{presentation_dore_files/figure-latex/iid_meso_plot-1.pdf}
+\includegraphics{figure/iid_meso_plot-1.png}
 \caption{Collection 1 - iid}
 \end{figure}
 
-\begin{tabular}{l}
-\hline
-Networks\\
-\hline
-arroyo1982\_1+arroyo1982\_2+arroyo3\\
-\hline
-eberling1999\\
-\hline
-kato1990\\
-\hline
-petanidou1991\\
-\hline
-Junker2013\\
-\hline
-bartomeus2008\\
-\hline
-Benadi2013\_1(950m)+Benadi2013\_2(1170m)+Benadi2013\_6(2020m)\\
-\hline
-Benadi2013\_4(1700m)+Benadi2013\_5(1800m)\\
-\hline
-Struck1994\\
-\hline
-Kato2000\\
-\hline
-Albrecht2010\_49yr+Albrecht2010\_63yr+Albrecht2010\_84yr+Albrecht2010\_109yr+Albrecht2010\_130yr\\
-\hline
-Baldock2011\_TB+Baldock2011\_JN\\
-\hline
-Dattilo2016\\
-\hline
-Devoto2005\_PP+Devoto2005\_AP\\
-\hline
-Devoto2005\_VT\\
-\hline
-Devoto2005\_LL+Devoto2005\_CT\\
-\hline
-Freitas2006\\
-\hline
-Gibson2006\_TA2\\
-\hline
-Jedrzejewska2013\_Ochata+Jedrzejewska2013\_Kabaty\\
-\hline
-MonteroCastano2017\_Albufera+MonteroCastano2017\_Llimpa+MonteroCastano2017\_Tirant\\
-\hline
-Kehinde2014\_Joostenberg\_Conv+Kehinde2014\_Joostenberg\_Org+Kehinde2014\_Joostenberg\_Nat+Kehinde2014\_Laibach\_Conv+Kehinde2014\_Laibach\_Org+Kehinde2014\_Laibach\_Nat+Kehinde2014\_Spier\_Conv+Kehinde2014\_Spier\_Nat\\
-\hline
-Pinheiro2008\\
-\hline
-Watts2016\_Chicon+Watts2016\_Mantanay+Watts2016\_Choquebamba+Watts2016\_Huaran+Watts2016\_Piscacucho+Watts2016\_Poques+Watts2016\_Pumamarca+Watts2016\_Tiaparo+Watts2016\_Yanacocha\\
-\hline
-Kato1993\\
-\hline
-KatoMiura1996\\
-\hline
-Kakutani1990\\
-\hline
-Inoue1990\\
-\hline
-Fragoso\_RA2+Fragoso\_RA3+Fragoso\_RD1+Fragoso\_RD3\\
-\hline
-Souza\_cerrado\\
-\hline
-Souza\_chaco\\
-\hline
-Souza\_pantanal\\
-\hline
-Souza\_vereda\\
-\hline
-Adedoja2019\\
-\hline
-Oleques2019\\
-\hline
-Baldock2019\_Bristol\\
-\hline
-Baldock2019\_Edinburgh\\
-\hline
-Baldock2019\_Leeds\\
-\hline
-Baldock2019\_Reading\\
-\hline
-\end{tabular}
+\begin{longtable}[]{@{}l@{}}
+\toprule
+Networks\tabularnewline
+\midrule
+\endhead
+arroyo1982\_1+arroyo1982\_2+arroyo3\tabularnewline
+eberling1999\tabularnewline
+kato1990\tabularnewline
+petanidou1991\tabularnewline
+Junker2013\tabularnewline
+bartomeus2008\tabularnewline
+Benadi2013\_1(950m)+Benadi2013\_2(1170m)+Benadi2013\_6(2020m)\tabularnewline
+Benadi2013\_4(1700m)+Benadi2013\_5(1800m)\tabularnewline
+Struck1994\tabularnewline
+Kato2000\tabularnewline
+Albrecht2010\_49yr+Albrecht2010\_63yr+Albrecht2010\_84yr+Albrecht2010\_109yr+Albrecht2010\_130yr\tabularnewline
+Baldock2011\_TB+Baldock2011\_JN\tabularnewline
+Dattilo2016\tabularnewline
+Devoto2005\_PP+Devoto2005\_AP\tabularnewline
+Devoto2005\_VT\tabularnewline
+Devoto2005\_LL+Devoto2005\_CT\tabularnewline
+Freitas2006\tabularnewline
+Gibson2006\_TA2\tabularnewline
+Jedrzejewska2013\_Ochata+Jedrzejewska2013\_Kabaty\tabularnewline
+MonteroCastano2017\_Albufera+MonteroCastano2017\_Llimpa+MonteroCastano2017\_Tirant\tabularnewline
+Kehinde2014\_Joostenberg\_Conv+Kehinde2014\_Joostenberg\_Org+Kehinde2014\_Joostenberg\_Nat+Kehinde2014\_Laibach\_Conv+Kehinde2014\_Laibach\_Org+Kehinde2014\_Laibach\_Nat+Kehinde2014\_Spier\_Conv+Kehinde2014\_Spier\_Nat\tabularnewline
+Pinheiro2008\tabularnewline
+Watts2016\_Chicon+Watts2016\_Mantanay+Watts2016\_Choquebamba+Watts2016\_Huaran+Watts2016\_Piscacucho+Watts2016\_Poques+Watts2016\_Pumamarca+Watts2016\_Tiaparo+Watts2016\_Yanacocha\tabularnewline
+Kato1993\tabularnewline
+KatoMiura1996\tabularnewline
+Kakutani1990\tabularnewline
+Inoue1990\tabularnewline
+Fragoso\_RA2+Fragoso\_RA3+Fragoso\_RD1+Fragoso\_RD3\tabularnewline
+Souza\_cerrado\tabularnewline
+Souza\_chaco\tabularnewline
+Souza\_pantanal\tabularnewline
+Souza\_vereda\tabularnewline
+Adedoja2019\tabularnewline
+Oleques2019\tabularnewline
+Baldock2019\_Bristol\tabularnewline
+Baldock2019\_Edinburgh\tabularnewline
+Baldock2019\_Leeds\tabularnewline
+Baldock2019\_Reading\tabularnewline
+\bottomrule
+\end{longtable}
 
 Pour la collection 2
 
 \begin{figure}
 \centering
-\includegraphics{presentation_dore_files/figure-latex/iid_meso_plot-2.pdf}
+\includegraphics{figure/iid_meso_plot-2.png}
 \caption{Collection 2 - iid}
 \end{figure}
 
-\begin{tabular}{l}
-\hline
-Networks\\
-\hline
-dupont2003\\
-\hline
-herrera1988\\
-\hline
-inouye1988\\
-\hline
-medan2002ld\\
-\hline
-medan2002rb\\
-\hline
-ramirez1992\\
-\hline
-ramirez1989\\
-\hline
-Burkle2013\\
-\hline
-Olito-Fox2014\\
-\hline
-Benadi2013\_3(1340m)\\
-\hline
-Aizen2008\_Challhuaco\_U+Aizen2008\_Challhuaco\_D\\
-\hline
-Aizen2008\_Cerro Otto\_U+Aizen2008\_Cerro Otto\_D\\
-\hline
-Aizen2008\_Llao-llao\_U+Aizen2008\_Llao-llao\_D\\
-\hline
-Chamberlain\_cr1+Chamberlain\_cr2+Chamberlain\_fs1+Chamberlain\_fs2+Chamberlain\_go1+Chamberlain\_go2+Chamberlain\_mm1+Chamberlain\_mm2+Chamberlain\_mz1+Chamberlain\_mz2+Chamberlain\_sm1+Chamberlain\_sm2\\
-\hline
-Chamberlain\_HLU+Chamberlain\_HLG+Chamberlain\_OKU+Chamberlain\_OKG+Chamberlain\_WLU+Chamberlain\_WLG+Chamberlain\_SOU+Chamberlain\_SOG\\
-\hline
-Devoto2005\_LQ\\
-\hline
-Devoto2005\_LT+Devoto2005\_LH\\
-\hline
-LemusJimenez2003\\
-\hline
-Lundgren2005\\
-\hline
-Marrero2013\\
-\hline
-Trojelsgaard2015\_La Gomera\\
-\hline
-Trojelsgaard2015\_Gran Canaria\\
-\hline
-Zackenberg\\
-\hline
-Yoshihara2008\\
-\hline
-Fragoso\_RA1+Fragoso\_RD2\\
-\hline
-PopicThesis\\
-\hline
-Pornon2017\\
-\hline
-Orford\_B1+Orford\_B2+Orford\_B3+Orford\_B4+Orford\_B5+Orford\_B10\\
-\hline
-Orford\_B6+Orford\_B7+Orford\_B8+Orford\_B9\\
-\hline
-Blumel2016\\
-\hline
-Kantsa2018\\
-\hline
-Bennett2018\\
-\hline
-Adedoja2018b\_baseZone+Adedoja2018b\_MidZone+Adedoja2018b\_HighZone+Adedoja2018b\_PeakZone\\
-\hline
-CordenizPicanco2018\_NatVeg\\
-\hline
-CordenizPicanco2018\_ExoFor\\
-\hline
-Benadi2018\\
-\hline
-Hackett2019\_NZ\_salt\_marsh+Hackett2019\_NZ\_sand\_dune+Hackett2019\_NZ\_scrub\_coprosma\\
-\hline
-Jolls2019\\
-\hline
-Traveset2013\_Fernandina\\
-\hline
-Traveset2013\_Pinta\\
-\hline
-Traveset2013\_Santiago\\
-\hline
-Traveset2013\_SantaCruz\\
-\hline
-Traveset2013\_SanCristobal\\
-\hline
-Simanonok2014\\
-\hline
-Son2019\_a1+Son2019\_a2+Son2019\_a3+Son2019\_a4+Son2019\_a5+Son2019\_a6+Son2019\_a7+Son2019\_a8+Son2019\_F1+Son2019\_F2+Son2019\_F3+Son2019\_F4+Son2019\_F5+Son2019\_F6+Son2019\_F7+Son2019\_F8\\
-\hline
-\end{tabular}
+\begin{longtable}[]{@{}l@{}}
+\toprule
+Networks\tabularnewline
+\midrule
+\endhead
+dupont2003\tabularnewline
+herrera1988\tabularnewline
+inouye1988\tabularnewline
+medan2002ld\tabularnewline
+medan2002rb\tabularnewline
+ramirez1992\tabularnewline
+ramirez1989\tabularnewline
+Burkle2013\tabularnewline
+Olito-Fox2014\tabularnewline
+Benadi2013\_3(1340m)\tabularnewline
+Aizen2008\_Challhuaco\_U+Aizen2008\_Challhuaco\_D\tabularnewline
+Aizen2008\_Cerro Otto\_U+Aizen2008\_Cerro Otto\_D\tabularnewline
+Aizen2008\_Llao-llao\_U+Aizen2008\_Llao-llao\_D\tabularnewline
+Chamberlain\_cr1+Chamberlain\_cr2+Chamberlain\_fs1+Chamberlain\_fs2+Chamberlain\_go1+Chamberlain\_go2+Chamberlain\_mm1+Chamberlain\_mm2+Chamberlain\_mz1+Chamberlain\_mz2+Chamberlain\_sm1+Chamberlain\_sm2\tabularnewline
+Chamberlain\_HLU+Chamberlain\_HLG+Chamberlain\_OKU+Chamberlain\_OKG+Chamberlain\_WLU+Chamberlain\_WLG+Chamberlain\_SOU+Chamberlain\_SOG\tabularnewline
+Devoto2005\_LQ\tabularnewline
+Devoto2005\_LT+Devoto2005\_LH\tabularnewline
+LemusJimenez2003\tabularnewline
+Lundgren2005\tabularnewline
+Marrero2013\tabularnewline
+Trojelsgaard2015\_La Gomera\tabularnewline
+Trojelsgaard2015\_Gran Canaria\tabularnewline
+Zackenberg\tabularnewline
+Yoshihara2008\tabularnewline
+Fragoso\_RA1+Fragoso\_RD2\tabularnewline
+PopicThesis\tabularnewline
+Pornon2017\tabularnewline
+Orford\_B1+Orford\_B2+Orford\_B3+Orford\_B4+Orford\_B5+Orford\_B10\tabularnewline
+Orford\_B6+Orford\_B7+Orford\_B8+Orford\_B9\tabularnewline
+Blumel2016\tabularnewline
+Kantsa2018\tabularnewline
+Bennett2018\tabularnewline
+Adedoja2018b\_baseZone+Adedoja2018b\_MidZone+Adedoja2018b\_HighZone+Adedoja2018b\_PeakZone\tabularnewline
+CordenizPicanco2018\_NatVeg\tabularnewline
+CordenizPicanco2018\_ExoFor\tabularnewline
+Benadi2018\tabularnewline
+Hackett2019\_NZ\_salt\_marsh+Hackett2019\_NZ\_sand\_dune+Hackett2019\_NZ\_scrub\_coprosma\tabularnewline
+Jolls2019\tabularnewline
+Traveset2013\_Fernandina\tabularnewline
+Traveset2013\_Pinta\tabularnewline
+Traveset2013\_Santiago\tabularnewline
+Traveset2013\_SantaCruz\tabularnewline
+Traveset2013\_SanCristobal\tabularnewline
+Simanonok2014\tabularnewline
+Son2019\_a1+Son2019\_a2+Son2019\_a3+Son2019\_a4+Son2019\_a5+Son2019\_a6+Son2019\_a7+Son2019\_a8+Son2019\_F1+Son2019\_F2+Son2019\_F3+Son2019\_F4+Son2019\_F5+Son2019\_F6+Son2019\_F7+Son2019\_F8\tabularnewline
+\bottomrule
+\end{longtable}
 
 Pour la collection 3
 
 \begin{figure}
 \centering
-\includegraphics{presentation_dore_files/figure-latex/iid_meso_plot-3.pdf}
+\includegraphics{figure/iid_meso_plot-3.png}
 \caption{Collection 3 - iid}
 \end{figure}
 
-\begin{tabular}{l}
-\hline
-Networks\\
-\hline
-small1976\\
-\hline
-\end{tabular}
+\begin{longtable}[]{@{}l@{}}
+\toprule
+Networks\tabularnewline
+\midrule
+\endhead
+small1976\tabularnewline
+\bottomrule
+\end{longtable}
 
 Pour la collection 4
 
 \begin{figure}
 \centering
-\includegraphics{presentation_dore_files/figure-latex/iid_meso_plot-4.pdf}
+\includegraphics{figure/iid_meso_plot-4.png}
 \caption{Collection 4 - iid}
 \end{figure}
 
-\begin{tabular}{l}
-\hline
-Networks\\
-\hline
-smith-ramirez2005\\
-\hline
-Weiner2011\\
-\hline
-Kaiser\_control+Kaiser\_restored\\
-\hline
-Gilarranz2014\_amarante+Gilarranz2014\_barrosa+Gilarranz2014\_cincocerros+Gilarranz2014\_difuntito+Gilarranz2014\_difuntos+Gilarranz2014\_elmorro+Gilarranz2014\_labrava+Gilarranz2014\_lachata+Gilarranz2014\_lapaja+Gilarranz2014\_piedraalta+Gilarranz2014\_vigilancia+Gilarranz2014\_volcan\\
-\hline
-Kaiser-Bunbury2017\_Bernica+Kaiser-Bunbury2017\_Casse-dent+Kaiser-Bunbury2017\_Copolia+Kaiser-Bunbury2017\_La-Reserve+Kaiser-Bunbury2017\_Rosebelle+Kaiser-Bunbury2017\_Salazie+Kaiser-Bunbury2017\_Tea-Plantation+Kaiser-Bunbury2017\_Trois-Freres\\
-\hline
-Fang2012\\
-\hline
-Aizen2008\_Puerto Blest\_U+Aizen2008\_Puerto Blest\_D\\
-\hline
-Chamberlain\_Site1+Chamberlain\_Site2+Chamberlain\_Site3+Chamberlain\_Site4+Chamberlain\_Site5+Chamberlain\_Site6\\
-\hline
-Dupont2009\_IsenBjerg+Dupont2009\_Other\\
-\hline
-Gibson2006\_GA1\\
-\hline
-Gibson2006\_TA1\\
-\hline
-LaraRomero2016\_pe?alara\_EP+LaraRomero2016\_pe?alara\_PA+LaraRomero2016\_nevero\_EP+LaraRomero2016\_nevero\_PA\\
-\hline
-Trojelsgaard2015\_Tenerife Teno Bajo+Trojelsgaard2015\_Tenerife Fasnia\\
-\hline
-Vanbergen2013\_balfarm+Vanbergen2013\_bridgend+Vanbergen2013\_dalhaikie+Vanbergen2013\_netherton+Vanbergen2013\_backhill+Vanbergen2013\_corntulloch+Vanbergen2013\_allancreich\\
-\hline
-Pfeiffer\_CNE+Pfeiffer\_CNM+Pfeiffer\_CNT+Pfeiffer\_CPB+Pfeiffer\_CPM+Pfeiffer\_CPR+Pfeiffer\_CPS+Pfeiffer\_M2+Pfeiffer\_RP1+Pfeiffer\_RP2+Pfeiffer\_LM+Pfeiffer\_LO+Pfeiffer\_BD+Pfeiffer\_BH+Pfeiffer\_BS\\
-\hline
-Carstensen\_Gigante+Carstensen\_Paulino+Carstensen\_Tinkerbell+Carstensen\_Midway+Carstensen\_Cedro+Carstensen\_Elefante+Carstensen\_Soizig\\
-\hline
-Welti\_ID+Welti\_K1B+Welti\_K4A+Welti\_4B+Welti\_20B+Welti\_20C+Welti\_N1A+Welti\_N1B+Welti\_N4A+Welti\_N4B+Welti\_N20A+Welti\_N20B\\
-\hline
-Grass2013\_1+Grass2013\_2+Grass2013\_3+Grass2013\_4+Grass2013\_5+Grass2013\_6+Grass2013\_7+Grass2013\_8+Grass2013\_9+Grass2013\_10+Grass2013\_11+Grass2013\_12+Grass2013\_13+Grass2013\_14+Grass2013\_15+Grass2013\_16+Grass2013\_17\\
-\hline
-Hackett2019\_UK\_sand\_dune+Hackett2019\_UK\_grassland+Hackett2019\_UK\_heathland+Hackett2019\_UK\_woodland+Hackett2019\_UK\_salt\_marsh+Hackett2019\_UK\_scrub\\
-\hline
-Neli2014\\
-\hline
-\end{tabular}
+\begin{longtable}[]{@{}l@{}}
+\toprule
+Networks\tabularnewline
+\midrule
+\endhead
+smith-ramirez2005\tabularnewline
+Weiner2011\tabularnewline
+Kaiser\_control+Kaiser\_restored\tabularnewline
+Gilarranz2014\_amarante+Gilarranz2014\_barrosa+Gilarranz2014\_cincocerros+Gilarranz2014\_difuntito+Gilarranz2014\_difuntos+Gilarranz2014\_elmorro+Gilarranz2014\_labrava+Gilarranz2014\_lachata+Gilarranz2014\_lapaja+Gilarranz2014\_piedraalta+Gilarranz2014\_vigilancia+Gilarranz2014\_volcan\tabularnewline
+Kaiser-Bunbury2017\_Bernica+Kaiser-Bunbury2017\_Casse-dent+Kaiser-Bunbury2017\_Copolia+Kaiser-Bunbury2017\_La-Reserve+Kaiser-Bunbury2017\_Rosebelle+Kaiser-Bunbury2017\_Salazie+Kaiser-Bunbury2017\_Tea-Plantation+Kaiser-Bunbury2017\_Trois-Freres\tabularnewline
+Fang2012\tabularnewline
+Aizen2008\_Puerto Blest\_U+Aizen2008\_Puerto Blest\_D\tabularnewline
+Chamberlain\_Site1+Chamberlain\_Site2+Chamberlain\_Site3+Chamberlain\_Site4+Chamberlain\_Site5+Chamberlain\_Site6\tabularnewline
+Dupont2009\_IsenBjerg+Dupont2009\_Other\tabularnewline
+Gibson2006\_GA1\tabularnewline
+Gibson2006\_TA1\tabularnewline
+LaraRomero2016\_pe?alara\_EP+LaraRomero2016\_pe?alara\_PA+LaraRomero2016\_nevero\_EP+LaraRomero2016\_nevero\_PA\tabularnewline
+Trojelsgaard2015\_Tenerife Teno Bajo+Trojelsgaard2015\_Tenerife
+Fasnia\tabularnewline
+Vanbergen2013\_balfarm+Vanbergen2013\_bridgend+Vanbergen2013\_dalhaikie+Vanbergen2013\_netherton+Vanbergen2013\_backhill+Vanbergen2013\_corntulloch+Vanbergen2013\_allancreich\tabularnewline
+Pfeiffer\_CNE+Pfeiffer\_CNM+Pfeiffer\_CNT+Pfeiffer\_CPB+Pfeiffer\_CPM+Pfeiffer\_CPR+Pfeiffer\_CPS+Pfeiffer\_M2+Pfeiffer\_RP1+Pfeiffer\_RP2+Pfeiffer\_LM+Pfeiffer\_LO+Pfeiffer\_BD+Pfeiffer\_BH+Pfeiffer\_BS\tabularnewline
+Carstensen\_Gigante+Carstensen\_Paulino+Carstensen\_Tinkerbell+Carstensen\_Midway+Carstensen\_Cedro+Carstensen\_Elefante+Carstensen\_Soizig\tabularnewline
+Welti\_ID+Welti\_K1B+Welti\_K4A+Welti\_4B+Welti\_20B+Welti\_20C+Welti\_N1A+Welti\_N1B+Welti\_N4A+Welti\_N4B+Welti\_N20A+Welti\_N20B\tabularnewline
+Grass2013\_1+Grass2013\_2+Grass2013\_3+Grass2013\_4+Grass2013\_5+Grass2013\_6+Grass2013\_7+Grass2013\_8+Grass2013\_9+Grass2013\_10+Grass2013\_11+Grass2013\_12+Grass2013\_13+Grass2013\_14+Grass2013\_15+Grass2013\_16+Grass2013\_17\tabularnewline
+Hackett2019\_UK\_sand\_dune+Hackett2019\_UK\_grassland+Hackett2019\_UK\_heathland+Hackett2019\_UK\_woodland+Hackett2019\_UK\_salt\_marsh+Hackett2019\_UK\_scrub\tabularnewline
+Neli2014\tabularnewline
+\bottomrule
+\end{longtable}
 
 Pour la collection 5
 
 \begin{figure}
 \centering
-\includegraphics{presentation_dore_files/figure-latex/iid_meso_plot-5.pdf}
+\includegraphics{figure/iid_meso_plot-5.png}
 \caption{Collection 5 - iid}
 \end{figure}
 
-\begin{tabular}{l}
-\hline
-Networks\\
-\hline
-olensen2002aig\\
-\hline
-olensen2002flo\\
-\hline
-vazquez2002\\
-\hline
-Shay2016\\
-\hline
-Gibson2006\_GA2\\
-\hline
-Gibson2006\_SG\\
-\hline
-Trojelsgaard2015\_El Hierro\\
-\hline
-Trojelsgaard2015\_Fuerteventura\\
-\hline
-Trojelsgaard2015\_Western Sahara\\
-\hline
-Robinson2018\\
-\hline
-CordenizPicanco2018\_NatFor\\
-\hline
-CordenizPicanco2018\_SemiPast\\
-\hline
-CordenizPicanco2018\_IntPast\\
-\hline
-Biella2019\\
-\hline
-Nel2017\\
-\hline
-Villalobos2019\\
-\hline
-LaraRomero2019\_blanca+LaraRomero2019\_rajada+LaraRomero2019\_refugio+LaraRomero2019\_torre\\
-\hline
-Ferrero2013\\
-\hline
-Sritongchuay2019\_near+Sritongchuay2019\_far\\
-\hline
-\end{tabular}
+\begin{longtable}[]{@{}l@{}}
+\toprule
+Networks\tabularnewline
+\midrule
+\endhead
+olensen2002aig\tabularnewline
+olensen2002flo\tabularnewline
+vazquez2002\tabularnewline
+Shay2016\tabularnewline
+Gibson2006\_GA2\tabularnewline
+Gibson2006\_SG\tabularnewline
+Trojelsgaard2015\_El Hierro\tabularnewline
+Trojelsgaard2015\_Fuerteventura\tabularnewline
+Trojelsgaard2015\_Western Sahara\tabularnewline
+Robinson2018\tabularnewline
+CordenizPicanco2018\_NatFor\tabularnewline
+CordenizPicanco2018\_SemiPast\tabularnewline
+CordenizPicanco2018\_IntPast\tabularnewline
+Biella2019\tabularnewline
+Nel2017\tabularnewline
+Villalobos2019\tabularnewline
+LaraRomero2019\_blanca+LaraRomero2019\_rajada+LaraRomero2019\_refugio+LaraRomero2019\_torre\tabularnewline
+Ferrero2013\tabularnewline
+Sritongchuay2019\_near+Sritongchuay2019\_far\tabularnewline
+\bottomrule
+\end{longtable}
 
 Et voici donc les valeurs numériques pour les \(\alpha\) (paramètres de
 connectivité).
@@ -402,16 +222,46 @@ collection 4 :
 \[\begin{bmatrix} 0.96 &0.83 &0.96 &0.39 &0.8 &0.16 &0.66 \\0.98 &0.86 &0.83 &0.51 &0.56 &0.19 &0.09 \\0.8 &0.46 &0.74 &0.12 &0.4 &0.05 &0.13 \\0.89 &0.69 &0.44 &0.35 &0.15 &0.07 &0.01 \\0.7 &0.29 &0.35 &0.03 &0.15 &0.01 &0.03 \\0.66 &0.43 &0.1 &0.17 &0.03 &0.02 &0 \\0.32 &0.12 &0.02 &0.04 &0 &0 &0 \\ \end{bmatrix}\]
 Pour la collection 5 :
 \[\begin{bmatrix} 0.71 &0.9 &0.57 &0.83 \\0.74 &0.22 &0.7 &0.33 \\0.09 &0.44 &0.07 &0.02 \\ \end{bmatrix}\]
+\#\#\# Comparaison avec des infos supplémentaires
+
+\begin{figure}
+\centering
+\includegraphics{figure/Annual_timespan_plot-1.png}
+\caption{plot of chunk Annual\_timespan\_plot}
+\end{figure}
 
 \hypertarget{ruxe9partition-dans-les-clusters-selon-la-taxonomie}{%
 \subsubsection{Répartition dans les clusters selon la
 taxonomie}\label{ruxe9partition-dans-les-clusters-selon-la-taxonomie}}
 
-\includegraphics{presentation_dore_files/figure-latex/iid_plot_taxonomy_pollinators-1.pdf}
-\includegraphics{presentation_dore_files/figure-latex/iid_plot_taxonomy_pollinators-2.pdf}
+\includegraphics{figure/iid_plot_taxonomy_pollinators-1.png}\includegraphics{figure/iid_plot_taxonomy_pollinators-2.png}
 
-\includegraphics{presentation_dore_files/figure-latex/iid_plot_taxonomy_plants-1.pdf}
-\includegraphics{presentation_dore_files/figure-latex/iid_plot_taxonomy_plants-2.pdf}
+\includegraphics{figure/iid_plot_taxonomy_plants-1.png}\includegraphics{figure/iid_plot_taxonomy_plants-2.png}
+
+\hypertarget{tables}{%
+\paragraph{Tables}\label{tables}}
+
+\begin{verbatim}
+## # A tibble: 9 × 25
+##   Taxon       Collection_1_Bloc_1 Collection_1_Bloc_2 Collection_1_Bloc_3
+##   <fct>                     <dbl>               <dbl>               <dbl>
+## 1 Hymenoptera                  24                   0                  17
+## 2 Diptera                       9                   0                   8
+## 3 n.i.                          8                   0                  11
+## 4 Lepidoptera                   7                   0                   6
+## 5 Coleoptera                    0                   0                   0
+## 6 Other                         0                   0                   0
+## 7 Birds                        NA                  NA                  NA
+## 8 Hemiptera                    NA                  NA                  NA
+## 9 Squamata                     NA                  NA                  NA
+## # ℹ 21 more variables: Collection_1_Bloc_4 <dbl>, Collection_1_Bloc_5 <dbl>,
+## #   Collection_1_Bloc_6 <dbl>, Collection_1_Bloc_7 <dbl>,
+## #   Collection_1_Bloc_8 <dbl>, Collection_2_Bloc_1 <dbl>,
+## #   Collection_2_Bloc_2 <dbl>, Collection_2_Bloc_3 <dbl>,
+## #   Collection_2_Bloc_4 <dbl>, Collection_3_Bloc_1 <dbl>,
+## #   Collection_3_Bloc_2 <dbl>, Collection_4_Bloc_1 <dbl>,
+## #   Collection_4_Bloc_2 <dbl>, Collection_4_Bloc_3 <dbl>, …
+\end{verbatim}
 
 \hypertarget{clustering-avec-le-moduxe8le-pi}{%
 \subsection{Clustering avec le modèle
@@ -424,275 +274,157 @@ Pour la collection 1
 
 \begin{figure}
 \centering
-\includegraphics{presentation_dore_files/figure-latex/pi_meso_plot-1.pdf}
+\includegraphics{figure/pi_meso_plot-1.png}
 \caption{Collection 1 - pi}
 \end{figure}
 
-\begin{tabular}{l}
-\hline
-Networks\\
-\hline
-arroyo1982\_1+arroyo1982\_2+arroyo3\\
-\hline
-eberling1999\\
-\hline
-inouye1988\\
-\hline
-kato1990\\
-\hline
-ramirez1992\\
-\hline
-petanidou1991\\
-\hline
-ramirez1989\\
-\hline
-smith-ramirez2005\\
-\hline
-Junker2013\\
-\hline
-Kaiser\_control+Kaiser\_restored\\
-\hline
-bartomeus2008\\
-\hline
-Olito-Fox2014\\
-\hline
-Benadi2013\_1(950m)+Benadi2013\_2(1170m)+Benadi2013\_6(2020m)\\
-\hline
-Benadi2013\_3(1340m)\\
-\hline
-Benadi2013\_4(1700m)+Benadi2013\_5(1800m)\\
-\hline
-Kaiser-Bunbury2017\_Bernica+Kaiser-Bunbury2017\_Casse-dent+Kaiser-Bunbury2017\_Copolia+Kaiser-Bunbury2017\_La-Reserve+Kaiser-Bunbury2017\_Rosebelle+Kaiser-Bunbury2017\_Salazie+Kaiser-Bunbury2017\_Tea-Plantation+Kaiser-Bunbury2017\_Trois-Freres\\
-\hline
-Fang2012\\
-\hline
-Shay2016\\
-\hline
-Struck1994\\
-\hline
-Kato2000\\
-\hline
-Aizen2008\_Cerro Otto\_U+Aizen2008\_Cerro Otto\_D\\
-\hline
-Aizen2008\_Llao-llao\_U+Aizen2008\_Llao-llao\_D\\
-\hline
-Aizen2008\_Puerto Blest\_U+Aizen2008\_Puerto Blest\_D\\
-\hline
-Albrecht2010\_49yr+Albrecht2010\_63yr+Albrecht2010\_84yr+Albrecht2010\_109yr+Albrecht2010\_130yr\\
-\hline
-Baldock2011\_TB+Baldock2011\_JN\\
-\hline
-Chamberlain\_cr1+Chamberlain\_cr2+Chamberlain\_fs1+Chamberlain\_fs2+Chamberlain\_go1+Chamberlain\_go2+Chamberlain\_mm1+Chamberlain\_mm2+Chamberlain\_mz1+Chamberlain\_mz2+Chamberlain\_sm1+Chamberlain\_sm2\\
-\hline
-Chamberlain\_HLU+Chamberlain\_HLG+Chamberlain\_OKU+Chamberlain\_OKG+Chamberlain\_WLU+Chamberlain\_WLG+Chamberlain\_SOU+Chamberlain\_SOG\\
-\hline
-Chamberlain\_Site1+Chamberlain\_Site2+Chamberlain\_Site3+Chamberlain\_Site4+Chamberlain\_Site5+Chamberlain\_Site6\\
-\hline
-Dattilo2016\\
-\hline
-Devoto2005\_PP+Devoto2005\_AP\\
-\hline
-Devoto2005\_VT\\
-\hline
-Devoto2005\_LL+Devoto2005\_CT\\
-\hline
-Dupont2009\_IsenBjerg+Dupont2009\_Other\\
-\hline
-Freitas2006\\
-\hline
-Gibson2006\_TA1\\
-\hline
-Gibson2006\_TA2\\
-\hline
-Jedrzejewska2013\_Ochata+Jedrzejewska2013\_Kabaty\\
-\hline
-LaraRomero2016\_pe?alara\_EP+LaraRomero2016\_pe?alara\_PA+LaraRomero2016\_nevero\_EP+LaraRomero2016\_nevero\_PA\\
-\hline
-LemusJimenez2003\\
-\hline
-Marrero2013\\
-\hline
-MonteroCastano2017\_Albufera+MonteroCastano2017\_Llimpa+MonteroCastano2017\_Tirant\\
-\hline
-Kehinde2014\_Joostenberg\_Conv+Kehinde2014\_Joostenberg\_Org+Kehinde2014\_Joostenberg\_Nat+Kehinde2014\_Laibach\_Conv+Kehinde2014\_Laibach\_Org+Kehinde2014\_Laibach\_Nat+Kehinde2014\_Spier\_Conv+Kehinde2014\_Spier\_Nat\\
-\hline
-Pinheiro2008\\
-\hline
-Trojelsgaard2015\_La Gomera\\
-\hline
-Trojelsgaard2015\_Tenerife Teno Bajo+Trojelsgaard2015\_Tenerife Fasnia\\
-\hline
-Vanbergen2013\_balfarm+Vanbergen2013\_bridgend+Vanbergen2013\_dalhaikie+Vanbergen2013\_netherton+Vanbergen2013\_backhill+Vanbergen2013\_corntulloch+Vanbergen2013\_allancreich\\
-\hline
-Zackenberg\\
-\hline
-Yoshihara2008\\
-\hline
-Watts2016\_Chicon+Watts2016\_Mantanay+Watts2016\_Choquebamba+Watts2016\_Huaran+Watts2016\_Piscacucho+Watts2016\_Poques+Watts2016\_Pumamarca+Watts2016\_Tiaparo+Watts2016\_Yanacocha\\
-\hline
-Kato1993\\
-\hline
-KatoMiura1996\\
-\hline
-Kakutani1990\\
-\hline
-Inoue1990\\
-\hline
-Fragoso\_RA2+Fragoso\_RA3+Fragoso\_RD1+Fragoso\_RD3\\
-\hline
-PopicThesis\\
-\hline
-Pfeiffer\_CNE+Pfeiffer\_CNM+Pfeiffer\_CNT+Pfeiffer\_CPB+Pfeiffer\_CPM+Pfeiffer\_CPR+Pfeiffer\_CPS+Pfeiffer\_M2+Pfeiffer\_RP1+Pfeiffer\_RP2+Pfeiffer\_LM+Pfeiffer\_LO+Pfeiffer\_BD+Pfeiffer\_BH+Pfeiffer\_BS\\
-\hline
-Carstensen\_Gigante+Carstensen\_Paulino+Carstensen\_Tinkerbell+Carstensen\_Midway+Carstensen\_Cedro+Carstensen\_Elefante+Carstensen\_Soizig\\
-\hline
-Orford\_B1+Orford\_B2+Orford\_B3+Orford\_B4+Orford\_B5+Orford\_B10\\
-\hline
-Orford\_B6+Orford\_B7+Orford\_B8+Orford\_B9\\
-\hline
-Blumel2016\\
-\hline
-Welti\_ID+Welti\_K1B+Welti\_K4A+Welti\_4B+Welti\_20B+Welti\_20C+Welti\_N1A+Welti\_N1B+Welti\_N4A+Welti\_N4B+Welti\_N20A+Welti\_N20B\\
-\hline
-Souza\_cerrado\\
-\hline
-Souza\_chaco\\
-\hline
-Souza\_pantanal\\
-\hline
-Souza\_vereda\\
-\hline
-Grass2013\_1+Grass2013\_2+Grass2013\_3+Grass2013\_4+Grass2013\_5+Grass2013\_6+Grass2013\_7+Grass2013\_8+Grass2013\_9+Grass2013\_10+Grass2013\_11+Grass2013\_12+Grass2013\_13+Grass2013\_14+Grass2013\_15+Grass2013\_16+Grass2013\_17\\
-\hline
-Bennett2018\\
-\hline
-Adedoja2018b\_baseZone+Adedoja2018b\_MidZone+Adedoja2018b\_HighZone+Adedoja2018b\_PeakZone\\
-\hline
-Adedoja2019\\
-\hline
-CordenizPicanco2018\_NatVeg\\
-\hline
-Benadi2018\\
-\hline
-Hackett2019\_NZ\_salt\_marsh+Hackett2019\_NZ\_sand\_dune+Hackett2019\_NZ\_scrub\_coprosma\\
-\hline
-Oleques2019\\
-\hline
-Jolls2019\\
-\hline
-Traveset2013\_Fernandina\\
-\hline
-Traveset2013\_Santiago\\
-\hline
-Traveset2013\_SantaCruz\\
-\hline
-Traveset2013\_SanCristobal\\
-\hline
-Simanonok2014\\
-\hline
-Son2019\_a1+Son2019\_a2+Son2019\_a3+Son2019\_a4+Son2019\_a5+Son2019\_a6+Son2019\_a7+Son2019\_a8+Son2019\_F1+Son2019\_F2+Son2019\_F3+Son2019\_F4+Son2019\_F5+Son2019\_F6+Son2019\_F7+Son2019\_F8\\
-\hline
-Baldock2019\_Bristol\\
-\hline
-Baldock2019\_Edinburgh\\
-\hline
-Baldock2019\_Leeds\\
-\hline
-Baldock2019\_Reading\\
-\hline
-\end{tabular}
+\begin{longtable}[]{@{}l@{}}
+\toprule
+Networks\tabularnewline
+\midrule
+\endhead
+arroyo1982\_1+arroyo1982\_2+arroyo3\tabularnewline
+eberling1999\tabularnewline
+inouye1988\tabularnewline
+kato1990\tabularnewline
+ramirez1992\tabularnewline
+petanidou1991\tabularnewline
+ramirez1989\tabularnewline
+smith-ramirez2005\tabularnewline
+Junker2013\tabularnewline
+Kaiser\_control+Kaiser\_restored\tabularnewline
+bartomeus2008\tabularnewline
+Olito-Fox2014\tabularnewline
+Benadi2013\_1(950m)+Benadi2013\_2(1170m)+Benadi2013\_6(2020m)\tabularnewline
+Benadi2013\_3(1340m)\tabularnewline
+Benadi2013\_4(1700m)+Benadi2013\_5(1800m)\tabularnewline
+Kaiser-Bunbury2017\_Bernica+Kaiser-Bunbury2017\_Casse-dent+Kaiser-Bunbury2017\_Copolia+Kaiser-Bunbury2017\_La-Reserve+Kaiser-Bunbury2017\_Rosebelle+Kaiser-Bunbury2017\_Salazie+Kaiser-Bunbury2017\_Tea-Plantation+Kaiser-Bunbury2017\_Trois-Freres\tabularnewline
+Fang2012\tabularnewline
+Shay2016\tabularnewline
+Struck1994\tabularnewline
+Kato2000\tabularnewline
+Aizen2008\_Cerro Otto\_U+Aizen2008\_Cerro Otto\_D\tabularnewline
+Aizen2008\_Llao-llao\_U+Aizen2008\_Llao-llao\_D\tabularnewline
+Aizen2008\_Puerto Blest\_U+Aizen2008\_Puerto Blest\_D\tabularnewline
+Albrecht2010\_49yr+Albrecht2010\_63yr+Albrecht2010\_84yr+Albrecht2010\_109yr+Albrecht2010\_130yr\tabularnewline
+Baldock2011\_TB+Baldock2011\_JN\tabularnewline
+Chamberlain\_cr1+Chamberlain\_cr2+Chamberlain\_fs1+Chamberlain\_fs2+Chamberlain\_go1+Chamberlain\_go2+Chamberlain\_mm1+Chamberlain\_mm2+Chamberlain\_mz1+Chamberlain\_mz2+Chamberlain\_sm1+Chamberlain\_sm2\tabularnewline
+Chamberlain\_HLU+Chamberlain\_HLG+Chamberlain\_OKU+Chamberlain\_OKG+Chamberlain\_WLU+Chamberlain\_WLG+Chamberlain\_SOU+Chamberlain\_SOG\tabularnewline
+Chamberlain\_Site1+Chamberlain\_Site2+Chamberlain\_Site3+Chamberlain\_Site4+Chamberlain\_Site5+Chamberlain\_Site6\tabularnewline
+Dattilo2016\tabularnewline
+Devoto2005\_PP+Devoto2005\_AP\tabularnewline
+Devoto2005\_VT\tabularnewline
+Devoto2005\_LL+Devoto2005\_CT\tabularnewline
+Dupont2009\_IsenBjerg+Dupont2009\_Other\tabularnewline
+Freitas2006\tabularnewline
+Gibson2006\_TA1\tabularnewline
+Gibson2006\_TA2\tabularnewline
+Jedrzejewska2013\_Ochata+Jedrzejewska2013\_Kabaty\tabularnewline
+LaraRomero2016\_pe?alara\_EP+LaraRomero2016\_pe?alara\_PA+LaraRomero2016\_nevero\_EP+LaraRomero2016\_nevero\_PA\tabularnewline
+LemusJimenez2003\tabularnewline
+Marrero2013\tabularnewline
+MonteroCastano2017\_Albufera+MonteroCastano2017\_Llimpa+MonteroCastano2017\_Tirant\tabularnewline
+Kehinde2014\_Joostenberg\_Conv+Kehinde2014\_Joostenberg\_Org+Kehinde2014\_Joostenberg\_Nat+Kehinde2014\_Laibach\_Conv+Kehinde2014\_Laibach\_Org+Kehinde2014\_Laibach\_Nat+Kehinde2014\_Spier\_Conv+Kehinde2014\_Spier\_Nat\tabularnewline
+Pinheiro2008\tabularnewline
+Trojelsgaard2015\_La Gomera\tabularnewline
+Trojelsgaard2015\_Tenerife Teno Bajo+Trojelsgaard2015\_Tenerife
+Fasnia\tabularnewline
+Vanbergen2013\_balfarm+Vanbergen2013\_bridgend+Vanbergen2013\_dalhaikie+Vanbergen2013\_netherton+Vanbergen2013\_backhill+Vanbergen2013\_corntulloch+Vanbergen2013\_allancreich\tabularnewline
+Zackenberg\tabularnewline
+Yoshihara2008\tabularnewline
+Watts2016\_Chicon+Watts2016\_Mantanay+Watts2016\_Choquebamba+Watts2016\_Huaran+Watts2016\_Piscacucho+Watts2016\_Poques+Watts2016\_Pumamarca+Watts2016\_Tiaparo+Watts2016\_Yanacocha\tabularnewline
+Kato1993\tabularnewline
+KatoMiura1996\tabularnewline
+Kakutani1990\tabularnewline
+Inoue1990\tabularnewline
+Fragoso\_RA2+Fragoso\_RA3+Fragoso\_RD1+Fragoso\_RD3\tabularnewline
+PopicThesis\tabularnewline
+Pfeiffer\_CNE+Pfeiffer\_CNM+Pfeiffer\_CNT+Pfeiffer\_CPB+Pfeiffer\_CPM+Pfeiffer\_CPR+Pfeiffer\_CPS+Pfeiffer\_M2+Pfeiffer\_RP1+Pfeiffer\_RP2+Pfeiffer\_LM+Pfeiffer\_LO+Pfeiffer\_BD+Pfeiffer\_BH+Pfeiffer\_BS\tabularnewline
+Carstensen\_Gigante+Carstensen\_Paulino+Carstensen\_Tinkerbell+Carstensen\_Midway+Carstensen\_Cedro+Carstensen\_Elefante+Carstensen\_Soizig\tabularnewline
+Orford\_B1+Orford\_B2+Orford\_B3+Orford\_B4+Orford\_B5+Orford\_B10\tabularnewline
+Orford\_B6+Orford\_B7+Orford\_B8+Orford\_B9\tabularnewline
+Blumel2016\tabularnewline
+Welti\_ID+Welti\_K1B+Welti\_K4A+Welti\_4B+Welti\_20B+Welti\_20C+Welti\_N1A+Welti\_N1B+Welti\_N4A+Welti\_N4B+Welti\_N20A+Welti\_N20B\tabularnewline
+Souza\_cerrado\tabularnewline
+Souza\_chaco\tabularnewline
+Souza\_pantanal\tabularnewline
+Souza\_vereda\tabularnewline
+Grass2013\_1+Grass2013\_2+Grass2013\_3+Grass2013\_4+Grass2013\_5+Grass2013\_6+Grass2013\_7+Grass2013\_8+Grass2013\_9+Grass2013\_10+Grass2013\_11+Grass2013\_12+Grass2013\_13+Grass2013\_14+Grass2013\_15+Grass2013\_16+Grass2013\_17\tabularnewline
+Bennett2018\tabularnewline
+Adedoja2018b\_baseZone+Adedoja2018b\_MidZone+Adedoja2018b\_HighZone+Adedoja2018b\_PeakZone\tabularnewline
+Adedoja2019\tabularnewline
+CordenizPicanco2018\_NatVeg\tabularnewline
+Benadi2018\tabularnewline
+Hackett2019\_NZ\_salt\_marsh+Hackett2019\_NZ\_sand\_dune+Hackett2019\_NZ\_scrub\_coprosma\tabularnewline
+Oleques2019\tabularnewline
+Jolls2019\tabularnewline
+Traveset2013\_Fernandina\tabularnewline
+Traveset2013\_Santiago\tabularnewline
+Traveset2013\_SantaCruz\tabularnewline
+Traveset2013\_SanCristobal\tabularnewline
+Simanonok2014\tabularnewline
+Son2019\_a1+Son2019\_a2+Son2019\_a3+Son2019\_a4+Son2019\_a5+Son2019\_a6+Son2019\_a7+Son2019\_a8+Son2019\_F1+Son2019\_F2+Son2019\_F3+Son2019\_F4+Son2019\_F5+Son2019\_F6+Son2019\_F7+Son2019\_F8\tabularnewline
+Baldock2019\_Bristol\tabularnewline
+Baldock2019\_Edinburgh\tabularnewline
+Baldock2019\_Leeds\tabularnewline
+Baldock2019\_Reading\tabularnewline
+\bottomrule
+\end{longtable}
 
 Pour la collection 2
 
 \begin{figure}
 \centering
-\includegraphics{presentation_dore_files/figure-latex/pi_meso_plot-2.pdf}
+\includegraphics{figure/pi_meso_plot-2.png}
 \caption{Collection 2 - pi}
 \end{figure}
 
-\begin{tabular}{l}
-\hline
-Networks\\
-\hline
-dupont2003\\
-\hline
-herrera1988\\
-\hline
-medan2002ld\\
-\hline
-medan2002rb\\
-\hline
-olensen2002aig\\
-\hline
-olensen2002flo\\
-\hline
-small1976\\
-\hline
-vazquez2002\\
-\hline
-Burkle2013\\
-\hline
-Weiner2011\\
-\hline
-Gilarranz2014\_amarante+Gilarranz2014\_barrosa+Gilarranz2014\_cincocerros+Gilarranz2014\_difuntito+Gilarranz2014\_difuntos+Gilarranz2014\_elmorro+Gilarranz2014\_labrava+Gilarranz2014\_lachata+Gilarranz2014\_lapaja+Gilarranz2014\_piedraalta+Gilarranz2014\_vigilancia+Gilarranz2014\_volcan\\
-\hline
-Aizen2008\_Challhuaco\_U+Aizen2008\_Challhuaco\_D\\
-\hline
-Devoto2005\_LQ\\
-\hline
-Devoto2005\_LT+Devoto2005\_LH\\
-\hline
-Gibson2006\_GA1\\
-\hline
-Gibson2006\_GA2\\
-\hline
-Gibson2006\_SG\\
-\hline
-Lundgren2005\\
-\hline
-Trojelsgaard2015\_El Hierro\\
-\hline
-Trojelsgaard2015\_Gran Canaria\\
-\hline
-Trojelsgaard2015\_Fuerteventura\\
-\hline
-Trojelsgaard2015\_Western Sahara\\
-\hline
-Fragoso\_RA1+Fragoso\_RD2\\
-\hline
-Pornon2017\\
-\hline
-Kantsa2018\\
-\hline
-Robinson2018\\
-\hline
-CordenizPicanco2018\_NatFor\\
-\hline
-CordenizPicanco2018\_ExoFor\\
-\hline
-CordenizPicanco2018\_SemiPast\\
-\hline
-CordenizPicanco2018\_IntPast\\
-\hline
-Hackett2019\_UK\_sand\_dune+Hackett2019\_UK\_grassland+Hackett2019\_UK\_heathland+Hackett2019\_UK\_woodland+Hackett2019\_UK\_salt\_marsh+Hackett2019\_UK\_scrub\\
-\hline
-Biella2019\\
-\hline
-Nel2017\\
-\hline
-Villalobos2019\\
-\hline
-LaraRomero2019\_blanca+LaraRomero2019\_rajada+LaraRomero2019\_refugio+LaraRomero2019\_torre\\
-\hline
-Traveset2013\_Pinta\\
-\hline
-Ferrero2013\\
-\hline
-Neli2014\\
-\hline
-Sritongchuay2019\_near+Sritongchuay2019\_far\\
-\hline
-\end{tabular}
+\begin{longtable}[]{@{}l@{}}
+\toprule
+Networks\tabularnewline
+\midrule
+\endhead
+dupont2003\tabularnewline
+herrera1988\tabularnewline
+medan2002ld\tabularnewline
+medan2002rb\tabularnewline
+olensen2002aig\tabularnewline
+olensen2002flo\tabularnewline
+small1976\tabularnewline
+vazquez2002\tabularnewline
+Burkle2013\tabularnewline
+Weiner2011\tabularnewline
+Gilarranz2014\_amarante+Gilarranz2014\_barrosa+Gilarranz2014\_cincocerros+Gilarranz2014\_difuntito+Gilarranz2014\_difuntos+Gilarranz2014\_elmorro+Gilarranz2014\_labrava+Gilarranz2014\_lachata+Gilarranz2014\_lapaja+Gilarranz2014\_piedraalta+Gilarranz2014\_vigilancia+Gilarranz2014\_volcan\tabularnewline
+Aizen2008\_Challhuaco\_U+Aizen2008\_Challhuaco\_D\tabularnewline
+Devoto2005\_LQ\tabularnewline
+Devoto2005\_LT+Devoto2005\_LH\tabularnewline
+Gibson2006\_GA1\tabularnewline
+Gibson2006\_GA2\tabularnewline
+Gibson2006\_SG\tabularnewline
+Lundgren2005\tabularnewline
+Trojelsgaard2015\_El Hierro\tabularnewline
+Trojelsgaard2015\_Gran Canaria\tabularnewline
+Trojelsgaard2015\_Fuerteventura\tabularnewline
+Trojelsgaard2015\_Western Sahara\tabularnewline
+Fragoso\_RA1+Fragoso\_RD2\tabularnewline
+Pornon2017\tabularnewline
+Kantsa2018\tabularnewline
+Robinson2018\tabularnewline
+CordenizPicanco2018\_NatFor\tabularnewline
+CordenizPicanco2018\_ExoFor\tabularnewline
+CordenizPicanco2018\_SemiPast\tabularnewline
+CordenizPicanco2018\_IntPast\tabularnewline
+Hackett2019\_UK\_sand\_dune+Hackett2019\_UK\_grassland+Hackett2019\_UK\_heathland+Hackett2019\_UK\_woodland+Hackett2019\_UK\_salt\_marsh+Hackett2019\_UK\_scrub\tabularnewline
+Biella2019\tabularnewline
+Nel2017\tabularnewline
+Villalobos2019\tabularnewline
+LaraRomero2019\_blanca+LaraRomero2019\_rajada+LaraRomero2019\_refugio+LaraRomero2019\_torre\tabularnewline
+Traveset2013\_Pinta\tabularnewline
+Ferrero2013\tabularnewline
+Neli2014\tabularnewline
+Sritongchuay2019\_near+Sritongchuay2019\_far\tabularnewline
+\bottomrule
+\end{longtable}
 
 Et voici donc les valeurs numériques pour les \(\alpha\) (paramètres de
 connectivité).
@@ -706,11 +438,9 @@ Pour la collection 2 :
 \subsubsection{Répartition dans les clusters selon la
 taxonomie}\label{ruxe9partition-dans-les-clusters-selon-la-taxonomie-1}}
 
-\includegraphics{presentation_dore_files/figure-latex/pi_plot_taxonomy_pollinators-1.pdf}
-\includegraphics{presentation_dore_files/figure-latex/pi_plot_taxonomy_pollinators-2.pdf}
+\includegraphics{figure/pi_plot_taxonomy_pollinators-1.png}\includegraphics{figure/pi_plot_taxonomy_pollinators-2.png}
 
-\includegraphics{presentation_dore_files/figure-latex/pi_plot_taxonomy_plants-1.pdf}
-\includegraphics{presentation_dore_files/figure-latex/pi_plot_taxonomy_plants-2.pdf}
+\includegraphics{figure/pi_plot_taxonomy_plants-1.png}\includegraphics{figure/pi_plot_taxonomy_plants-2.png}
 
 \hypertarget{clustering-avec-le-moduxe8le-rho}{%
 \subsection{Clustering avec le modèle
@@ -723,261 +453,141 @@ Pour la collection 1
 
 \begin{figure}
 \centering
-\includegraphics{presentation_dore_files/figure-latex/rho_meso_plot-1.pdf}
+\includegraphics{figure/rho_meso_plot-1.png}
 \caption{Collection 1 - rho}
 \end{figure}
 
-\begin{tabular}{l}
-\hline
-Networks\\
-\hline
-arroyo1982\_1+arroyo1982\_2+arroyo3\\
-\hline
-dupont2003\\
-\hline
-eberling1999\\
-\hline
-herrera1988\\
-\hline
-inouye1988\\
-\hline
-kato1990\\
-\hline
-medan2002ld\\
-\hline
-medan2002rb\\
-\hline
-olensen2002aig\\
-\hline
-olensen2002flo\\
-\hline
-ramirez1992\\
-\hline
-small1976\\
-\hline
-vazquez2002\\
-\hline
-petanidou1991\\
-\hline
-ramirez1989\\
-\hline
-smith-ramirez2005\\
-\hline
-Burkle2013\\
-\hline
-Junker2013\\
-\hline
-Weiner2011\\
-\hline
-Kaiser\_control+Kaiser\_restored\\
-\hline
-bartomeus2008\\
-\hline
-Olito-Fox2014\\
-\hline
-Gilarranz2014\_amarante+Gilarranz2014\_barrosa+Gilarranz2014\_cincocerros+Gilarranz2014\_difuntito+Gilarranz2014\_difuntos+Gilarranz2014\_elmorro+Gilarranz2014\_labrava+Gilarranz2014\_lachata+Gilarranz2014\_lapaja+Gilarranz2014\_piedraalta+Gilarranz2014\_vigilancia+Gilarranz2014\_volcan\\
-\hline
-Benadi2013\_1(950m)+Benadi2013\_2(1170m)+Benadi2013\_6(2020m)\\
-\hline
-Benadi2013\_3(1340m)\\
-\hline
-Benadi2013\_4(1700m)+Benadi2013\_5(1800m)\\
-\hline
-Kaiser-Bunbury2017\_Bernica+Kaiser-Bunbury2017\_Casse-dent+Kaiser-Bunbury2017\_Copolia+Kaiser-Bunbury2017\_La-Reserve+Kaiser-Bunbury2017\_Rosebelle+Kaiser-Bunbury2017\_Salazie+Kaiser-Bunbury2017\_Tea-Plantation+Kaiser-Bunbury2017\_Trois-Freres\\
-\hline
-Fang2012\\
-\hline
-Shay2016\\
-\hline
-Struck1994\\
-\hline
-Kato2000\\
-\hline
-Aizen2008\_Challhuaco\_U+Aizen2008\_Challhuaco\_D\\
-\hline
-Aizen2008\_Cerro Otto\_U+Aizen2008\_Cerro Otto\_D\\
-\hline
-Aizen2008\_Llao-llao\_U+Aizen2008\_Llao-llao\_D\\
-\hline
-Aizen2008\_Puerto Blest\_U+Aizen2008\_Puerto Blest\_D\\
-\hline
-Albrecht2010\_49yr+Albrecht2010\_63yr+Albrecht2010\_84yr+Albrecht2010\_109yr+Albrecht2010\_130yr\\
-\hline
-Baldock2011\_TB+Baldock2011\_JN\\
-\hline
-Chamberlain\_cr1+Chamberlain\_cr2+Chamberlain\_fs1+Chamberlain\_fs2+Chamberlain\_go1+Chamberlain\_go2+Chamberlain\_mm1+Chamberlain\_mm2+Chamberlain\_mz1+Chamberlain\_mz2+Chamberlain\_sm1+Chamberlain\_sm2\\
-\hline
-Chamberlain\_HLU+Chamberlain\_HLG+Chamberlain\_OKU+Chamberlain\_OKG+Chamberlain\_WLU+Chamberlain\_WLG+Chamberlain\_SOU+Chamberlain\_SOG\\
-\hline
-Chamberlain\_Site1+Chamberlain\_Site2+Chamberlain\_Site3+Chamberlain\_Site4+Chamberlain\_Site5+Chamberlain\_Site6\\
-\hline
-Dattilo2016\\
-\hline
-Devoto2005\_LQ\\
-\hline
-Devoto2005\_PP+Devoto2005\_AP\\
-\hline
-Devoto2005\_LT+Devoto2005\_LH\\
-\hline
-Devoto2005\_VT\\
-\hline
-Devoto2005\_LL+Devoto2005\_CT\\
-\hline
-Dupont2009\_IsenBjerg+Dupont2009\_Other\\
-\hline
-Freitas2006\\
-\hline
-Gibson2006\_GA1\\
-\hline
-Gibson2006\_GA2\\
-\hline
-Gibson2006\_SG\\
-\hline
-Gibson2006\_TA1\\
-\hline
-Gibson2006\_TA2\\
-\hline
-Jedrzejewska2013\_Ochata+Jedrzejewska2013\_Kabaty\\
-\hline
-LaraRomero2016\_pe?alara\_EP+LaraRomero2016\_pe?alara\_PA+LaraRomero2016\_nevero\_EP+LaraRomero2016\_nevero\_PA\\
-\hline
-LemusJimenez2003\\
-\hline
-Lundgren2005\\
-\hline
-Marrero2013\\
-\hline
-MonteroCastano2017\_Albufera+MonteroCastano2017\_Llimpa+MonteroCastano2017\_Tirant\\
-\hline
-Kehinde2014\_Joostenberg\_Conv+Kehinde2014\_Joostenberg\_Org+Kehinde2014\_Joostenberg\_Nat+Kehinde2014\_Laibach\_Conv+Kehinde2014\_Laibach\_Org+Kehinde2014\_Laibach\_Nat+Kehinde2014\_Spier\_Conv+Kehinde2014\_Spier\_Nat\\
-\hline
-Pinheiro2008\\
-\hline
-Trojelsgaard2015\_El Hierro\\
-\hline
-Trojelsgaard2015\_La Gomera\\
-\hline
-Trojelsgaard2015\_Gran Canaria\\
-\hline
-Trojelsgaard2015\_Fuerteventura\\
-\hline
-Trojelsgaard2015\_Tenerife Teno Bajo+Trojelsgaard2015\_Tenerife Fasnia\\
-\hline
-Trojelsgaard2015\_Western Sahara\\
-\hline
-Vanbergen2013\_balfarm+Vanbergen2013\_bridgend+Vanbergen2013\_dalhaikie+Vanbergen2013\_netherton+Vanbergen2013\_backhill+Vanbergen2013\_corntulloch+Vanbergen2013\_allancreich\\
-\hline
-Zackenberg\\
-\hline
-Yoshihara2008\\
-\hline
-Watts2016\_Chicon+Watts2016\_Mantanay+Watts2016\_Choquebamba+Watts2016\_Huaran+Watts2016\_Piscacucho+Watts2016\_Poques+Watts2016\_Pumamarca+Watts2016\_Tiaparo+Watts2016\_Yanacocha\\
-\hline
-Kato1993\\
-\hline
-KatoMiura1996\\
-\hline
-Kakutani1990\\
-\hline
-Inoue1990\\
-\hline
-Fragoso\_RA1+Fragoso\_RD2\\
-\hline
-Fragoso\_RA2+Fragoso\_RA3+Fragoso\_RD1+Fragoso\_RD3\\
-\hline
-PopicThesis\\
-\hline
-Pfeiffer\_CNE+Pfeiffer\_CNM+Pfeiffer\_CNT+Pfeiffer\_CPB+Pfeiffer\_CPM+Pfeiffer\_CPR+Pfeiffer\_CPS+Pfeiffer\_M2+Pfeiffer\_RP1+Pfeiffer\_RP2+Pfeiffer\_LM+Pfeiffer\_LO+Pfeiffer\_BD+Pfeiffer\_BH+Pfeiffer\_BS\\
-\hline
-Carstensen\_Gigante+Carstensen\_Paulino+Carstensen\_Tinkerbell+Carstensen\_Midway+Carstensen\_Cedro+Carstensen\_Elefante+Carstensen\_Soizig\\
-\hline
-Pornon2017\\
-\hline
-Orford\_B1+Orford\_B2+Orford\_B3+Orford\_B4+Orford\_B5+Orford\_B10\\
-\hline
-Orford\_B6+Orford\_B7+Orford\_B8+Orford\_B9\\
-\hline
-Blumel2016\\
-\hline
-Welti\_ID+Welti\_K1B+Welti\_K4A+Welti\_4B+Welti\_20B+Welti\_20C+Welti\_N1A+Welti\_N1B+Welti\_N4A+Welti\_N4B+Welti\_N20A+Welti\_N20B\\
-\hline
-Kantsa2018\\
-\hline
-Souza\_cerrado\\
-\hline
-Souza\_chaco\\
-\hline
-Souza\_pantanal\\
-\hline
-Souza\_vereda\\
-\hline
-Grass2013\_1+Grass2013\_2+Grass2013\_3+Grass2013\_4+Grass2013\_5+Grass2013\_6+Grass2013\_7+Grass2013\_8+Grass2013\_9+Grass2013\_10+Grass2013\_11+Grass2013\_12+Grass2013\_13+Grass2013\_14+Grass2013\_15+Grass2013\_16+Grass2013\_17\\
-\hline
-Robinson2018\\
-\hline
-Bennett2018\\
-\hline
-Adedoja2018b\_baseZone+Adedoja2018b\_MidZone+Adedoja2018b\_HighZone+Adedoja2018b\_PeakZone\\
-\hline
-Adedoja2019\\
-\hline
-CordenizPicanco2018\_NatFor\\
-\hline
-CordenizPicanco2018\_NatVeg\\
-\hline
-CordenizPicanco2018\_ExoFor\\
-\hline
-CordenizPicanco2018\_SemiPast\\
-\hline
-CordenizPicanco2018\_IntPast\\
-\hline
-Benadi2018\\
-\hline
-Hackett2019\_NZ\_salt\_marsh+Hackett2019\_NZ\_sand\_dune+Hackett2019\_NZ\_scrub\_coprosma\\
-\hline
-Hackett2019\_UK\_sand\_dune+Hackett2019\_UK\_grassland+Hackett2019\_UK\_heathland+Hackett2019\_UK\_woodland+Hackett2019\_UK\_salt\_marsh+Hackett2019\_UK\_scrub\\
-\hline
-Oleques2019\\
-\hline
-Biella2019\\
-\hline
-Jolls2019\\
-\hline
-Nel2017\\
-\hline
-Villalobos2019\\
-\hline
-LaraRomero2019\_blanca+LaraRomero2019\_rajada+LaraRomero2019\_refugio+LaraRomero2019\_torre\\
-\hline
-Traveset2013\_Fernandina\\
-\hline
-Traveset2013\_Pinta\\
-\hline
-Traveset2013\_Santiago\\
-\hline
-Traveset2013\_SantaCruz\\
-\hline
-Traveset2013\_SanCristobal\\
-\hline
-Ferrero2013\\
-\hline
-Simanonok2014\\
-\hline
-Son2019\_a1+Son2019\_a2+Son2019\_a3+Son2019\_a4+Son2019\_a5+Son2019\_a6+Son2019\_a7+Son2019\_a8+Son2019\_F1+Son2019\_F2+Son2019\_F3+Son2019\_F4+Son2019\_F5+Son2019\_F6+Son2019\_F7+Son2019\_F8\\
-\hline
-Neli2014\\
-\hline
-Sritongchuay2019\_near+Sritongchuay2019\_far\\
-\hline
-Baldock2019\_Bristol\\
-\hline
-Baldock2019\_Edinburgh\\
-\hline
-Baldock2019\_Leeds\\
-\hline
-Baldock2019\_Reading\\
-\hline
-\end{tabular}
+\begin{longtable}[]{@{}l@{}}
+\toprule
+Networks\tabularnewline
+\midrule
+\endhead
+arroyo1982\_1+arroyo1982\_2+arroyo3\tabularnewline
+dupont2003\tabularnewline
+eberling1999\tabularnewline
+herrera1988\tabularnewline
+inouye1988\tabularnewline
+kato1990\tabularnewline
+medan2002ld\tabularnewline
+medan2002rb\tabularnewline
+olensen2002aig\tabularnewline
+olensen2002flo\tabularnewline
+ramirez1992\tabularnewline
+small1976\tabularnewline
+vazquez2002\tabularnewline
+petanidou1991\tabularnewline
+ramirez1989\tabularnewline
+smith-ramirez2005\tabularnewline
+Burkle2013\tabularnewline
+Junker2013\tabularnewline
+Weiner2011\tabularnewline
+Kaiser\_control+Kaiser\_restored\tabularnewline
+bartomeus2008\tabularnewline
+Olito-Fox2014\tabularnewline
+Gilarranz2014\_amarante+Gilarranz2014\_barrosa+Gilarranz2014\_cincocerros+Gilarranz2014\_difuntito+Gilarranz2014\_difuntos+Gilarranz2014\_elmorro+Gilarranz2014\_labrava+Gilarranz2014\_lachata+Gilarranz2014\_lapaja+Gilarranz2014\_piedraalta+Gilarranz2014\_vigilancia+Gilarranz2014\_volcan\tabularnewline
+Benadi2013\_1(950m)+Benadi2013\_2(1170m)+Benadi2013\_6(2020m)\tabularnewline
+Benadi2013\_3(1340m)\tabularnewline
+Benadi2013\_4(1700m)+Benadi2013\_5(1800m)\tabularnewline
+Kaiser-Bunbury2017\_Bernica+Kaiser-Bunbury2017\_Casse-dent+Kaiser-Bunbury2017\_Copolia+Kaiser-Bunbury2017\_La-Reserve+Kaiser-Bunbury2017\_Rosebelle+Kaiser-Bunbury2017\_Salazie+Kaiser-Bunbury2017\_Tea-Plantation+Kaiser-Bunbury2017\_Trois-Freres\tabularnewline
+Fang2012\tabularnewline
+Shay2016\tabularnewline
+Struck1994\tabularnewline
+Kato2000\tabularnewline
+Aizen2008\_Challhuaco\_U+Aizen2008\_Challhuaco\_D\tabularnewline
+Aizen2008\_Cerro Otto\_U+Aizen2008\_Cerro Otto\_D\tabularnewline
+Aizen2008\_Llao-llao\_U+Aizen2008\_Llao-llao\_D\tabularnewline
+Aizen2008\_Puerto Blest\_U+Aizen2008\_Puerto Blest\_D\tabularnewline
+Albrecht2010\_49yr+Albrecht2010\_63yr+Albrecht2010\_84yr+Albrecht2010\_109yr+Albrecht2010\_130yr\tabularnewline
+Baldock2011\_TB+Baldock2011\_JN\tabularnewline
+Chamberlain\_cr1+Chamberlain\_cr2+Chamberlain\_fs1+Chamberlain\_fs2+Chamberlain\_go1+Chamberlain\_go2+Chamberlain\_mm1+Chamberlain\_mm2+Chamberlain\_mz1+Chamberlain\_mz2+Chamberlain\_sm1+Chamberlain\_sm2\tabularnewline
+Chamberlain\_HLU+Chamberlain\_HLG+Chamberlain\_OKU+Chamberlain\_OKG+Chamberlain\_WLU+Chamberlain\_WLG+Chamberlain\_SOU+Chamberlain\_SOG\tabularnewline
+Chamberlain\_Site1+Chamberlain\_Site2+Chamberlain\_Site3+Chamberlain\_Site4+Chamberlain\_Site5+Chamberlain\_Site6\tabularnewline
+Dattilo2016\tabularnewline
+Devoto2005\_LQ\tabularnewline
+Devoto2005\_PP+Devoto2005\_AP\tabularnewline
+Devoto2005\_LT+Devoto2005\_LH\tabularnewline
+Devoto2005\_VT\tabularnewline
+Devoto2005\_LL+Devoto2005\_CT\tabularnewline
+Dupont2009\_IsenBjerg+Dupont2009\_Other\tabularnewline
+Freitas2006\tabularnewline
+Gibson2006\_GA1\tabularnewline
+Gibson2006\_GA2\tabularnewline
+Gibson2006\_SG\tabularnewline
+Gibson2006\_TA1\tabularnewline
+Gibson2006\_TA2\tabularnewline
+Jedrzejewska2013\_Ochata+Jedrzejewska2013\_Kabaty\tabularnewline
+LaraRomero2016\_pe?alara\_EP+LaraRomero2016\_pe?alara\_PA+LaraRomero2016\_nevero\_EP+LaraRomero2016\_nevero\_PA\tabularnewline
+LemusJimenez2003\tabularnewline
+Lundgren2005\tabularnewline
+Marrero2013\tabularnewline
+MonteroCastano2017\_Albufera+MonteroCastano2017\_Llimpa+MonteroCastano2017\_Tirant\tabularnewline
+Kehinde2014\_Joostenberg\_Conv+Kehinde2014\_Joostenberg\_Org+Kehinde2014\_Joostenberg\_Nat+Kehinde2014\_Laibach\_Conv+Kehinde2014\_Laibach\_Org+Kehinde2014\_Laibach\_Nat+Kehinde2014\_Spier\_Conv+Kehinde2014\_Spier\_Nat\tabularnewline
+Pinheiro2008\tabularnewline
+Trojelsgaard2015\_El Hierro\tabularnewline
+Trojelsgaard2015\_La Gomera\tabularnewline
+Trojelsgaard2015\_Gran Canaria\tabularnewline
+Trojelsgaard2015\_Fuerteventura\tabularnewline
+Trojelsgaard2015\_Tenerife Teno Bajo+Trojelsgaard2015\_Tenerife
+Fasnia\tabularnewline
+Trojelsgaard2015\_Western Sahara\tabularnewline
+Vanbergen2013\_balfarm+Vanbergen2013\_bridgend+Vanbergen2013\_dalhaikie+Vanbergen2013\_netherton+Vanbergen2013\_backhill+Vanbergen2013\_corntulloch+Vanbergen2013\_allancreich\tabularnewline
+Zackenberg\tabularnewline
+Yoshihara2008\tabularnewline
+Watts2016\_Chicon+Watts2016\_Mantanay+Watts2016\_Choquebamba+Watts2016\_Huaran+Watts2016\_Piscacucho+Watts2016\_Poques+Watts2016\_Pumamarca+Watts2016\_Tiaparo+Watts2016\_Yanacocha\tabularnewline
+Kato1993\tabularnewline
+KatoMiura1996\tabularnewline
+Kakutani1990\tabularnewline
+Inoue1990\tabularnewline
+Fragoso\_RA1+Fragoso\_RD2\tabularnewline
+Fragoso\_RA2+Fragoso\_RA3+Fragoso\_RD1+Fragoso\_RD3\tabularnewline
+PopicThesis\tabularnewline
+Pfeiffer\_CNE+Pfeiffer\_CNM+Pfeiffer\_CNT+Pfeiffer\_CPB+Pfeiffer\_CPM+Pfeiffer\_CPR+Pfeiffer\_CPS+Pfeiffer\_M2+Pfeiffer\_RP1+Pfeiffer\_RP2+Pfeiffer\_LM+Pfeiffer\_LO+Pfeiffer\_BD+Pfeiffer\_BH+Pfeiffer\_BS\tabularnewline
+Carstensen\_Gigante+Carstensen\_Paulino+Carstensen\_Tinkerbell+Carstensen\_Midway+Carstensen\_Cedro+Carstensen\_Elefante+Carstensen\_Soizig\tabularnewline
+Pornon2017\tabularnewline
+Orford\_B1+Orford\_B2+Orford\_B3+Orford\_B4+Orford\_B5+Orford\_B10\tabularnewline
+Orford\_B6+Orford\_B7+Orford\_B8+Orford\_B9\tabularnewline
+Blumel2016\tabularnewline
+Welti\_ID+Welti\_K1B+Welti\_K4A+Welti\_4B+Welti\_20B+Welti\_20C+Welti\_N1A+Welti\_N1B+Welti\_N4A+Welti\_N4B+Welti\_N20A+Welti\_N20B\tabularnewline
+Kantsa2018\tabularnewline
+Souza\_cerrado\tabularnewline
+Souza\_chaco\tabularnewline
+Souza\_pantanal\tabularnewline
+Souza\_vereda\tabularnewline
+Grass2013\_1+Grass2013\_2+Grass2013\_3+Grass2013\_4+Grass2013\_5+Grass2013\_6+Grass2013\_7+Grass2013\_8+Grass2013\_9+Grass2013\_10+Grass2013\_11+Grass2013\_12+Grass2013\_13+Grass2013\_14+Grass2013\_15+Grass2013\_16+Grass2013\_17\tabularnewline
+Robinson2018\tabularnewline
+Bennett2018\tabularnewline
+Adedoja2018b\_baseZone+Adedoja2018b\_MidZone+Adedoja2018b\_HighZone+Adedoja2018b\_PeakZone\tabularnewline
+Adedoja2019\tabularnewline
+CordenizPicanco2018\_NatFor\tabularnewline
+CordenizPicanco2018\_NatVeg\tabularnewline
+CordenizPicanco2018\_ExoFor\tabularnewline
+CordenizPicanco2018\_SemiPast\tabularnewline
+CordenizPicanco2018\_IntPast\tabularnewline
+Benadi2018\tabularnewline
+Hackett2019\_NZ\_salt\_marsh+Hackett2019\_NZ\_sand\_dune+Hackett2019\_NZ\_scrub\_coprosma\tabularnewline
+Hackett2019\_UK\_sand\_dune+Hackett2019\_UK\_grassland+Hackett2019\_UK\_heathland+Hackett2019\_UK\_woodland+Hackett2019\_UK\_salt\_marsh+Hackett2019\_UK\_scrub\tabularnewline
+Oleques2019\tabularnewline
+Biella2019\tabularnewline
+Jolls2019\tabularnewline
+Nel2017\tabularnewline
+Villalobos2019\tabularnewline
+LaraRomero2019\_blanca+LaraRomero2019\_rajada+LaraRomero2019\_refugio+LaraRomero2019\_torre\tabularnewline
+Traveset2013\_Fernandina\tabularnewline
+Traveset2013\_Pinta\tabularnewline
+Traveset2013\_Santiago\tabularnewline
+Traveset2013\_SantaCruz\tabularnewline
+Traveset2013\_SanCristobal\tabularnewline
+Ferrero2013\tabularnewline
+Simanonok2014\tabularnewline
+Son2019\_a1+Son2019\_a2+Son2019\_a3+Son2019\_a4+Son2019\_a5+Son2019\_a6+Son2019\_a7+Son2019\_a8+Son2019\_F1+Son2019\_F2+Son2019\_F3+Son2019\_F4+Son2019\_F5+Son2019\_F6+Son2019\_F7+Son2019\_F8\tabularnewline
+Neli2014\tabularnewline
+Sritongchuay2019\_near+Sritongchuay2019\_far\tabularnewline
+Baldock2019\_Bristol\tabularnewline
+Baldock2019\_Edinburgh\tabularnewline
+Baldock2019\_Leeds\tabularnewline
+Baldock2019\_Reading\tabularnewline
+\bottomrule
+\end{longtable}
 
 Et voici donc les valeurs numériques pour les \(\alpha\) (paramètres de
 connectivité).
@@ -989,11 +599,9 @@ Pour la collection 1 :
 \subsubsection{Répartition dans les clusters selon la
 taxonomie}\label{ruxe9partition-dans-les-clusters-selon-la-taxonomie-2}}
 
-\includegraphics{presentation_dore_files/figure-latex/rho_plot_taxonomy_pollinators-1.pdf}
-\includegraphics{presentation_dore_files/figure-latex/rho_plot_taxonomy_pollinators-2.pdf}
+\includegraphics{figure/rho_plot_taxonomy_pollinators-1.png}\includegraphics{figure/rho_plot_taxonomy_pollinators-2.png}
 
-\includegraphics{presentation_dore_files/figure-latex/rho_plot_taxonomy_plants-1.pdf}
-\includegraphics{presentation_dore_files/figure-latex/rho_plot_taxonomy_plants-2.pdf}
+\includegraphics{figure/rho_plot_taxonomy_plants-1.png}\includegraphics{figure/rho_plot_taxonomy_plants-2.png}
 
 \hypertarget{clustering-avec-le-moduxe8le-pirho}{%
 \subsection{Clustering avec le modèle
@@ -1006,457 +614,365 @@ Pour la collection 1
 
 \begin{figure}
 \centering
-\includegraphics{presentation_dore_files/figure-latex/pirho_meso_plot-1.pdf}
+\includegraphics{figure/pirho_meso_plot-1.png}
 \caption{Collection 1 - pirho}
 \end{figure}
 
-\begin{tabular}{l}
-\hline
-Networks\\
-\hline
-arroyo1982\_1+arroyo1982\_2+arroyo3\\
-\hline
-dupont2003\\
-\hline
-petanidou1991\\
-\hline
-Aizen2008\_Challhuaco\_U+Aizen2008\_Challhuaco\_D\\
-\hline
-Aizen2008\_Llao-llao\_U+Aizen2008\_Llao-llao\_D\\
-\hline
-Jedrzejewska2013\_Ochata+Jedrzejewska2013\_Kabaty\\
-\hline
-Pinheiro2008\\
-\hline
-Souza\_pantanal\\
-\hline
-Robinson2018\\
-\hline
-Jolls2019\\
-\hline
-Traveset2013\_Fernandina\\
-\hline
-Baldock2019\_Leeds\\
-\hline
-Baldock2019\_Reading\\
-\hline
-\end{tabular}
+\begin{longtable}[]{@{}l@{}}
+\toprule
+Networks\tabularnewline
+\midrule
+\endhead
+arroyo1982\_1+arroyo1982\_2+arroyo3\tabularnewline
+dupont2003\tabularnewline
+petanidou1991\tabularnewline
+Aizen2008\_Challhuaco\_U+Aizen2008\_Challhuaco\_D\tabularnewline
+Aizen2008\_Llao-llao\_U+Aizen2008\_Llao-llao\_D\tabularnewline
+Jedrzejewska2013\_Ochata+Jedrzejewska2013\_Kabaty\tabularnewline
+Pinheiro2008\tabularnewline
+Souza\_pantanal\tabularnewline
+Robinson2018\tabularnewline
+Jolls2019\tabularnewline
+Traveset2013\_Fernandina\tabularnewline
+Baldock2019\_Leeds\tabularnewline
+Baldock2019\_Reading\tabularnewline
+\bottomrule
+\end{longtable}
 
 Pour la collection 2
 
 \begin{figure}
 \centering
-\includegraphics{presentation_dore_files/figure-latex/pirho_meso_plot-2.pdf}
+\includegraphics{figure/pirho_meso_plot-2.png}
 \caption{Collection 2 - pirho}
 \end{figure}
 
-\begin{tabular}{l}
-\hline
-Networks\\
-\hline
-Benadi2013\_3(1340m)\\
-\hline
-Trojelsgaard2015\_La Gomera\\
-\hline
-CordenizPicanco2018\_SemiPast\\
-\hline
-\end{tabular}
+\begin{longtable}[]{@{}l@{}}
+\toprule
+Networks\tabularnewline
+\midrule
+\endhead
+Benadi2013\_3(1340m)\tabularnewline
+Trojelsgaard2015\_La Gomera\tabularnewline
+CordenizPicanco2018\_SemiPast\tabularnewline
+\bottomrule
+\end{longtable}
 
 Pour la collection 3
 
 \begin{figure}
 \centering
-\includegraphics{presentation_dore_files/figure-latex/pirho_meso_plot-3.pdf}
+\includegraphics{figure/pirho_meso_plot-3.png}
 \caption{Collection 3 - pirho}
 \end{figure}
 
-\begin{tabular}{l}
-\hline
-Networks\\
-\hline
-Kato2000\\
-\hline
-Freitas2006\\
-\hline
-Inoue1990\\
-\hline
-Souza\_cerrado\\
-\hline
-Adedoja2019\\
-\hline
-Baldock2019\_Bristol\\
-\hline
-\end{tabular}
+\begin{longtable}[]{@{}l@{}}
+\toprule
+Networks\tabularnewline
+\midrule
+\endhead
+Kato2000\tabularnewline
+Freitas2006\tabularnewline
+Inoue1990\tabularnewline
+Souza\_cerrado\tabularnewline
+Adedoja2019\tabularnewline
+Baldock2019\_Bristol\tabularnewline
+\bottomrule
+\end{longtable}
 
 Pour la collection 4
 
 \begin{figure}
 \centering
-\includegraphics{presentation_dore_files/figure-latex/pirho_meso_plot-4.pdf}
+\includegraphics{figure/pirho_meso_plot-4.png}
 \caption{Collection 4 - pirho}
 \end{figure}
 
-\begin{tabular}{l}
-\hline
-Networks\\
-\hline
-Aizen2008\_Puerto Blest\_U+Aizen2008\_Puerto Blest\_D\\
-\hline
-LemusJimenez2003\\
-\hline
-\end{tabular}
+\begin{longtable}[]{@{}l@{}}
+\toprule
+Networks\tabularnewline
+\midrule
+\endhead
+Aizen2008\_Puerto Blest\_U+Aizen2008\_Puerto Blest\_D\tabularnewline
+LemusJimenez2003\tabularnewline
+\bottomrule
+\end{longtable}
 
 Pour la collection 5
 
 \begin{figure}
 \centering
-\includegraphics{presentation_dore_files/figure-latex/pirho_meso_plot-5.pdf}
+\includegraphics{figure/pirho_meso_plot-5.png}
 \caption{Collection 5 - pirho}
 \end{figure}
 
-\begin{tabular}{l}
-\hline
-Networks\\
-\hline
-inouye1988\\
-\hline
-Junker2013\\
-\hline
-Kehinde2014\_Joostenberg\_Conv+Kehinde2014\_Joostenberg\_Org+Kehinde2014\_Joostenberg\_Nat+Kehinde2014\_Laibach\_Conv+Kehinde2014\_Laibach\_Org+Kehinde2014\_Laibach\_Nat+Kehinde2014\_Spier\_Conv+Kehinde2014\_Spier\_Nat\\
-\hline
-Watts2016\_Chicon+Watts2016\_Mantanay+Watts2016\_Choquebamba+Watts2016\_Huaran+Watts2016\_Piscacucho+Watts2016\_Poques+Watts2016\_Pumamarca+Watts2016\_Tiaparo+Watts2016\_Yanacocha\\
-\hline
-Kakutani1990\\
-\hline
-Fragoso\_RA1+Fragoso\_RD2\\
-\hline
-Souza\_chaco\\
-\hline
-Oleques2019\\
-\hline
-\end{tabular}
+\begin{longtable}[]{@{}l@{}}
+\toprule
+Networks\tabularnewline
+\midrule
+\endhead
+inouye1988\tabularnewline
+Junker2013\tabularnewline
+Kehinde2014\_Joostenberg\_Conv+Kehinde2014\_Joostenberg\_Org+Kehinde2014\_Joostenberg\_Nat+Kehinde2014\_Laibach\_Conv+Kehinde2014\_Laibach\_Org+Kehinde2014\_Laibach\_Nat+Kehinde2014\_Spier\_Conv+Kehinde2014\_Spier\_Nat\tabularnewline
+Watts2016\_Chicon+Watts2016\_Mantanay+Watts2016\_Choquebamba+Watts2016\_Huaran+Watts2016\_Piscacucho+Watts2016\_Poques+Watts2016\_Pumamarca+Watts2016\_Tiaparo+Watts2016\_Yanacocha\tabularnewline
+Kakutani1990\tabularnewline
+Fragoso\_RA1+Fragoso\_RD2\tabularnewline
+Souza\_chaco\tabularnewline
+Oleques2019\tabularnewline
+\bottomrule
+\end{longtable}
 
 Pour la collection 6
 
 \begin{figure}
 \centering
-\includegraphics{presentation_dore_files/figure-latex/pirho_meso_plot-6.pdf}
+\includegraphics{figure/pirho_meso_plot-6.png}
 \caption{Collection 6 - pirho}
 \end{figure}
 
-\begin{tabular}{l}
-\hline
-Networks\\
-\hline
-medan2002ld\\
-\hline
-small1976\\
-\hline
-smith-ramirez2005\\
-\hline
-Benadi2013\_1(950m)+Benadi2013\_2(1170m)+Benadi2013\_6(2020m)\\
-\hline
-Shay2016\\
-\hline
-Aizen2008\_Cerro Otto\_U+Aizen2008\_Cerro Otto\_D\\
-\hline
-Lundgren2005\\
-\hline
-Zackenberg\\
-\hline
-Carstensen\_Gigante+Carstensen\_Paulino+Carstensen\_Tinkerbell+Carstensen\_Midway+Carstensen\_Cedro+Carstensen\_Elefante+Carstensen\_Soizig\\
-\hline
-Welti\_ID+Welti\_K1B+Welti\_K4A+Welti\_4B+Welti\_20B+Welti\_20C+Welti\_N1A+Welti\_N1B+Welti\_N4A+Welti\_N4B+Welti\_N20A+Welti\_N20B\\
-\hline
-Bennett2018\\
-\hline
-CordenizPicanco2018\_NatFor\\
-\hline
-CordenizPicanco2018\_ExoFor\\
-\hline
-CordenizPicanco2018\_IntPast\\
-\hline
-Benadi2018\\
-\hline
-Villalobos2019\\
-\hline
-Traveset2013\_Santiago\\
-\hline
-Traveset2013\_SantaCruz\\
-\hline
-Son2019\_a1+Son2019\_a2+Son2019\_a3+Son2019\_a4+Son2019\_a5+Son2019\_a6+Son2019\_a7+Son2019\_a8+Son2019\_F1+Son2019\_F2+Son2019\_F3+Son2019\_F4+Son2019\_F5+Son2019\_F6+Son2019\_F7+Son2019\_F8\\
-\hline
-Sritongchuay2019\_near+Sritongchuay2019\_far\\
-\hline
-\end{tabular}
+\begin{longtable}[]{@{}l@{}}
+\toprule
+Networks\tabularnewline
+\midrule
+\endhead
+medan2002ld\tabularnewline
+small1976\tabularnewline
+smith-ramirez2005\tabularnewline
+Benadi2013\_1(950m)+Benadi2013\_2(1170m)+Benadi2013\_6(2020m)\tabularnewline
+Shay2016\tabularnewline
+Aizen2008\_Cerro Otto\_U+Aizen2008\_Cerro Otto\_D\tabularnewline
+Lundgren2005\tabularnewline
+Zackenberg\tabularnewline
+Carstensen\_Gigante+Carstensen\_Paulino+Carstensen\_Tinkerbell+Carstensen\_Midway+Carstensen\_Cedro+Carstensen\_Elefante+Carstensen\_Soizig\tabularnewline
+Welti\_ID+Welti\_K1B+Welti\_K4A+Welti\_4B+Welti\_20B+Welti\_20C+Welti\_N1A+Welti\_N1B+Welti\_N4A+Welti\_N4B+Welti\_N20A+Welti\_N20B\tabularnewline
+Bennett2018\tabularnewline
+CordenizPicanco2018\_NatFor\tabularnewline
+CordenizPicanco2018\_ExoFor\tabularnewline
+CordenizPicanco2018\_IntPast\tabularnewline
+Benadi2018\tabularnewline
+Villalobos2019\tabularnewline
+Traveset2013\_Santiago\tabularnewline
+Traveset2013\_SantaCruz\tabularnewline
+Son2019\_a1+Son2019\_a2+Son2019\_a3+Son2019\_a4+Son2019\_a5+Son2019\_a6+Son2019\_a7+Son2019\_a8+Son2019\_F1+Son2019\_F2+Son2019\_F3+Son2019\_F4+Son2019\_F5+Son2019\_F6+Son2019\_F7+Son2019\_F8\tabularnewline
+Sritongchuay2019\_near+Sritongchuay2019\_far\tabularnewline
+\bottomrule
+\end{longtable}
 
 Pour la collection 7
 
 \begin{figure}
 \centering
-\includegraphics{presentation_dore_files/figure-latex/pirho_meso_plot-7.pdf}
+\includegraphics{figure/pirho_meso_plot-7.png}
 \caption{Collection 7 - pirho}
 \end{figure}
 
-\begin{tabular}{l}
-\hline
-Networks\\
-\hline
-medan2002rb\\
-\hline
-olensen2002flo\\
-\hline
-vazquez2002\\
-\hline
-Trojelsgaard2015\_Gran Canaria\\
-\hline
-Trojelsgaard2015\_Western Sahara\\
-\hline
-LaraRomero2019\_blanca+LaraRomero2019\_rajada+LaraRomero2019\_refugio+LaraRomero2019\_torre\\
-\hline
-\end{tabular}
+\begin{longtable}[]{@{}l@{}}
+\toprule
+Networks\tabularnewline
+\midrule
+\endhead
+medan2002rb\tabularnewline
+olensen2002flo\tabularnewline
+vazquez2002\tabularnewline
+Trojelsgaard2015\_Gran Canaria\tabularnewline
+Trojelsgaard2015\_Western Sahara\tabularnewline
+LaraRomero2019\_blanca+LaraRomero2019\_rajada+LaraRomero2019\_refugio+LaraRomero2019\_torre\tabularnewline
+\bottomrule
+\end{longtable}
 
 Pour la collection 8
 
 \begin{figure}
 \centering
-\includegraphics{presentation_dore_files/figure-latex/pirho_meso_plot-8.pdf}
+\includegraphics{figure/pirho_meso_plot-8.png}
 \caption{Collection 8 - pirho}
 \end{figure}
 
-\begin{tabular}{l}
-\hline
-Networks\\
-\hline
-Weiner2011\\
-\hline
-Kaiser\_control+Kaiser\_restored\\
-\hline
-Gilarranz2014\_amarante+Gilarranz2014\_barrosa+Gilarranz2014\_cincocerros+Gilarranz2014\_difuntito+Gilarranz2014\_difuntos+Gilarranz2014\_elmorro+Gilarranz2014\_labrava+Gilarranz2014\_lachata+Gilarranz2014\_lapaja+Gilarranz2014\_piedraalta+Gilarranz2014\_vigilancia+Gilarranz2014\_volcan\\
-\hline
-Kaiser-Bunbury2017\_Bernica+Kaiser-Bunbury2017\_Casse-dent+Kaiser-Bunbury2017\_Copolia+Kaiser-Bunbury2017\_La-Reserve+Kaiser-Bunbury2017\_Rosebelle+Kaiser-Bunbury2017\_Salazie+Kaiser-Bunbury2017\_Tea-Plantation+Kaiser-Bunbury2017\_Trois-Freres\\
-\hline
-Fang2012\\
-\hline
-Gibson2006\_SG\\
-\hline
-Gibson2006\_TA1\\
-\hline
-Trojelsgaard2015\_Fuerteventura\\
-\hline
-Pfeiffer\_CNE+Pfeiffer\_CNM+Pfeiffer\_CNT+Pfeiffer\_CPB+Pfeiffer\_CPM+Pfeiffer\_CPR+Pfeiffer\_CPS+Pfeiffer\_M2+Pfeiffer\_RP1+Pfeiffer\_RP2+Pfeiffer\_LM+Pfeiffer\_LO+Pfeiffer\_BD+Pfeiffer\_BH+Pfeiffer\_BS\\
-\hline
-Biella2019\\
-\hline
-Nel2017\\
-\hline
-Ferrero2013\\
-\hline
-Neli2014\\
-\hline
-\end{tabular}
+\begin{longtable}[]{@{}l@{}}
+\toprule
+Networks\tabularnewline
+\midrule
+\endhead
+Weiner2011\tabularnewline
+Kaiser\_control+Kaiser\_restored\tabularnewline
+Gilarranz2014\_amarante+Gilarranz2014\_barrosa+Gilarranz2014\_cincocerros+Gilarranz2014\_difuntito+Gilarranz2014\_difuntos+Gilarranz2014\_elmorro+Gilarranz2014\_labrava+Gilarranz2014\_lachata+Gilarranz2014\_lapaja+Gilarranz2014\_piedraalta+Gilarranz2014\_vigilancia+Gilarranz2014\_volcan\tabularnewline
+Kaiser-Bunbury2017\_Bernica+Kaiser-Bunbury2017\_Casse-dent+Kaiser-Bunbury2017\_Copolia+Kaiser-Bunbury2017\_La-Reserve+Kaiser-Bunbury2017\_Rosebelle+Kaiser-Bunbury2017\_Salazie+Kaiser-Bunbury2017\_Tea-Plantation+Kaiser-Bunbury2017\_Trois-Freres\tabularnewline
+Fang2012\tabularnewline
+Gibson2006\_SG\tabularnewline
+Gibson2006\_TA1\tabularnewline
+Trojelsgaard2015\_Fuerteventura\tabularnewline
+Pfeiffer\_CNE+Pfeiffer\_CNM+Pfeiffer\_CNT+Pfeiffer\_CPB+Pfeiffer\_CPM+Pfeiffer\_CPR+Pfeiffer\_CPS+Pfeiffer\_M2+Pfeiffer\_RP1+Pfeiffer\_RP2+Pfeiffer\_LM+Pfeiffer\_LO+Pfeiffer\_BD+Pfeiffer\_BH+Pfeiffer\_BS\tabularnewline
+Biella2019\tabularnewline
+Nel2017\tabularnewline
+Ferrero2013\tabularnewline
+Neli2014\tabularnewline
+\bottomrule
+\end{longtable}
 
 Pour la collection 9
 
 \begin{figure}
 \centering
-\includegraphics{presentation_dore_files/figure-latex/pirho_meso_plot-9.pdf}
+\includegraphics{figure/pirho_meso_plot-9.png}
 \caption{Collection 9 - pirho}
 \end{figure}
 
-\begin{tabular}{l}
-\hline
-Networks\\
-\hline
-eberling1999\\
-\hline
-ramirez1992\\
-\hline
-Struck1994\\
-\hline
-Albrecht2010\_49yr+Albrecht2010\_63yr+Albrecht2010\_84yr+Albrecht2010\_109yr+Albrecht2010\_130yr\\
-\hline
-Devoto2005\_PP+Devoto2005\_AP\\
-\hline
-Devoto2005\_VT\\
-\hline
-Gibson2006\_TA2\\
-\hline
-MonteroCastano2017\_Albufera+MonteroCastano2017\_Llimpa+MonteroCastano2017\_Tirant\\
-\hline
-Yoshihara2008\\
-\hline
-PopicThesis\\
-\hline
-Orford\_B1+Orford\_B2+Orford\_B3+Orford\_B4+Orford\_B5+Orford\_B10\\
-\hline
-Souza\_vereda\\
-\hline
-Adedoja2018b\_baseZone+Adedoja2018b\_MidZone+Adedoja2018b\_HighZone+Adedoja2018b\_PeakZone\\
-\hline
-Hackett2019\_NZ\_salt\_marsh+Hackett2019\_NZ\_sand\_dune+Hackett2019\_NZ\_scrub\_coprosma\\
-\hline
-\end{tabular}
+\begin{longtable}[]{@{}l@{}}
+\toprule
+Networks\tabularnewline
+\midrule
+\endhead
+eberling1999\tabularnewline
+ramirez1992\tabularnewline
+Struck1994\tabularnewline
+Albrecht2010\_49yr+Albrecht2010\_63yr+Albrecht2010\_84yr+Albrecht2010\_109yr+Albrecht2010\_130yr\tabularnewline
+Devoto2005\_PP+Devoto2005\_AP\tabularnewline
+Devoto2005\_VT\tabularnewline
+Gibson2006\_TA2\tabularnewline
+MonteroCastano2017\_Albufera+MonteroCastano2017\_Llimpa+MonteroCastano2017\_Tirant\tabularnewline
+Yoshihara2008\tabularnewline
+PopicThesis\tabularnewline
+Orford\_B1+Orford\_B2+Orford\_B3+Orford\_B4+Orford\_B5+Orford\_B10\tabularnewline
+Souza\_vereda\tabularnewline
+Adedoja2018b\_baseZone+Adedoja2018b\_MidZone+Adedoja2018b\_HighZone+Adedoja2018b\_PeakZone\tabularnewline
+Hackett2019\_NZ\_salt\_marsh+Hackett2019\_NZ\_sand\_dune+Hackett2019\_NZ\_scrub\_coprosma\tabularnewline
+\bottomrule
+\end{longtable}
 
 Pour la collection 10
 
 \begin{figure}
 \centering
-\includegraphics{presentation_dore_files/figure-latex/pirho_meso_plot-10.pdf}
+\includegraphics{figure/pirho_meso_plot-10.png}
 \caption{Collection 10 - pirho}
 \end{figure}
 
-\begin{tabular}{l}
-\hline
-Networks\\
-\hline
-herrera1988\\
-\hline
-Burkle2013\\
-\hline
-bartomeus2008\\
-\hline
-Olito-Fox2014\\
-\hline
-Benadi2013\_4(1700m)+Benadi2013\_5(1800m)\\
-\hline
-Baldock2011\_TB+Baldock2011\_JN\\
-\hline
-Chamberlain\_HLU+Chamberlain\_HLG+Chamberlain\_OKU+Chamberlain\_OKG+Chamberlain\_WLU+Chamberlain\_WLG+Chamberlain\_SOU+Chamberlain\_SOG\\
-\hline
-Chamberlain\_Site1+Chamberlain\_Site2+Chamberlain\_Site3+Chamberlain\_Site4+Chamberlain\_Site5+Chamberlain\_Site6\\
-\hline
-Devoto2005\_LQ\\
-\hline
-Devoto2005\_LT+Devoto2005\_LH\\
-\hline
-Devoto2005\_LL+Devoto2005\_CT\\
-\hline
-Dupont2009\_IsenBjerg+Dupont2009\_Other\\
-\hline
-Gibson2006\_GA1\\
-\hline
-LaraRomero2016\_pe?alara\_EP+LaraRomero2016\_pe?alara\_PA+LaraRomero2016\_nevero\_EP+LaraRomero2016\_nevero\_PA\\
-\hline
-Marrero2013\\
-\hline
-Trojelsgaard2015\_Tenerife Teno Bajo+Trojelsgaard2015\_Tenerife Fasnia\\
-\hline
-Vanbergen2013\_balfarm+Vanbergen2013\_bridgend+Vanbergen2013\_dalhaikie+Vanbergen2013\_netherton+Vanbergen2013\_backhill+Vanbergen2013\_corntulloch+Vanbergen2013\_allancreich\\
-\hline
-Fragoso\_RA2+Fragoso\_RA3+Fragoso\_RD1+Fragoso\_RD3\\
-\hline
-Pornon2017\\
-\hline
-Orford\_B6+Orford\_B7+Orford\_B8+Orford\_B9\\
-\hline
-Blumel2016\\
-\hline
-Kantsa2018\\
-\hline
-Grass2013\_1+Grass2013\_2+Grass2013\_3+Grass2013\_4+Grass2013\_5+Grass2013\_6+Grass2013\_7+Grass2013\_8+Grass2013\_9+Grass2013\_10+Grass2013\_11+Grass2013\_12+Grass2013\_13+Grass2013\_14+Grass2013\_15+Grass2013\_16+Grass2013\_17\\
-\hline
-CordenizPicanco2018\_NatVeg\\
-\hline
-Hackett2019\_UK\_sand\_dune+Hackett2019\_UK\_grassland+Hackett2019\_UK\_heathland+Hackett2019\_UK\_woodland+Hackett2019\_UK\_salt\_marsh+Hackett2019\_UK\_scrub\\
-\hline
-Traveset2013\_Pinta\\
-\hline
-Traveset2013\_SanCristobal\\
-\hline
-Simanonok2014\\
-\hline
-Baldock2019\_Edinburgh\\
-\hline
-\end{tabular}
+\begin{longtable}[]{@{}l@{}}
+\toprule
+Networks\tabularnewline
+\midrule
+\endhead
+herrera1988\tabularnewline
+Burkle2013\tabularnewline
+bartomeus2008\tabularnewline
+Olito-Fox2014\tabularnewline
+Benadi2013\_4(1700m)+Benadi2013\_5(1800m)\tabularnewline
+Baldock2011\_TB+Baldock2011\_JN\tabularnewline
+Chamberlain\_HLU+Chamberlain\_HLG+Chamberlain\_OKU+Chamberlain\_OKG+Chamberlain\_WLU+Chamberlain\_WLG+Chamberlain\_SOU+Chamberlain\_SOG\tabularnewline
+Chamberlain\_Site1+Chamberlain\_Site2+Chamberlain\_Site3+Chamberlain\_Site4+Chamberlain\_Site5+Chamberlain\_Site6\tabularnewline
+Devoto2005\_LQ\tabularnewline
+Devoto2005\_LT+Devoto2005\_LH\tabularnewline
+Devoto2005\_LL+Devoto2005\_CT\tabularnewline
+Dupont2009\_IsenBjerg+Dupont2009\_Other\tabularnewline
+Gibson2006\_GA1\tabularnewline
+LaraRomero2016\_pe?alara\_EP+LaraRomero2016\_pe?alara\_PA+LaraRomero2016\_nevero\_EP+LaraRomero2016\_nevero\_PA\tabularnewline
+Marrero2013\tabularnewline
+Trojelsgaard2015\_Tenerife Teno Bajo+Trojelsgaard2015\_Tenerife
+Fasnia\tabularnewline
+Vanbergen2013\_balfarm+Vanbergen2013\_bridgend+Vanbergen2013\_dalhaikie+Vanbergen2013\_netherton+Vanbergen2013\_backhill+Vanbergen2013\_corntulloch+Vanbergen2013\_allancreich\tabularnewline
+Fragoso\_RA2+Fragoso\_RA3+Fragoso\_RD1+Fragoso\_RD3\tabularnewline
+Pornon2017\tabularnewline
+Orford\_B6+Orford\_B7+Orford\_B8+Orford\_B9\tabularnewline
+Blumel2016\tabularnewline
+Kantsa2018\tabularnewline
+Grass2013\_1+Grass2013\_2+Grass2013\_3+Grass2013\_4+Grass2013\_5+Grass2013\_6+Grass2013\_7+Grass2013\_8+Grass2013\_9+Grass2013\_10+Grass2013\_11+Grass2013\_12+Grass2013\_13+Grass2013\_14+Grass2013\_15+Grass2013\_16+Grass2013\_17\tabularnewline
+CordenizPicanco2018\_NatVeg\tabularnewline
+Hackett2019\_UK\_sand\_dune+Hackett2019\_UK\_grassland+Hackett2019\_UK\_heathland+Hackett2019\_UK\_woodland+Hackett2019\_UK\_salt\_marsh+Hackett2019\_UK\_scrub\tabularnewline
+Traveset2013\_Pinta\tabularnewline
+Traveset2013\_SanCristobal\tabularnewline
+Simanonok2014\tabularnewline
+Baldock2019\_Edinburgh\tabularnewline
+\bottomrule
+\end{longtable}
 
 Pour la collection 11
 
 \begin{figure}
 \centering
-\includegraphics{presentation_dore_files/figure-latex/pirho_meso_plot-11.pdf}
+\includegraphics{figure/pirho_meso_plot-11.png}
 \caption{Collection 11 - pirho}
 \end{figure}
 
-\begin{tabular}{l}
-\hline
-Networks\\
-\hline
-kato1990\\
-\hline
-ramirez1989\\
-\hline
-Kato1993\\
-\hline
-\end{tabular}
+\begin{longtable}[]{@{}l@{}}
+\toprule
+Networks\tabularnewline
+\midrule
+\endhead
+kato1990\tabularnewline
+ramirez1989\tabularnewline
+Kato1993\tabularnewline
+\bottomrule
+\end{longtable}
 
 Pour la collection 12
 
 \begin{figure}
 \centering
-\includegraphics{presentation_dore_files/figure-latex/pirho_meso_plot-12.pdf}
+\includegraphics{figure/pirho_meso_plot-12.png}
 \caption{Collection 12 - pirho}
 \end{figure}
 
-\begin{tabular}{l}
-\hline
-Networks\\
-\hline
-Chamberlain\_cr1+Chamberlain\_cr2+Chamberlain\_fs1+Chamberlain\_fs2+Chamberlain\_go1+Chamberlain\_go2+Chamberlain\_mm1+Chamberlain\_mm2+Chamberlain\_mz1+Chamberlain\_mz2+Chamberlain\_sm1+Chamberlain\_sm2\\
-\hline
-Dattilo2016\\
-\hline
-KatoMiura1996\\
-\hline
-\end{tabular}
+\begin{longtable}[]{@{}l@{}}
+\toprule
+Networks\tabularnewline
+\midrule
+\endhead
+Chamberlain\_cr1+Chamberlain\_cr2+Chamberlain\_fs1+Chamberlain\_fs2+Chamberlain\_go1+Chamberlain\_go2+Chamberlain\_mm1+Chamberlain\_mm2+Chamberlain\_mz1+Chamberlain\_mz2+Chamberlain\_sm1+Chamberlain\_sm2\tabularnewline
+Dattilo2016\tabularnewline
+KatoMiura1996\tabularnewline
+\bottomrule
+\end{longtable}
 
 Pour la collection 13
 
 \begin{figure}
 \centering
-\includegraphics{presentation_dore_files/figure-latex/pirho_meso_plot-13.pdf}
+\includegraphics{figure/pirho_meso_plot-13.png}
 \caption{Collection 13 - pirho}
 \end{figure}
 
-\begin{tabular}{l}
-\hline
-Networks\\
-\hline
-olensen2002aig\\
-\hline
-\end{tabular}
+\begin{longtable}[]{@{}l@{}}
+\toprule
+Networks\tabularnewline
+\midrule
+\endhead
+olensen2002aig\tabularnewline
+\bottomrule
+\end{longtable}
 
 Pour la collection 14
 
 \begin{figure}
 \centering
-\includegraphics{presentation_dore_files/figure-latex/pirho_meso_plot-14.pdf}
+\includegraphics{figure/pirho_meso_plot-14.png}
 \caption{Collection 14 - pirho}
 \end{figure}
 
-\begin{tabular}{l}
-\hline
-Networks\\
-\hline
-Trojelsgaard2015\_El Hierro\\
-\hline
-\end{tabular}
+\begin{longtable}[]{@{}l@{}}
+\toprule
+Networks\tabularnewline
+\midrule
+\endhead
+Trojelsgaard2015\_El Hierro\tabularnewline
+\bottomrule
+\end{longtable}
 
 Pour la collection 15
 
 \begin{figure}
 \centering
-\includegraphics{presentation_dore_files/figure-latex/pirho_meso_plot-15.pdf}
+\includegraphics{figure/pirho_meso_plot-15.png}
 \caption{Collection 15 - pirho}
 \end{figure}
 
-\begin{tabular}{l}
-\hline
-Networks\\
-\hline
-Gibson2006\_GA2\\
-\hline
-\end{tabular}
+\begin{longtable}[]{@{}l@{}}
+\toprule
+Networks\tabularnewline
+\midrule
+\endhead
+Gibson2006\_GA2\tabularnewline
+\bottomrule
+\end{longtable}
 
 Et voici donc les valeurs numériques pour les \(\alpha\) (paramètres de
 connectivité).
@@ -1494,10 +1010,6 @@ Pour la collection 15 :
 \subsubsection{Répartition dans les clusters selon la
 taxonomie}\label{ruxe9partition-dans-les-clusters-selon-la-taxonomie-3}}
 
-\includegraphics{presentation_dore_files/figure-latex/pirho_plot_taxonomy_pollinators-1.pdf}
-\includegraphics{presentation_dore_files/figure-latex/pirho_plot_taxonomy_pollinators-2.pdf}
+\includegraphics{figure/pirho_plot_taxonomy_pollinators-1.png}\includegraphics{figure/pirho_plot_taxonomy_pollinators-2.png}
 
-\includegraphics{presentation_dore_files/figure-latex/pirho_plot_taxonomy_plants-1.pdf}
-\includegraphics{presentation_dore_files/figure-latex/pirho_plot_taxonomy_plants-2.pdf}
-
-\end{document}
+\includegraphics{figure/pirho_plot_taxonomy_plants-1.png}\includegraphics{figure/pirho_plot_taxonomy_plants-2.png}

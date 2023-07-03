@@ -1,6 +1,6 @@
 require("ggplot2")
 filenames <- list.files(
-    path = "./simulation/data/",
+    path = "./Rcodes/simulation/data/",
     pattern = "inference_testing_2023-05*",
     full.names = TRUE
 )

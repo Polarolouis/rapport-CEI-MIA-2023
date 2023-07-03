@@ -1,7 +1,7 @@
 require("bettermc")
 require("gtools")
 require("tictoc")
-devtools::load_all("R/")
+require("colSBM")
 
 # Network param
 nr <- 120
@@ -16,13 +16,13 @@ base_pi1 <- c(0.2, 0.4, 0.4, 0)
 rho1 <- rep(0.25, 4)
 
 pi2 <- rep(0.25, 4)
-base_rho2 <- c(0, 1/3, 1/3, 1/3)
+base_rho2 <- c(0, 1 / 3, 1 / 3, 1 / 3)
 
 pi1 <- matrix(unlist(combinat::permn(base_pi1)), byrow = TRUE, ncol = 4)
-pi1 <- pi1[!duplicated(pi1), ][1:4, ]
+pi1 <- pi1[!duplicated(pi1), ]
 
 rho2 <- matrix(unlist(combinat::permn(base_rho2)), byrow = TRUE, ncol = 4)
-rho2 <- rho2[!duplicated(rho2),]
+rho2 <- rho2[!duplicated(rho2), ]
 
 repetition <- seq.int(3)
 
@@ -30,8 +30,10 @@ conditions <- tidyr::crossing(epsilon_alpha, pi1, rho2, repetition)
 
 # Filter conditions to prevent the same blocks from being empty
 conditions <- conditions[
-    !apply(conditions$pi1[, 1:4] == 0 & conditions$rho2[, 1:4] == 0, 
-    1, any),
+    !apply(
+        conditions$pi1[, 1:4] == 0 & conditions$rho2[, 1:4] == 0,
+        1, any
+    ),
 ]
 
 # To speed up computations and debug adding an argument based selection
@@ -58,18 +60,20 @@ if (arg[2] > nrow(conditions) | arg[2] < 1) {
 
 choosed_conditions <- seq.int(from = arg[1], to = arg[2])
 
-conditions <- conditions[choosed_conditions,]
+conditions <- conditions[choosed_conditions, ]
 tic()
 results <- bettermc::mclapply(seq_len(nrow(conditions)), function(s) {
-    ea <- conditions[s,]$epsilon_alpha
+    ea <- conditions[s, ]$epsilon_alpha
     current_pi1 <- conditions[s, ]$pi1
-    current_rho2 <- conditions[s,]$rho2
-    
-    current_alpha <- base_alpha + matrix(c(
-                            3 * ea, 2 * ea, ea, -ea,
-                            2 * ea, 2 * ea, - ea, ea,
-                            ea, - ea, ea, 2 * ea,
-                            - ea, ea, 2 * ea, 0),
+    current_rho2 <- conditions[s, ]$rho2
+
+    current_alpha <- base_alpha + matrix(
+        c(
+            3 * ea, 2 * ea, ea, -ea,
+            2 * ea, 2 * ea, -ea, ea,
+            ea, -ea, ea, 2 * ea,
+            -ea, ea, 2 * ea, 0
+        ),
         byrow = TRUE, nrow = 4, ncol = 4
     )
 
@@ -78,25 +82,25 @@ results <- bettermc::mclapply(seq_len(nrow(conditions)), function(s) {
     Cpi2 <- matrix(c(rho1, current_rho2), byrow = TRUE, nrow = M) > 0
 
     netlist_generated <- list(
-        generate_bipartite_network(
+        generate_bipartite_collection(
             nr, nc, conditions[s, ]$pi1, rho1,
-            current_alpha
-        ),
-        generate_bipartite_network(
+            current_alpha, M = 1, return_memberships = TRUE
+        )[[1]],
+        generate_bipartite_collection(
             nr, nc, pi2, conditions[s, ]$rho2,
-            current_alpha
-        )
+            current_alpha, M = 1, return_memberships = TRUE
+        )[[1]]
     )
     netlist <- lapply(seq_along(netlist_generated), function(m) {
         return(netlist_generated[[m]]$incidence_matrix)
     })
 
     row_clusterings <- lapply(seq_along(netlist_generated), function(m) {
-        return(netlist_generated[[m]]$row_clustering)
+        return(netlist_generated[[m]]$row_blockmemberships)
     })
 
     col_clusterings <- lapply(seq_along(netlist_generated), function(m) {
-        return(netlist_generated[[m]]$col_clustering)
+        return(netlist_generated[[m]]$col_blockmemberships)
     })
 
     full_row_clustering <- as.vector(sapply(
@@ -112,7 +116,7 @@ results <- bettermc::mclapply(seq_len(nrow(conditions)), function(s) {
     fitted_bisbmpop_iid <- estimate_colBiSBM(
         netlist = netlist,
         colsbm_model = "iid",
-	nb_run = 1,
+        nb_run = 1,
         silent_parallelization = TRUE,
         global_opts = list(
             verbosity = 0,
@@ -124,7 +128,7 @@ results <- bettermc::mclapply(seq_len(nrow(conditions)), function(s) {
     fitted_bisbmpop_pi <- estimate_colBiSBM(
         netlist = netlist,
         colsbm_model = "pi",
-	nb_run = 1,
+        nb_run = 1,
         silent_parallelization = TRUE,
         global_opts = list(
             verbosity = 0,
@@ -136,7 +140,7 @@ results <- bettermc::mclapply(seq_len(nrow(conditions)), function(s) {
     fitted_bisbmpop_rho <- estimate_colBiSBM(
         netlist = netlist,
         colsbm_model = "rho",
-	nb_run = 1,
+        nb_run = 1,
         silent_parallelization = TRUE,
         global_opts = list(
             verbosity = 0,
@@ -148,7 +152,7 @@ results <- bettermc::mclapply(seq_len(nrow(conditions)), function(s) {
     fitted_bisbmpop_pirho <- estimate_colBiSBM(
         netlist = netlist,
         colsbm_model = "pirho",
-	nb_run = 1,
+        nb_run = 1,
         silent_parallelization = TRUE,
         global_opts = list(
             verbosity = 0,

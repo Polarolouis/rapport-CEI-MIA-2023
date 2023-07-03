@@ -1,5 +1,4 @@
 \documentclass[12pt,a4paper]{report}
-
 %====En-tête====
 % Ajout des packages
 \usepackage[english]{babel} % pour dire que le texte est en francais
@@ -18,11 +17,18 @@
 \usepackage{tikz} % For graph plots
 \usepackage{caption} % Figures
 \usepackage{subcaption} % And Subfigures
+\usepackage{longtable}
+\usepackage{rotating} % For allowing to rotate figures
+\usepackage{svg} % To allow svg inclusions
 
 %% Bibliography
 \usepackage[style=apa,citestyle=authoryear-comp]{biblatex}
 \addbibresource{references.bib}
 
+%% For good md to tex conversion
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\usepackage{booktabs}
 
 %% Tikz Related
 \usetikzlibrary{calc,shapes,backgrounds,arrows,automata,shadows,positioning}
@@ -62,14 +68,26 @@
 % titre et auteur
 \title{Rapport de stage dans l'UMR MIA Paris-Saclay}
 \author{Louis Lacoste}
-
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
 \maketitle
 \tableofcontents
 
-\chapter{Présentation de l'UMR}
+\section{Remerciements}
 
-\chapter{Context}
+Je tiens à remercier en premier lieu Pierre Barbillon pour son encadrement
+remarquable, sa disponibilité, ses conseils avisés et sa gentillesse.
+Saint-Clair Chabert-Liddell pour son accompagnement, ses remarques,
+ses explications et le temps qu'il m'a consacré. Merci à Sophie Donnet, pour les
+cours et les idées qu'elle m'a donné
+
+% TODO Compléter les remerciements
+
+\chapter{L'UMR MIA Paris-Saclay}
+
+\include{presentation_UMR}
+
+\chapter{Context of the study}
 
 \section{Usage and importance of bipartite graphs}
 \label{sec:usage-and-importance-of-bipartite-graphs}
@@ -253,6 +271,7 @@ This model supposes that:
 \end{figure}
 
 Parameters
+% TODO fix parameters according to presentation
 \begin{itemize}
     \item $Q_1 = \{{\color{blueind}\bullet},{\color{cyanind}\bullet},{\color{electricblue}\bullet}\}$ blocks in rows
     \item $Q_2 = \{{\color{burntorange}\bullet},{\color{goldenyellow}\bullet},{\color{yellow}\bullet}\}$ blocks in columns
@@ -433,7 +452,7 @@ the column dimension.
 For a given number of blocks $Q_1$, $Q_2$ and matrix $S^2$ ($S^1$ being in this case the matrix full of ones), the number of
 parameters is:
 \begin{equation*}
-    \text{NP}(\pi\text{-}colBiSBM) = (Q_1 - 1) + \sum_{m=1}^{M}\Bigg( \sum_{r=1}^{Q_2} S^2_{mr} - 1 \Bigg) + \sum_{\substack{q=1,\dots,Q_1 \\ r=1,\dots,Q_2}} \mathbb{1}_{{(S^{1\prime}S^2)}_{qr}>0}
+    \text{NP}(\rho\text{-}colBiSBM) = (Q_1 - 1) + \sum_{m=1}^{M}\Bigg( \sum_{r=1}^{Q_2} S^2_{mr} - 1 \Bigg) + \sum_{\substack{q=1,\dots,Q_1 \\ r=1,\dots,Q_2}} \mathbb{1}_{{(S^{1\prime}S^2)}_{qr}>0}
 \end{equation*}
 
 $\pi\rho$-colBiSBM model still assumes that the networks share a common connectivity
@@ -451,7 +470,7 @@ $\rho^m_r \in \left[ 0,1 \right], \sum_{r=1}^{Q_2} \rho^m_r = 1 $.
 For a given number of blocks $Q_1$, $Q_2$ and matrices $S^1$, $S^2$, the number of
 parameters is:
 \begin{equation*}
-    \text{NP}(\pi\text{-}colBiSBM) = \sum_{m=1}^{M}\Bigg( \sum_{q=1}^{Q_1} S^1_{mq} - 1 \Bigg) + \sum_{m=1}^{M}\Bigg( \sum_{r=1}^{Q_2} S^2_{mr} - 1 \Bigg) + \sum_{\substack{q=1,\dots,Q_1 \\ r=1,\dots,Q_2}} \mathbb{1}_{{(S^{1\prime}S^2)}_{qr}>0}
+    \text{NP}(\pi\rho\text{-}colBiSBM) = \sum_{m=1}^{M}\Bigg( \sum_{q=1}^{Q_1} S^1_{mq} - 1 \Bigg) + \sum_{m=1}^{M}\Bigg( \sum_{r=1}^{Q_2} S^2_{mr} - 1 \Bigg) + \sum_{\substack{q=1,\dots,Q_1 \\ r=1,\dots,Q_2}} \mathbb{1}_{{(S^{1\prime}S^2)}_{qr}>0}
 \end{equation*}
 
 
@@ -463,34 +482,67 @@ we use a variatonal version of the Expectation Maximization (VEM) algorithm.
 
 We maximize a variational lower bound of the log-likelihood of the observed data
 by approximating $p(\bm{Z,W}|\bm{X};\bm{\theta})$ with a distribution on $\bm{Z}$
-and $\bm{W}$ named $\mathcal{R}$ issued from a family of factorizable distribution
-\parencite{daudinMixtureModelRandom2008}:
+and $\bm{W}$ named $\mathcal{R}$ defined as
+$\mathcal{R} = \otimes_{m=1}^M \mathcal{R}_m$.\
 
-\[
-    \mathcal{J}(\mathcal{R};\bm{\theta}) \coloneqq \mathbb{E}_{\mathcal{R}}[\ell(\bm{X},\bm{Z},\bm{W};\bm{\theta})] + \mathcal{H}(\bm{Z,W}) \leq \ell(\bm{X};\bm{\theta})
-\]
-$\mathcal{H}$ is the entropy of the distribution. $\bm{Z}$ and $\bm{W}$ are
+The lower bound is defined as:
+\begin{equation*}
+    \mathcal{J}(\mathcal{R};\bm{\theta}) \coloneqq \sum_{m=1}^{M} \bigg( \mathbb{E}_{\mathcal{R}_m}[\ell(X^m,Z^m,W^m;\bm{\theta})] + \mathcal{H}(\mathcal{R}_m) \bigg)  \leq \ell(\bm{X};\bm{\theta})
+\end{equation*}
+
+$\bm{Z}$ and $\bm{W}$ are
 redefined using the \emph{one-hot encoded} conversion (i.e., $Z_i^m = q
-\rightarrow Z_{iq}^m = 1$ and $W_j^m = r \rightarrow W_{jr}^m = 1$)
-We define $\tau_{iq}^{1,m} = \mathbb{P}_{\mathcal{R}}(Z_{iq}^m = 1|X_{ij}^m)$
-and $\tau_{jr}^{2,m} = \mathbb{P}_{\mathcal{R}}(W_{jr}^m = 1|X_{ij}^m)$ and the
-variational approximation is
-$\mathbb{P}_{\mathcal{R}} (Z_{iq}^m = 1, W_{jr}^m = 1|X_{ij}^m) =
-\mathbb{P}_{\mathcal{R}}(Z_{iq}^m = 1|X_{ij}^m) {\color{red}\times} \mathbb{P}_{\mathcal{R}}(W_{jr}^m = 1|X_{ij}^m) = \tau_{iq}^{1,m} {\color{red}\times} \tau_{jr}^{2,m}$.
+\rightarrow Z_{iq}^m = 1$ and $W_j^m = r \rightarrow W_{jr}^m = 1$).\\ % W_{jr\prime}^m pour r != r égal 0
+
+When $\mathcal{R}_m$ is issued from the set of the factorizable distributions,
+we denote
+$\tau_{iq}^{1,m} = \mathbb{P}_{\mathcal{R}_m}(Z_{iq}^m = 1|X_{ij}^m)$
+and $\tau_{jr}^{2,m} = \mathbb{P}_{\mathcal{R}_m}(W_{jr}^m = 1|X_{ij}^m)$, thus
+we have:
+$\mathbb{P}_{\mathcal{R}_m} (Z_{iq}^m = 1, W_{jr}^m = 1|X_{ij}^m) =
+\mathbb{P}_{\mathcal{R}_m}(Z_{iq}^m = 1|X_{ij}^m) {\color{red}\times} \mathbb{P}_{\mathcal{R}_m}(W_{jr}^m = 1|X_{ij}^m) = \tau_{iq}^{1,m} {\color{red}\times} \tau_{jr}^{2,m}$.
+
+
+The formula for the entropy per network is thus:
+\begin{equation*}
+    \mathcal{H}(\mathcal{R}_m) = - \sum_{i=1}^{n_1} \tau^{1,m}_{i,q} \log \tau^{1,m}_{i,q} - \sum_{j=1}^{n_2} \tau^{2,m}_{j,r} \log \tau^{2,m}_{j,r}
+\end{equation*}
+
+And the expectation of the completed log-likelihood under the $\mathcal{R}_m$ variational distribution for network $m$ is:
+\begin{align*}
+    \mathbb{E}_{\mathcal{R}_m}[\ell(X^m,Z^m,W^m;\bm{\theta})] = \sum_{i = 1}^{n_1^m}\sum_{j=1}^{n_2^m}\sum_{q \in \mathcal{Q}_{1,m}} \sum_{r \in \mathcal{Q}_{2,m}} \tau^{1,m}_{i,q} \tau^{2,m}_{j,r} \log f(X^{m}_{ij}; \alpha_{qr}) \\
+        + \sum_{i=1}^{n_1^m} \sum_{q \in \mathcal{Q}_{1,m}} \tau^{1,m}_{i,q} \log \pi_{\color{black}q}^{\color{gray}m} + \sum_{j=1}^{n_2^m} \sum_{r \in \mathcal{Q}_{2,m}} \tau^{2,m}_{j,r} \log \rho_{\color{black}r}^{\color{gray}m}
+\end{align*}
+
+And thus the lower bound becomes:
+
+\begin{align*}
+    \mathcal{J}(\bm{\tau};\bm{\theta}) \coloneqq \sum_{m=1}^{M} \bigg(\sum_{i = 1}^{n_1^m}\sum_{j=1}^{n_2^m}\sum_{q \in \mathcal{Q}_{1,m}} \sum_{r \in \mathcal{Q}_{2,m}} \tau^{1,m}_{i,q} \tau^{2,m}_{j,r} \log f(X^{m}_{ij}; \alpha_{qr}) \\
+        + \sum_{i=1}^{n_1^m} \sum_{q \in \mathcal{Q}_{1,m}} \tau^{1,m}_{i,q} \log \pi_{\color{black}q}^{\color{gray}m} + \sum_{j=1}^{n_2^m} \sum_{r \in \mathcal{Q}_{2,m}} \tau^{2,m}_{j,r} \log \rho_{\color{black}r}^{\color{gray}m} \\
+        - \sum_{i=1}^{n_1} \tau^{1,m}_{i,q} \log \tau^{1,m}_{i,q} - \sum_{j=1}^{n_2} \tau^{2,m}_{j,r} \log \tau^{2,m}_{j,r} \bigg) \color{black}
+\end{align*}
+
+where we identify the variational distribution $\mathcal{R}$ with its parameter
+$\bm{\tau}$. \\
+
+% \begin{equation*}
+%     \mathcal{J}(\mathcal{R};\bm{\theta}) \coloneqq \mathbb{E}_{\mathcal{R}}[\ell(\bm{X},\bm{Z},\bm{W};\bm{\theta})] + \mathcal{H}(\bm{Z,W}) \leq \ell(\bm{X};\bm{\theta})
+% \end{equation*}
+
 
 % TODO Develop the formula
 
 The VEM algorithm alternates between two steps, the variational E step and the M step.
-The E steps consists in optimizing $\mathcal{J}(\mathcal{R};\bm{\theta})$ for a
-current value of $\bm{\theta}$ with respect to $\mathcal{R}$. And the M step
-consists of maximizing $\mathcal{J}(\mathcal{R};\bm{\theta})$ with respect to
-$\bm{\theta}$ and for a given variational distribution $\mathcal{R}$.
+The E steps consists in optimizing $\mathcal{J}(\bm{\tau};\bm{\theta})$ for a
+current value of $\bm{\theta}$ with respect to $\bm{\tau}$. And the M step
+consists of maximizing $\mathcal{J}(\bm{\tau};\bm{\theta})$ with respect to
+$\bm{\theta}$ and for a given variational distribution $\bm{\tau}$.
 
 \subsection{Variational E step}
 \label{ssec:variational-e-step}
 
-At this step we maximize with respect to $\bm{\tau}$:
-$$\widehat{\bm{\tau}}^{(t+1)} = \arg \max_{\bm{\tau}} \mathcal{J}(\mathcal{\bm{\tau}},\bm{\widehat{\theta}}^{(t)})$$
+At this step we maximize with respect to the variational distribution $\bm{\tau}$:
+$$\widehat{\bm{\tau}}^{(t+1)} = \arg \max_{\bm{\tau}} \mathcal{J}(\mathcal{\bm{\tau}},\bm{\widehat{\theta}}^{(t)}).$$
 
 And we obtain the following formulae for the $\bm{\tau^m}$:
 
@@ -498,10 +550,11 @@ And we obtain the following formulae for the $\bm{\tau^m}$:
     \widehat{\tau}_{iq}^{1,m} \propto \widehat{\pi}_{q}^{m(t)} \prod_{j=1}^{n_2^m}\prod_{r\in\mathcal{Q}_2^m} f(X_{ij}^m;\widehat{\alpha}_{qr}^{(t)})^{\widehat{\tau}_{jr}^{2,m(t+1)}}  & \forall i = 1, \dots , n_1^m, q \in \mathcal{Q}_1^m \\
     \widehat{\tau}_{jr}^{2,m} \propto \widehat{\rho}_{r}^{m(t)} \prod_{i=1}^{n_1^m}\prod_{q\in\mathcal{Q}_1^m} f(X_{ij}^m;\widehat{\alpha}_{qr}^{(t)})^{\widehat{\tau}_{iq}^{1,m(t+1)}} & \forall j = 1, \dots , n_2^m, r \in \mathcal{Q}_2^m
 \end{align*}
+which are used to update iteratively the values by a fixed point algorithm with
+only one step.
 
-
-From the above formulae we obtain for the Bernoulli distribution:
 % TODO move to technical.tex
+% From the above formulae we obtain for the Bernoulli distribution:
 % \begin{itemize}
 %     \item[-] \textit{iid} :
 %         \[ \bm{\tau}^{m,1} = ~^{t}\pi + \exp((\text{Mask}^{m} \odot A^{m})
@@ -589,7 +642,7 @@ We obtain the following expression
 \]
 with pen the penalties.\\
 Using the formula $\mathbb{E}_{\widehat{\mathcal{R}}} [\ell(\bm{X,Z,W;\theta})] \approx \ell (\bm{X;\theta}) - \mathcal{H(\widehat{R})}$,
-it becomes evident, as highlighted in the existing literature, that the
+it becomes clearer, as highlighted in the existing literature, that the
 Integrated Classified Likelihood (ICL) gives preference to well-separated blocks
 by imposing a penalty on the entropy of node grouping. However, the objective of
 our study extends beyond grouping nodes into coherent blocks. We also aim to
@@ -994,7 +1047,7 @@ networks and then compute the dissimilarity matrix between all networks of the
 collection. We obtain the collection $\mathcal{G} = \{\mathcal{M}\}$ the trivial
 partition in a unique group.
 
-Then using the \emph{KNN} we split the collection in two sub-collections with
+Then using the \emph{Kmeans} we split the collection in two sub-collections with
 the dissimilarity matrix. The two sub-collections are fitted and we compute
 the score of this new partition $\mathcal{G}^{*} = \{G_1, G_2\}$.
 
@@ -1002,12 +1055,17 @@ If $Sc(\mathcal{G}^{*}) > Sc(\mathcal{G})$ then we repeat the same procedure on
 $G_1$ and $G_2$. Else we return $\mathcal{G}$.
 
 We illustrate our capacity to perform a partition of a collection for all
-colBiSBM models in \ref{ssec:network-clustering-of-simulated-networks}.
+colBiSBM models in \ref{sec:network-clustering-of-simulated-networks}.
 
-\section{Simulation studies}\label{sec:simulation-studies}
-\subsection{Network clustering of simulated networks}\label{ssec:network-clustering-of-simulated-networks}
+\chapter{Simulation studies}\label{chap:simulation-studies}
+\section{Network clustering of simulated networks}\label{sec:network-clustering-of-simulated-networks}
 
-\section{Application to~\cite{doreRelativeEffectsAnthropogenic2021} data}\label{sec:application-to-dorerelativeeffectsanthropogenic2021-data}
+\chapter{Applications}
+\include{Rcodes/real_data/application_dore_data}
+% \include{Rcodes/real_data/presentation_dore}
+\subsection{Completing raw data using CoOPLBM \parencite{anakokDisentanglingStructureEcological2022}}
+
+\include{Rcodes/real_data/CoOPLBM_completion_analyze}
 
 \printbibliography
 \listoffigures

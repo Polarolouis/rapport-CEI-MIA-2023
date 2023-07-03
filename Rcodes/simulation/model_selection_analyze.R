@@ -1,6 +1,6 @@
 require("ggplot2")
 filenames <- list.files(
-    path = "./simulation/data/",
+    path = "./Rcodes/simulation/data/",
     pattern = "model_selection_check_batch_15mai_3_rep_",
     full.names = TRUE
 )
