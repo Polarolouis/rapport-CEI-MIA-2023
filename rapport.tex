@@ -20,6 +20,7 @@
 \usepackage{longtable}
 \usepackage{rotating} % For allowing to rotate figures
 \usepackage{svg} % To allow svg inclusions
+\usepackage{float} % To allow Pandoc to control figure placement
 
 %% Bibliography
 \usepackage[style=apa,citestyle=authoryear-comp]{biblatex}
@@ -64,6 +65,7 @@
 
 % Nouvelles commandes
 \newcommand{\Tau}{\mathcal{T}}
+\newcommand{\eps}[1][]{\ensuremath{\epsilon_{#1}}}
 
 % titre et auteur
 \title{Rapport de stage dans l'UMR MIA Paris-Saclay}
@@ -1058,6 +1060,7 @@ We illustrate our capacity to perform a partition of a collection for all
 colBiSBM models in \ref{sec:network-clustering-of-simulated-networks}.
 
 \chapter{Simulation studies}\label{chap:simulation-studies}
+\include{Rcodes/simulation/model_selection_analyze}
 \section{Network clustering of simulated networks}\label{sec:network-clustering-of-simulated-networks}
 
 \chapter{Applications}

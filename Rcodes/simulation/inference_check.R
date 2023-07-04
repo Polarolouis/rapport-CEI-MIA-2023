@@ -125,6 +125,10 @@ results <- bettermc::mclapply(seq_len(nrow(conditions)), function(s) {
         )
     )
 
+    # Handling a problem with sep_BiSBM$M
+    fitted_bisbmpop_iid$sep_BiSBM$M <- fitted_bisbmpop_iid$M
+    sep_BiSBM <- fitted_bisbmpop_iid$sep_BiSBM
+
     fitted_bisbmpop_pi <- estimate_colBiSBM(
         netlist = netlist,
         colsbm_model = "pi",
@@ -134,7 +138,8 @@ results <- bettermc::mclapply(seq_len(nrow(conditions)), function(s) {
             verbosity = 0,
             plot_details = 0,
             nb_cores = parallel::detectCores() - 1
-        )
+        ),
+        sep_BiSBM = sep_BiSBM
     )
 
     fitted_bisbmpop_rho <- estimate_colBiSBM(
@@ -146,7 +151,8 @@ results <- bettermc::mclapply(seq_len(nrow(conditions)), function(s) {
             verbosity = 0,
             plot_details = 0,
             nb_cores = parallel::detectCores() - 1
-        )
+        ),
+        sep_BiSBM = sep_BiSBM
     )
 
     fitted_bisbmpop_pirho <- estimate_colBiSBM(
@@ -158,11 +164,12 @@ results <- bettermc::mclapply(seq_len(nrow(conditions)), function(s) {
             verbosity = 0,
             plot_details = 0,
             nb_cores = parallel::detectCores() - 1
-        )
+        ),
+        sep_BiSBM = sep_BiSBM
     )
 
     # BICLs
-    sep_BICL <- sum(fitted_bisbmpop_iid$sep_BiSBM$BICL)
+    sep_BICL <- sum(sep_BiSBM$BICL)
     iid_BICL <- fitted_bisbmpop_iid$best_fit$BICL
     pi_BICL <- fitted_bisbmpop_pi$best_fit$BICL
     rho_BICL <- fitted_bisbmpop_rho$best_fit$BICL
@@ -179,13 +186,13 @@ results <- bettermc::mclapply(seq_len(nrow(conditions)), function(s) {
         # ax row1  row2
         # ay col1  col2
         rowMeans(sapply(seq.int(model$M), function(m) {
-            c(
+            matrix(c(
                 aricode::ARI(model$Z[[m]][[1]], row_clusterings[[m]]),
                 aricode::ARI(model$Z[[m]][[2]], col_clusterings[[m]])
-            )
+            ), nrow = 2, ncol = 1)
         }))
     }
-    sep_mean_ARIs <- compute_mean_ARI(fitted_bisbmpop_iid$sep_BiSBM)
+    sep_mean_ARIs <- compute_mean_ARI(sep_BiSBM)
     iid_mean_ARIs <- compute_mean_ARI(fitted_bisbmpop_iid$best_fit)
     pi_mean_ARIs <- compute_mean_ARI(fitted_bisbmpop_pi$best_fit)
     rho_mean_ARIs <- compute_mean_ARI(fitted_bisbmpop_rho$best_fit)

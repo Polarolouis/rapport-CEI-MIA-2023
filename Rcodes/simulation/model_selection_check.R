@@ -1,7 +1,7 @@
 require("bettermc")
 require("gtools")
 require("tictoc")
-devtools::load_all("R/")
+require("colSBM")
 
 # Network param
 nr <- 90
@@ -89,14 +89,14 @@ results <- bettermc::mclapply(seq_len(nrow(conditions)), function(s) {
     current_rho2 <- current_rho2[conditions[s, ]$rho2_order]
 
     netlist_generated <- list(
-        generate_bipartite_network(
+        generate_bipartite_collection(
             nr, nc, pi1, rho1,
-            alpha
-        ),
-        generate_bipartite_network(
+            alpha, M = 1, return_memberships = TRUE
+        )[[1]],
+        generate_bipartite_collection(
             nr, nc, current_pi2, current_rho2,
-            alpha
-        )
+            alpha, M = 1, return_memberships = TRUE
+        )[[1]]
     )
 
     # Extracting the incidence matrices
@@ -116,6 +116,9 @@ results <- bettermc::mclapply(seq_len(nrow(conditions)), function(s) {
         )
     )
 
+    fitted_bisbmpop_iid$sep_BiSBM$M <- 2
+    sep_BiSBM <- fitted_bisbmpop_iid$sep_BiSBM
+
     fitted_bisbmpop_pi <- estimate_colBiSBM(
         netlist = netlist,
         colsbm_model = "pi",
@@ -125,7 +128,8 @@ results <- bettermc::mclapply(seq_len(nrow(conditions)), function(s) {
             verbosity = 0,
             plot_details = 0,
             nb_cores = parallel::detectCores() - 1
-        )
+        ),
+        sep_BiSBM = sep_BiSBM
     )
 
     fitted_bisbmpop_rho <- estimate_colBiSBM(
@@ -137,7 +141,8 @@ results <- bettermc::mclapply(seq_len(nrow(conditions)), function(s) {
             verbosity = 0,
             plot_details = 0,
             nb_cores = parallel::detectCores() - 1
-        )
+        ),
+        sep_BiSBM = sep_BiSBM
     )
 
     fitted_bisbmpop_pirho <- estimate_colBiSBM(
@@ -149,7 +154,8 @@ results <- bettermc::mclapply(seq_len(nrow(conditions)), function(s) {
             verbosity = 0,
             plot_details = 0,
             nb_cores = parallel::detectCores() - 1
-        )
+        ), 
+        sep_BiSBM = sep_BiSBM
     )
 
     # BICLs
