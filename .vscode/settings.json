@@ -4,7 +4,7 @@
             {
                 "match": ".*\\.Rmd",
                 "isAsync": true,
-                "cmd": "Rscript Rmd2Latex-fragment.R '${file}' "
+                "cmd": "/bin/bash -c \"Rscript Rmd2Latex-fragment.R '${file}'\""
             },
             {
                 "match": ".*",

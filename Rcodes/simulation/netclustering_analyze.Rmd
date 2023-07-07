@@ -1,0 +1,19 @@
+```{r libraries, echo = FALSE, include = FALSE}
+require("ggplot2")
+require("tidyr")
+require("dplyr")
+require("patchwork")
+require("latex2exp")
+```
+
+\section{Network clustering of simulated networks}\label{sec:network-clustering-of-simulated-networks}
+
+```{r impoting-data, echo = FALSE}
+filenames <- list.files(
+    path = "./data/",
+    pattern = "simulated_collection_clustering_*",
+    full.names = TRUE
+)
+# data_list <- lapply(filenames, function(file) lapply(readRDS(file), function(model) model$list_clustering))
+data_list <- lapply(filenames, readRDS)
+```

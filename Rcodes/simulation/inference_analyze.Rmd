@@ -1,0 +1,196 @@
+```{r libraries, echo = FALSE, include = FALSE}
+require("ggplot2")
+require("tidyr")
+require("dplyr")
+require("stringr")
+require("knitr")
+require("pander")
+require("patchwork")
+require("latex2exp")
+```
+
+```{r setup, echo = FALSE}
+options(dplyr.summarise.inform = FALSE)
+knitr::opts_knit$set(kable.force.latex = TRUE)
+
+meanse <- function(x, ...) {
+    mean1 <- signif(round(mean(x, na.rm = T), 2), 5) # calculate mean and round
+    se1 <- signif(round(sd(x, na.rm = T) / sqrt(sum(!is.na(x))), 2), 2) # std error - round adding zeros
+    out <- paste(mean1, "$\\pm$", se1) # paste together mean plus/minus and standard error
+    if (str_detect(out, "NA")) {
+        out <- "NA"
+    } # if missing do not add plusminus
+    if (se1 == 0) {
+        out <- paste(mean1)
+    }
+    return(out)
+}
+```
+
+```{r import-data, echo = FALSE}
+filenames <- list.files(
+    path = "./data/",
+    pattern = "inference_testing_2023-07-*",
+    full.names = TRUE
+)
+data_list <- lapply(filenames, readRDS)
+col_id_BICLS <- c(11, 16, 23, 30, 37)
+result_data_frame <- dplyr::bind_rows(data_list)
+
+# Compute the preferred model
+result_data_frame <- cbind(result_data_frame, preferred_model = sapply(seq_len(nrow(result_data_frame)), function(n) sub("_BICL", "", names(which.max(result_data_frame[n, col_id_BICLS])))))
+
+```
+
+# Efficiency of the inference
+
+\paragraph{Simulation settings} For this simulation the data is simulated with 
+$M = 2, n_{1}^{m} = 120, n_{2}^{m} = 120, Q_1 = Q_2 = 4$, $\bm{\alpha}, \bm{\pi}$
+and $\bm{\rho}$ are set as follows:
+\begin{align*}
+    &&\bm{\alpha} = .25 + 
+                    \begin{pmatrix}
+                        3 \eps[\alpha] & 2 \eps[\alpha] & \eps[\alpha] & - \eps[\alpha]\\
+                        2 \eps[\alpha] & 2 \eps[\alpha] & - \eps[\alpha] & \eps[\alpha]\\
+                        \eps[\alpha] & - \eps[\alpha] & \eps[\alpha] & 2 \eps[\alpha]\\
+                        - \eps[\alpha] & \eps[\alpha] & 2 \eps[\alpha] & 0
+                    \end{pmatrix}, \\ \bm{\pi}^1 = \sigma_1 
+                    \begin{pmatrix}
+                        0.2 & 0.4 & 0.4 & 0
+                    \end{pmatrix},
+                    && \bm{\pi}^2 = 
+                    \begin{pmatrix}
+                        0.25 & 0.25 & 0.25 & 0.25
+                    \end{pmatrix}, \\
+                    \bm{\rho}^1 = 
+                    \begin{pmatrix}
+                        0.25 & 0.25 & 0.25 & 0.25
+                    \end{pmatrix}, &&
+                    \bm{\rho}^2 = \sigma_2
+                    \begin{pmatrix}
+                        0 & 0.33 & 0.33 & 0.33
+                    \end{pmatrix}, &&
+\end{align*}
+with $\eps[\alpha]$ taking nine equally spaced values ranging from 0 to 0.24.
+For each value of $\eps[\alpha]$, 108 datasets ($X_1, X_2$) are simulated, 
+resulting in $9 \times 108 = 972$ datasets. More precisely, for each dataset, 
+we pick uniformly at random two permutations of $\{ 1, \dots , 4 \}$ 
+($\sigma_1, \sigma_2$) with the constraint that $\sigma_1(4) \neq \sigma_2(1)$. 
+This ensures that each of the two networks have a non-empty block that is empty 
+in the other one. Then the networks are simulated with 
+$\mathcal{B}$ern-$BiSBM_{120}(4, \bm{\alpha}, \bm{\pi}^m, \bm{\rho}^m)$
+with the previous parameters. Each network has 2 blocks in common and their 
+connectivity structures encompass a mix of core-periphery, assortative 
+community and disassortative community structures, depending on which 3 of the 4
+blocks are selected for each network. $\eps[\alpha]$ represents the strength of
+these structures, the larger, the easier it is to tell apart one block from 
+another.
+
+\paragraph{Inference} We want to measure the quality of the
+inference procedure, for this we use the inference described in the section
+\ref{sec:variational-estimation-of-the-parameters}.
+
+\paragraph{Quality indicators} To assess the quality of the inference, we will
+use the following indicators:
+\begin{itemize}
+    \item First, for each dataset, we put in competition $\pi\text{-}colBiSBM$ with 
+    $sep\text{-}BiSBM$, $iid\text{-}colBiSBM$, $\rho\text{-}colBiSBM$, 
+    $\pi\rho\text{-}colBiSBM$
+    respectively. To do so, for each dataset, we compute the 
+    BIC-L of each model $\pi\text{-}colBiSBM$ is preferred to $sep\text{-}BiSBM$
+    (resp. $iid\text{-}colBiSBM$, $\rho\text{-}colBiSBM$, 
+    $\pi\rho\text{-}colBiSBM$) if 
+    its BIC-L is greater.
+    \item When considering $\pi\text{-}colBiSBM$, $\rho\text{-}colBiSBM$, 
+    $\pi\rho\text{-}colBiSBM$ we compare $\widehat{Q_1}$, $\widehat{Q_2}$ to 
+    their true values. ($Q_1 = 4$ and $Q_2 = 4$)
+    \item Finally, we assess the quality of the node grouping by computing the
+    Adjusted Rand Index \parencite[][, ARI = 0 for a random grouping, ARI = 1 for a perfect recovery]{hubertComparingPartitions1985}. For each network, for the
+    $\pi\text{-}colBiSBM$, $\rho\text{-}colBiSBM$, 
+    $\pi\rho\text{-}colBiSBM$ we compare the inferred block memberships to the
+    real ones by computing the mean of the ARI per axis over the two networks
+    \begin{equation*}
+        \overline{\text{ARI}}_d = \frac{1}{2} \text{ARI}\big( \text{ARI}(\widehat{\bm{Z}^1_d},\bm{Z}^1_d) + \text{ARI}(\widehat{\bm{Z}^2_d},\bm{Z}^2_d) \big) 
+    \end{equation*}
+    where $d$ is the dimension or axis (i.e., rows, $d=1$, or columns, $d=2$) of
+    the block memberships.
+    And we compute the ARI of the whole set of nodes to account for block
+    pairing between networks
+    \begin{equation*}
+        \text{ARI}_d = \text{ARI}\big((\widehat{\bm{Z}^1_d},\widehat{\bm{Z}^2_d}),(\bm{Z}^1_d,\bm{Z}^2_d) \big) 
+    \end{equation*}
+\end{itemize} 
+
+All these quality indicators are averaged over the 108 datasets. The results are
+provided in the tables \ref{tab:per_model_sep} to \ref{tab:per_model_pirho}. Each line corresponds to the 
+108 datasets for a given value of value of $\eps[\alpha]$. 
+
+```{r inference_table, echo = FALSE}
+averaged_data <- result_data_frame %>%
+    group_by(epsilon_alpha) %>%
+    summarise(across(-preferred_model, list("avrg" = meanse))) %>%
+    select(-c(2:10))
+averaged_data <- averaged_data %>%
+    select(which(!grepl("*_BICL_*", colnames(averaged_data)), 
+    arr.ind = TRUE))
+```
+
+```{r function_per_model, echo = FALSE}
+dataframe_per_model <- function(model) {
+    averaged_data %>%
+        select(epsilon_alpha, starts_with(paste0(model, "_")))
+}
+```
+
+```{r per_model_table, echo = FALSE, results='asis', message=FALSE, warning = FALSE}
+for (model in c("sep", "iid", "pi", "rho", "pirho")) {
+    kable_colnames <- c(
+        "$\\eps[\\alpha]$", #"BIC-L", 
+        "$\\overline{\\text{ARI}}_{1}$",
+        "$\\overline{\\text{ARI}}_{2}$", "$\\text{ARI}_{1}$", "$\\text{ARI}_{2}$"
+    )
+    model_name <- model
+    if (model != "sep") {
+        kable_colnames <- c(
+            kable_colnames, "Recovered $Q_1$",
+            "Recovered $Q_2$"
+        )
+    }
+    if (model == "pirho") {
+        model_name <- "$\\pi\\rho$"
+    } else {
+        if (model != "iid" && model != "sep") model_name <- paste0("$\\", model, "$")
+    }
+    print(kable(dataframe_per_model(model),
+        escape = FALSE,
+        booktabs = TRUE,
+        digits = 2,
+        position = "!h",
+        caption = paste0(
+            "\\label{tab:per_model_", model,
+            "}Quality metrics for ",
+            paste0(model_name, "-colBiSBM")
+        ),
+        col.names = kable_colnames
+    ))
+}
+```
+
+
+```{r proportion-preferred_model, echo = FALSE}
+proportion_preferred_table <- result_data_frame %>%
+    group_by(epsilon_alpha, preferred_model) %>%
+    summarise(n = n()) %>%
+    mutate(freq = n / sum(n)) %>%
+    ungroup() %>%
+    select(-n) %>%
+    pivot_wider(
+        names_from = preferred_model,
+        values_from = freq, values_fill = 0
+    )
+```
+
+\paragraph{Results} For the model comparison, when $\eps[\alpha]$ is small 
+($\eps[\alpha]\in[0, .04]$), the simulation model is close to the 
+Erd\H{o}s-Reńyi network and it is very hard to find any structure beyond the one
+of a single block on each dimension.

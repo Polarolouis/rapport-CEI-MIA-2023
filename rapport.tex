@@ -21,6 +21,7 @@
 \usepackage{rotating} % For allowing to rotate figures
 \usepackage{svg} % To allow svg inclusions
 \usepackage{float} % To allow Pandoc to control figure placement
+% \usepackage{booktabs} % For good tables
 
 %% Bibliography
 \usepackage[style=apa,citestyle=authoryear-comp]{biblatex}
@@ -272,23 +273,25 @@ This model supposes that:
     \label{fig:LBMvisu}
 \end{figure}
 
-Parameters
-% TODO fix parameters according to presentation
 \begin{itemize}
-    \item $Q_1 = \{{\color{blueind}\bullet},{\color{cyanind}\bullet},{\color{electricblue}\bullet}\}$ blocks in rows
-    \item $Q_2 = \{{\color{burntorange}\bullet},{\color{goldenyellow}\bullet},{\color{yellow}\bullet}\}$ blocks in columns
-    \item $\pi_{\bullet} = \mathbb{P}(i\in\bullet)$ in row and $\rho_{\bullet} = \mathbb{P}(j\in\bullet)$ in column
-    \item $\alpha_{{\color{blueind}\bullet}{\color{burntorange}\bullet}} = \mathbb{P}(i \leftrightarrow j | i \in {\color{blueind}\bullet}, j \in {\color{burntorange}\bullet})$ connectivity probability between two nodes, given their clustering
+    \item $Q_1 = |\{{\color{blueind}\bullet},{\color{cyanind}\bullet},{\color{electricblue}\bullet}\}|$ \emph{given} blocks in rows
+    \item $Q_2 = |\{{\color{burntorange}\bullet},{\color{goldenyellow}\bullet},{\color{yellow}\bullet}\}|$ \emph{given} blocks in columns
+\end{itemize}
+Parameters
+\begin{itemize}
+    \item $\pi_{\bullet} = \mathbb{P}(Z_i = \bullet)$ for rows and $\rho_{\bullet} = \mathbb{P}(W_j = \bullet)$ for columns
+    \item $\alpha_{{\color{blueind}\bullet}{\color{burntorange}\bullet}} = \mathbb{P}(X_{ij} = 1 | Z_i = {\color{blueind}\bullet}, W_j = {\color{burntorange}\bullet})$, probability of connectivity knowing node membership blocks.
 \end{itemize}
 
-On \ref{fig:LBMvisu}, $\pi$ are the probabilities for a row node to belong to
-the row block of corresponding color, $\rho$ are the probabilities for a column
-node to belong to the column block of corresponding color and $\alpha$ are the
+On \ref{fig:LBMvisu}, $\bm{\pi}$ are the probabilities for a row node to belong to
+the row block of corresponding color, $\bm{\rho}$ are the probabilities for a column
+node to belong to the column block of corresponding color and $\bm{\alpha}$ are the
 connectivity parameters between the row and column blocks.
 
 This model can be used to easily generate bipartite graphs with complex and very
 varied structures. But when trying to determine the structure of a given network
-we need to find those parameters.
+we need to find those parameters and as the row and column block memberships are
+\emph{latent} i.e.,\ they are not known and must be inferred.
 
 For this a common approach is to use a VEM algorithm
 (proposed for SBM in ~\cite{daudinMixtureModelRandom2008} and for LBM in ~\cite{govaertEMAlgorithmBlock2005})
@@ -316,7 +319,7 @@ We define a collection of bipartite networks as $\bm{X} = (X^1, \dots, X^M)$
 the collection of incidence matrix. Moreover, all the networks in the collection
 have the same type of interaction (e.g., all interactions are binary).
 
-\section{Separate BiSBM (sepBiSBM)}\label{sec:separate-bisbm-sepbisbm}
+\section{Separate BiSBM (sep-BiSBM)}\label{sec:separate-bisbm-sepbisbm}
 
 A first approach to deal with a collection of networks is to adjust separate
 BiSBM for each network of the collection.
@@ -530,9 +533,6 @@ $\bm{\tau}$. \\
 % \begin{equation*}
 %     \mathcal{J}(\mathcal{R};\bm{\theta}) \coloneqq \mathbb{E}_{\mathcal{R}}[\ell(\bm{X},\bm{Z},\bm{W};\bm{\theta})] + \mathcal{H}(\bm{Z,W}) \leq \ell(\bm{X};\bm{\theta})
 % \end{equation*}
-
-
-% TODO Develop the formula
 
 The VEM algorithm alternates between two steps, the variational E step and the M step.
 The E steps consists in optimizing $\mathcal{J}(\bm{\tau};\bm{\theta})$ for a
@@ -1060,8 +1060,9 @@ We illustrate our capacity to perform a partition of a collection for all
 colBiSBM models in \ref{sec:network-clustering-of-simulated-networks}.
 
 \chapter{Simulation studies}\label{chap:simulation-studies}
+\include{Rcodes/simulation/inference_analyze}
 \include{Rcodes/simulation/model_selection_analyze}
-\section{Network clustering of simulated networks}\label{sec:network-clustering-of-simulated-networks}
+\include{Rcodes/simulation/netclustering_analyze}
 
 \chapter{Applications}
 \include{Rcodes/real_data/application_dore_data}
