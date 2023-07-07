@@ -1,5 +1,6 @@
 ```{r libraries, echo = FALSE, include = FALSE}
 require("ggplot2")
+require("ggokabeito")
 require("tidyr")
 require("dplyr")
 require("stringr")
@@ -39,7 +40,10 @@ result_data_frame <- dplyr::bind_rows(data_list)
 
 # Compute the preferred model
 result_data_frame <- cbind(result_data_frame, preferred_model = sapply(seq_len(nrow(result_data_frame)), function(n) sub("_BICL", "", names(which.max(result_data_frame[n, col_id_BICLS])))))
-
+result_data_frame$preferred_model <- factor(result_data_frame$preferred_model, levels = c(
+    "sep", "iid", "pi",
+    "rho", "pirho"
+))
 ```
 
 # Efficiency of the inference
@@ -85,6 +89,7 @@ community and disassortative community structures, depending on which 3 of the 4
 blocks are selected for each network. $\eps[\alpha]$ represents the strength of
 these structures, the larger, the easier it is to tell apart one block from 
 another.
+The true model of all the simulation is a $\pi\rho\text{-}colBiSBM$.
 
 \paragraph{Inference} We want to measure the quality of the
 inference procedure, for this we use the inference described in the section
@@ -142,6 +147,7 @@ dataframe_per_model <- function(model) {
 }
 ```
 
+\tiny
 ```{r per_model_table, echo = FALSE, results='asis', message=FALSE, warning = FALSE}
 for (model in c("sep", "iid", "pi", "rho", "pirho")) {
     kable_colnames <- c(
@@ -159,7 +165,11 @@ for (model in c("sep", "iid", "pi", "rho", "pirho")) {
     if (model == "pirho") {
         model_name <- "$\\pi\\rho$"
     } else {
-        if (model != "iid" && model != "sep") model_name <- paste0("$\\", model, "$")
+        if (model != "iid" && model != "sep") {
+            model_name <- paste0("$\\", model, "$")
+        } else {
+            model_name <- paste0("$", model, "$")
+        }
     }
     print(kable(dataframe_per_model(model),
         escape = FALSE,
@@ -169,28 +179,84 @@ for (model in c("sep", "iid", "pi", "rho", "pirho")) {
         caption = paste0(
             "\\label{tab:per_model_", model,
             "}Quality metrics for ",
-            paste0(model_name, "-colBiSBM")
+            ifelse(model != "sep", paste0(model_name, "$\\text{-}colBiSBM$"),"$sep\\text{-}BiSBM$")
         ),
         col.names = kable_colnames
     ))
 }
 ```
-
+\normalsize
 
 ```{r proportion-preferred_model, echo = FALSE}
-proportion_preferred_table <- result_data_frame %>%
+proportion_preferred_data <- result_data_frame %>%
     group_by(epsilon_alpha, preferred_model) %>%
     summarise(n = n()) %>%
-    mutate(freq = n / sum(n)) %>%
+    mutate(prop_model = n / sum(n)) %>%
     ungroup() %>%
-    select(-n) %>%
+    select(-n)
+
+proportion_preferred_table <- proportion_preferred_data %>%
     pivot_wider(
         names_from = preferred_model,
-        values_from = freq, values_fill = 0
+        values_from = prop_model, values_fill = 0
     )
+
+kable(proportion_preferred_table,
+    escape = FALSE,
+    booktabs = TRUE,
+    digits = 2,
+    position = "!h",
+    caption = "\\label{tab:proportion-preferred-table}Proportions of models selected per \\eps[\\alpha] (data for Figure \\ref{fig:inference-proportion-preferred})",
+    col.names = c(
+        "\\eps[\\alpha]",
+        "$sep\\text{-}BiSBM$",
+        "$iid\\text{-}colBiSBM$",
+        "$\\pi\\text{-}colBiSBM$",
+        "$\\rho\\text{-}colBiSBM$",
+        "$\\pi\\rho\\text{-}colBiSBM$"
+    ),
+    align = "rccccc",
+    format = "latex"
+)
+```
+```{r proportion_preferred_figure, echo = FALSE}
+#| fig.cap="\\label{fig:inference-proportion-preferred}Plot of the proportions of different preferred models in function of \\eps[\\alpha]",
+#| fig.asp = 0.5,
+#| fig.pos = "H",
+#| fig.width = 7,
+#| fig.height = 4,
+#| dpi=300
+
+proportion_preferred_data %>% ggplot() +
+    aes(
+        x = epsilon_alpha, y = prop_model, color = preferred_model,
+        fill = preferred_model
+    ) +
+    guides(
+        fill = guide_legend(title = "Preferred Model"),
+        color = guide_legend(title = "Preferred Model")
+    ) +
+    scale_x_continuous(breaks = seq(from = 0.0, to = 0.24, by = 0.03)) +
+    scale_color_okabe_ito() +
+    scale_fill_okabe_ito() +
+    xlab(TeX("$\\epsilon_{\\alpha}$")) +
+        ylab("Model proportions") +
+        geom_col(position = "stack")
+
 ```
 
 \paragraph{Results} For the model comparison, when $\eps[\alpha]$ is small 
 ($\eps[\alpha]\in[0, .04]$), the simulation model is close to the 
 Erd\H{o}s-Reńyi network and it is very hard to find any structure beyond the one
 of a single block on each dimension.
+
+On the figure \ref{fig:inference-proportion-preferred} and table 
+\ref{tab:proportion-preferred-table} we can see that from
+$\eps[\alpha] = 0.12$ around $70\%$ of the time the $\pi\rho\text{-}colBiSBM$
+model (i.e., the correct one) is selected. 
+
+An interesting result we can read in the tables is that our models outperform
+the $sep\text{-}BiSBM$ when considering the ARI on the whole set of nodes 
+($\text{ARI}_d$). This means that our models are able to recover the block 
+pairing \emph{between the networks} in addition to recovering the blocks and
+their parameters.

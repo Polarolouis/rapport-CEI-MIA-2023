@@ -1,7 +1,9 @@
 ```{r libraries, echo = FALSE, include = FALSE}
 require("ggplot2")
+require("ggokabeito")
 require("knitr")
-# require("kableExtra")
+require("kableExtra")
+require("stringr")
 require("tidyr")
 require("dplyr")
 require("patchwork")
@@ -9,7 +11,20 @@ require("latex2exp")
 ```
 
 ```{r setup, echo = FALSE, include= FALSE}
-options(knitr.table.knitr.table.format = "latex")
+options(knitr.table.format = "latex")
+
+meanse <- function(x, ...) {
+    mean1 <- signif(round(mean(x, na.rm = T), 2), 5) # calculate mean and round
+    se1 <- signif(round(sd(x, na.rm = T) / sqrt(sum(!is.na(x))), 2), 2) # std error - round adding zeros
+    out <- paste(mean1, "$\\pm$", se1) # paste together mean plus/minus and standard error
+    if (str_detect(out, "NA")) {
+        out <- "NA"
+    } # if missing do not add plusminus
+    if (se1 == 0) {
+        out <- paste(mean1)
+    }
+    return(out)
+}
 ```
 
 
@@ -66,7 +81,7 @@ spaced in $\left[ 0, .28\right]$. We simulate 324 different collections for each
 value of $\eps[\pi]$ and $\eps[\rho]$.
 
 $\pi\rho\text{-}colBiSBM$, $\pi\text{-}colBiSBM$, $\rho\text{-}colBiSBM$,
-$iid\text{-}colBiSBM$ and $sep\text{-}colBiSBM$ are put in competition and the
+$iid\text{-}colBiSBM$ and $sep\text{-}BiSBM$ are put in competition and the
 model with the greater BIC-L is selected as the \emph{preferred model}. 
 
 ```{r compute-table, echo = FALSE, include = FALSE}
@@ -94,19 +109,32 @@ model_comparison_eps_rho <- result_data_frame %>%
 #| dpi=300
 
 plot_pi <- model_comparison_eps_pi %>% ggplot() +
-    aes(x = epsilon_pi, y = prop_model, color = preferred_model, 
-    fill = preferred_model) +
+    aes(
+        x = epsilon_pi, y = prop_model, color = preferred_model,
+        fill = preferred_model
+    ) +
+    guides(fill = guide_legend(title = "Preferred Model"),
+    color = guide_legend(title = "Preferred Model")) +
     xlab(TeX("$\\epsilon_{\\pi}$")) +
-    ylab("Model proportions")+
+    ylab("Model proportions") +
+    scale_color_okabe_ito() +
+    scale_fill_okabe_ito() +
     geom_col(position = "stack")
 plot_rho <- model_comparison_eps_rho %>% ggplot() +
-    aes(x = epsilon_rho, y = prop_model, color = preferred_model, 
-    fill = preferred_model) +
+    aes(
+        x = epsilon_rho, y = prop_model, color = preferred_model,
+        fill = preferred_model
+    ) +
+    guides(fill = guide_legend(title = "Preferred Model"),
+    color = guide_legend(title = "Preferred Model")) +
     xlab(TeX("$\\epsilon_{\\rho}$")) +
-    ylab("")+
+    ylab("") +
+    scale_color_okabe_ito() +
+    scale_fill_okabe_ito() +
     geom_col(position = "stack")
 
-ggsave("./img/plot_model_function_eps.png", plot_pi + plot_rho + plot_layout(guides = "collect"))
+ggsave("./img/plot_model_function_eps.png", plot_pi + plot_rho +
+    plot_layout(guides = "collect"))
 ```
 
 
@@ -130,7 +158,7 @@ kable(
             values_fill = 0
         ) %>% group_by(epsilon_pi) %>%
         summarise(
-            rec_Q1 = mean(rec_Q1),
+            rec_Q1 = meanse(rec_Q1),
             iid = sum(iid),
             pi = sum(pi),
             rho = sum(rho),
@@ -148,8 +176,9 @@ kable(
     booktab = TRUE,
     position = "!h",
     escape = FALSE,
-    caption = "\\label{tab:pi-model-sel}Model selection for varying $\\pi$ mixture parameters"
-) %>% kableExtra::add_header_above(c(" " = 1, "Proportions of model selection" = 4, "Blocks" = 1))
+    caption = "\\label{tab:pi-model-sel}Model selection for varying $\\pi$ mixture parameters",
+    format = "latex"
+) %>% kableExtra::add_header_above(c(" "=1,"Models"=4,"Blocks"=1))
 kable(
     (model_comparison_eps_rho %>%
         select(-one_of("n")) %>%
@@ -158,7 +187,7 @@ kable(
             values_from = prop_model,
             values_fill = 0
         )  %>% group_by(epsilon_rho) %>% 
-        summarise(rec_Q2 = mean(rec_Q2), 
+        summarise(rec_Q2 = meanse(rec_Q2), 
         iid = sum(iid), 
         pi = sum(pi), 
         rho = sum(rho), 
@@ -175,8 +204,9 @@ kable(
     booktab = TRUE,
     position = "!h",
     escape = FALSE,
-    caption = "\\label{tab:rho-model-sel}Model selection for varying $\\rho$ mixture parameters"
-) %>% kableExtra::add_header_above(c(" " = 1, "Proportions of model selection" = 4, "Blocks" = 1))
+    caption = "\\label{tab:rho-model-sel}Model selection for varying $\\rho$ mixture parameters",
+    format = "latex"
+) %>% kableExtra::add_header_above(c(" "=1,"Models"=4,"Blocks"=1))
 ```
 
 \begin{figure}[H]
