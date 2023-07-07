@@ -36,7 +36,7 @@ value of \(\eps[\pi]\) and \(\eps[\rho]\).
 
 \(\pi\rho\text{-}colBiSBM\), \(\pi\text{-}colBiSBM\),
 \(\rho\text{-}colBiSBM\), \(iid\text{-}colBiSBM\) and
-\(sep\text{-}colBiSBM\) are put in competition and the model with the
+\(sep\text{-}BiSBM\) are put in competition and the model with the
 greater BIC-L is selected as the \emph{preferred model}.
 
 When \(\eps[\pi] = 0\), \(\bm{\pi}^1 = \bm{\pi}^2\), \(\eps[\rho] = 0\)
@@ -55,20 +55,20 @@ is a \(\rho\text{-}colBiSBM\). Finally, when \(\eps[\pi] > 0\) or
 \centering
 \begin{tabular}[t]{lccccl}
 \toprule
-\multicolumn{1}{c}{ } & \multicolumn{4}{c}{Proportions of model selection} & \multicolumn{1}{c}{Blocks} \\
+\multicolumn{1}{c}{ } & \multicolumn{4}{c}{Models} & \multicolumn{1}{c}{Blocks} \\
 \cmidrule(l{3pt}r{3pt}){2-5} \cmidrule(l{3pt}r{3pt}){6-6}
 $\eps[\pi]$ & $iid\text{-}colBiSBM$     & $\pi\text{-}colBiSBM$ & $\rho\text{-}colBiSBM$ & $\pi\rho\text{-}colBiSBM$ & Recovered $Q_1$\\
 \midrule
-0.00 & 0.65 & 0.00 & 0.35 & 0.00 & 3.00\\
-0.04 & 0.66 & 0.00 & 0.34 & 0.00 & 3.00\\
-0.07 & 0.64 & 0.01 & 0.34 & 0.01 & 3.01\\
-0.11 & 0.63 & 0.03 & 0.31 & 0.03 & 3.01\\
-0.14 & 0.55 & 0.12 & 0.28 & 0.05 & 3.00\\
+0.00 & 0.65 & 0.00 & 0.35 & 0.00 & 3\\
+0.04 & 0.66 & 0.00 & 0.34 & 0.00 & 3\\
+0.07 & 0.64 & 0.01 & 0.34 & 0.01 & 3.01 $\pm$ 0.01\\
+0.11 & 0.63 & 0.03 & 0.31 & 0.03 & 3.01 $\pm$ 0.01\\
+0.14 & 0.55 & 0.12 & 0.28 & 0.05 & 3\\
 \addlinespace
 0.18 & 0.39 & 0.26 & 0.21 & 0.13 & 3.01\\
 0.21 & 0.23 & 0.42 & 0.13 & 0.23 & 3.01\\
-0.25 & 0.10 & 0.56 & 0.05 & 0.29 & 3.02\\
-0.28 & 0.01 & 0.65 & 0.01 & 0.33 & 3.01\\
+0.25 & 0.10 & 0.56 & 0.05 & 0.29 & 3.02 $\pm$ 0.01\\
+0.28 & 0.01 & 0.65 & 0.01 & 0.33 & 3.01 $\pm$ 0.01\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -79,20 +79,20 @@ $\eps[\pi]$ & $iid\text{-}colBiSBM$     & $\pi\text{-}colBiSBM$ & $\rho\text{-}c
 \centering
 \begin{tabular}[t]{lccccl}
 \toprule
-\multicolumn{1}{c}{ } & \multicolumn{4}{c}{Proportions of model selection} & \multicolumn{1}{c}{Blocks} \\
+\multicolumn{1}{c}{ } & \multicolumn{4}{c}{Models} & \multicolumn{1}{c}{Blocks} \\
 \cmidrule(l{3pt}r{3pt}){2-5} \cmidrule(l{3pt}r{3pt}){6-6}
 $\eps[\rho]$ & $iid\text{-}colBiSBM$     & $\pi\text{-}colBiSBM$ & $\rho\text{-}colBiSBM$ & $\pi\rho\text{-}colBiSBM$ & Recovered $Q_2$\\
 \midrule
-0.00 & 0.63 & 0.37 & 0.00 & 0.00 & 3.00\\
-0.04 & 0.65 & 0.34 & 0.00 & 0.01 & 3.00\\
-0.07 & 0.64 & 0.33 & 0.01 & 0.01 & 3.00\\
-0.11 & 0.64 & 0.31 & 0.03 & 0.02 & 3.00\\
-0.14 & 0.53 & 0.29 & 0.11 & 0.06 & 3.00\\
+0.00 & 0.63 & 0.37 & 0.00 & 0.00 & 3\\
+0.04 & 0.65 & 0.34 & 0.00 & 0.01 & 3\\
+0.07 & 0.64 & 0.33 & 0.01 & 0.01 & 3\\
+0.11 & 0.64 & 0.31 & 0.03 & 0.02 & 3\\
+0.14 & 0.53 & 0.29 & 0.11 & 0.06 & 3\\
 \addlinespace
 0.18 & 0.42 & 0.20 & 0.24 & 0.14 & 3.01\\
 0.21 & 0.25 & 0.12 & 0.40 & 0.22 & 3.01\\
 0.25 & 0.08 & 0.06 & 0.58 & 0.29 & 3.01\\
-0.28 & 0.01 & 0.01 & 0.65 & 0.32 & 3.00\\
+0.28 & 0.01 & 0.01 & 0.65 & 0.32 & 3\\
 \bottomrule
 \end{tabular}
 \end{table}

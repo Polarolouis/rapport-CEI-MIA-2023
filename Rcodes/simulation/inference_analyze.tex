@@ -44,7 +44,8 @@ their connectivity structures encompass a mix of core-periphery,
 assortative community and disassortative community structures, depending
 on which 3 of the 4 blocks are selected for each network.
 \(\eps[\alpha]\) represents the strength of these structures, the
-larger, the easier it is to tell apart one block from another.
+larger, the easier it is to tell apart one block from another. The true
+model of all the simulation is a \(\pi\rho\text{-}colBiSBM\).
 
 \paragraph{Inference}
 
@@ -91,9 +92,10 @@ results are provided in the tables \ref{tab:per_model_sep} to
 \ref{tab:per_model_pirho}. Each line corresponds to the 108 datasets for
 a given value of value of \(\eps[\alpha]\).
 
+\tiny
 \begin{table}[!h]
 
-\caption{\label{tab:per_model_table}\label{tab:per_model_sep}Quality metrics for sep-colBiSBM}
+\caption{\label{tab:per_model_table}\label{tab:per_model_sep}Quality metrics for $sep\text{-}BiSBM$}
 \centering
 \begin{tabular}[t]{rllll}
 \toprule
@@ -114,7 +116,7 @@ $\eps[\alpha]$ & $\overline{\text{ARI}}_{1}$ & $\overline{\text{ARI}}_{2}$ & $\t
 \end{table}
 \begin{table}[!h]
 
-\caption{\label{tab:per_model_table}\label{tab:per_model_iid}Quality metrics for iid-colBiSBM}
+\caption{\label{tab:per_model_table}\label{tab:per_model_iid}Quality metrics for $iid$$\text{-}colBiSBM$}
 \centering
 \begin{tabular}[t]{rllllll}
 \toprule
@@ -135,7 +137,7 @@ $\eps[\alpha]$ & $\overline{\text{ARI}}_{1}$ & $\overline{\text{ARI}}_{2}$ & $\t
 \end{table}
 \begin{table}[!h]
 
-\caption{\label{tab:per_model_table}\label{tab:per_model_pi}Quality metrics for $\pi$-colBiSBM}
+\caption{\label{tab:per_model_table}\label{tab:per_model_pi}Quality metrics for $\pi$$\text{-}colBiSBM$}
 \centering
 \begin{tabular}[t]{rllllll}
 \toprule
@@ -156,7 +158,7 @@ $\eps[\alpha]$ & $\overline{\text{ARI}}_{1}$ & $\overline{\text{ARI}}_{2}$ & $\t
 \end{table}
 \begin{table}[!h]
 
-\caption{\label{tab:per_model_table}\label{tab:per_model_rho}Quality metrics for $\rho$-colBiSBM}
+\caption{\label{tab:per_model_table}\label{tab:per_model_rho}Quality metrics for $\rho$$\text{-}colBiSBM$}
 \centering
 \begin{tabular}[t]{rllllll}
 \toprule
@@ -177,7 +179,7 @@ $\eps[\alpha]$ & $\overline{\text{ARI}}_{1}$ & $\overline{\text{ARI}}_{2}$ & $\t
 \end{table}
 \begin{table}[!h]
 
-\caption{\label{tab:per_model_table}\label{tab:per_model_pirho}Quality metrics for $\pi\rho$-colBiSBM}
+\caption{\label{tab:per_model_table}\label{tab:per_model_pirho}Quality metrics for $\pi\rho$$\text{-}colBiSBM$}
 \centering
 \begin{tabular}[t]{rllllll}
 \toprule
@@ -196,6 +198,36 @@ $\eps[\alpha]$ & $\overline{\text{ARI}}_{1}$ & $\overline{\text{ARI}}_{2}$ & $\t
 \bottomrule
 \end{tabular}
 \end{table}
+\normalsize
+
+\begin{table}[!h]
+
+\caption{\label{tab:proportion-preferred_model}\label{tab:proportion-preferred-table}Proportions of models selected per \eps[\alpha] (data for Figure \ref{fig:inference-proportion-preferred})}
+\centering
+\begin{tabular}[t]{rccccc}
+\toprule
+\eps[\alpha] & $sep\text{-}BiSBM$ & $iid\text{-}colBiSBM$ & $\pi\text{-}colBiSBM$ & $\rho\text{-}colBiSBM$ & $\pi\rho\text{-}colBiSBM$\\
+\midrule
+0.00 & 1.00 & 0.00 & 0.00 & 0.00 & 0.00\\
+0.03 & 0.95 & 0.04 & 0.01 & 0.00 & 0.00\\
+0.06 & 0.39 & 0.33 & 0.06 & 0.15 & 0.06\\
+0.09 & 0.07 & 0.01 & 0.12 & 0.25 & 0.55\\
+0.12 & 0.00 & 0.08 & 0.06 & 0.13 & 0.72\\
+\addlinespace
+0.15 & 0.00 & 0.12 & 0.08 & 0.08 & 0.71\\
+0.18 & 0.00 & 0.11 & 0.04 & 0.06 & 0.79\\
+0.21 & 0.00 & 0.19 & 0.04 & 0.07 & 0.69\\
+0.24 & 0.00 & 0.09 & 0.06 & 0.08 & 0.77\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}
+\centering
+\includegraphics{./img/54eb0a21b143a53b6199a869d7a228ad7d158e57.png}
+\caption{\label{fig:inference-proportion-preferred}Plot of the
+proportions of different preferred models in function of \eps[\alpha]}
+\end{figure}
 
 \paragraph{Results}
 
@@ -203,3 +235,14 @@ For the model comparison, when \(\eps[\alpha]\) is small
 (\(\eps[\alpha]\in[0, .04]\)), the simulation model is close to the
 Erd\H{o}s-Reńyi network and it is very hard to find any structure beyond
 the one of a single block on each dimension.
+
+On the figure \ref{fig:inference-proportion-preferred} and table
+\ref{tab:proportion-preferred-table} we can see that from
+\(\eps[\alpha] = 0.12\) around \(70\%\) of the time the
+\(\pi\rho\text{-}colBiSBM\) model (i.e., the correct one) is selected.
+
+An interesting result we can read in the tables is that our models
+outperform the \(sep\text{-}BiSBM\) when considering the ARI on the
+whole set of nodes (\(\text{ARI}_d\)). This means that our models are
+able to recover the block pairing \emph{between the networks} in
+addition to recovering the blocks and their parameters.
