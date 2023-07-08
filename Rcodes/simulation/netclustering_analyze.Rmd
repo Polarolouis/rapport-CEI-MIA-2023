@@ -1,5 +1,6 @@
 ```{r libraries, echo = FALSE, include = FALSE}
 require("ggplot2")
+require("ggokabeito")
 require("tidyr")
 require("dplyr")
 require("patchwork")
@@ -10,119 +11,27 @@ require("latex2exp")
 
 ```{r impoting-data, echo = FALSE}
 filenames <- list.files(
-    path = "./Rcodes/simulation/data",
-    pattern = "simulated_collection_clustering_*",
+    path = "./data",
+    pattern = "simulated_collection_data_clustering_*",
     full.names = TRUE
 )
 
-rep(gsub(".*_(iid|pi|rho|pirho)_.*", "\\1", filenames), each = 6)
-
 # data_list <- lapply(filenames, function(file) lapply(readRDS(file), function(model) model$list_clustering))
-data_list <- lapply(filenames, readRDS)
+df_netclust <- do.call("rbind", lapply(filenames, readRDS))
 
+```
 
-for (model in data_list) {
-            list_clustering <- lapply(
-                seq_along(model), function(s) model[[s]]$list_of_clusterings
-            )
-
-            list_best_partition <- lapply(
-                seq_along(list_clustering), function(s) {
-                    list(
-                        epsilon = result_clustering[[s]]$epsilon,
-                        best_partition = unlist(extract_best_bipartite_partition(list_clustering[[s]]))
-                    )
-                }
-            )
-            data.frame(
-                epsilon = sapply(
-                    list_best_partition,
-                    function(best_partition) {
-                        best_partition$epsilon
-                    }
-                ),
-                ARI = sapply(
-                    list_best_partition,
-                    function(best_partition) {
-                        aricode::ARI(rep(1:3, each = 3), unlist(
-                            lapply(
-                                seq_along(best_partition$best_partition),
-                                function(idx) {
-                                    setNames(
-                                        rep(idx, 
-                                        best_partition$best_partition[[idx]]$M), 
-                                        best_partition$best_partition[[idx]]$net_id
-                                    )
-                                }
-                            )
-                        ))
-                    }
-                )
-            )
-}
-
-lapply(
-    data_list,
-    function(model) {
-        list_clustering <- lapply(
-        seq_along(model), function(s) model[[s]]$list_of_clusterings
-        )
-
-        list_best_partition <- lapply(
-            seq_along(list_clustering), function(s) {
-                list(
-                    epsilon = result_clustering[[s]]$epsilon,
-                    best_partition = unlist(extract_best_bipartite_partition(list_clustering[[s]]))
-                )
-            }
-        )
-    data.frame(
-        epsilon = sapply(
-            list_best_partition,
-            function(best_partition) {
-                best_partition$epsilon
-            }
-        ),
-        ARI = sapply(
-            list_best_partition,
-            function(best_partition) {
-                aricode::ARI(rep(1:3, each = 3), unlist(
-                    lapply(
-                        seq_along(best_partition$best_partition),
-                        function(idx) {
-                            setNames(
-                                rep(idx, best_partition$best_partition[[idx]]$M), best_partition$best_partition[[idx]]$net_id
-                            )
-                        }
-                    )
-                ))
-            }
-        )
-    )
-
-}
-)
-    data.frame(
-        epsilon = sapply(
-            list_best_partition,
-            function(best_partition) {
-                best_partition$epsilon
-            }
-        ),
-        ARI = sapply(
-            list_best_partition,
-            function(best_partition) {
-                aricode::ARI(rep(1:3, each = 3), unlist(
-                    lapply(
-                        seq_along(best_partition$best_partition),
-                        function(idx) {
-                            setNames(
-                                rep(idx, best_partition$best_partition[[idx]]$M), best_partition$best_partition[[idx]]$net_id
-                            )
-                        }
-                    )
-                ))
-            }
-        )
-    )
+```{r netclustering-ARI-boxplot, echo = FALSE}
+#| dpi = 300,
+#| fig.asp = 0.5,
+#| fig.cap = "\\label{}ARI of the partition obtained by clustering in function of $\\eps$"
+df_netclust %>%
+    ggplot() +
+    aes(x = as.factor(epsilon), y = ARI) +
+    scale_color_okabe_ito() +
+    scale_fill_okabe_ito() +
+    xlab(TeX("$\\epsilon$")) +
+    guides(fill = guide_legend(title = "Model")) +
+    ylab("ARI of obtained netclustering") +
+    geom_boxplot(aes(fill = model))
 ```

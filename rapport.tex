@@ -32,6 +32,9 @@
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 \usepackage{booktabs}
 
+% Figure placement
+\floatplacement{figure}{H}
+
 %% Tikz Related
 \usetikzlibrary{calc,shapes,backgrounds,arrows,automata,shadows,positioning}
 \usetikzlibrary{arrows,shapes,positioning,shadows,trees,calc,backgrounds,automata,positioning}
@@ -1060,6 +1063,15 @@ We illustrate our capacity to perform a partition of a collection for all
 colBiSBM models in \ref{sec:network-clustering-of-simulated-networks}.
 
 \chapter{Simulation studies}\label{chap:simulation-studies}
+
+The below simulations are meant to test the capacities of our models.
+We assess the inference capacities of the algorithm and method, the model
+selection performances and the clustering capacities.
+
+\paragraph{Reproducibility} All the codes used to obtain data and to perform the
+analysis can be found on the report repository at
+\url{https://gitea.polarolouis.fr/polarolouis/rapport-CEI-MIA-2023}.
+
 \include{Rcodes/simulation/inference_analyze}
 \include{Rcodes/simulation/model_selection_analyze}
 \include{Rcodes/simulation/netclustering_analyze}

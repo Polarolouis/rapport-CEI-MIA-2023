@@ -1,7 +1,8 @@
 require("ggplot2")
 require("tictoc")
+require("colSBM")
 
-devtools::load_all("R/")
+set.seed(1234)
 
 # Generation of conditions
 if (!exists("model_to_test")) {
@@ -17,7 +18,7 @@ nc <- 75
 
 pi <- matrix(c(0.2, 0.3, 0.5), nrow = 1, byrow = TRUE)
 rho <- matrix(c(0.2, 0.3, 0.5), nrow = 1, byrow = TRUE)
-epsilons <- c(0.4)
+epsilons <- seq(0.1, 0.4, by = 0.1)
 
 if (!exists("arg")) {
     arg <- commandArgs(trailingOnly = TRUE)
@@ -31,7 +32,7 @@ if (identical(arg, character(0))) {
 
 conditions <- tidyr::crossing(epsilons, pi, rho, repetitions)
 
-results <- bettermc::mclapply(seq_len(nrow(conditions)), function(s) {
+results <- lapply(seq_len(nrow(conditions)), function(s) {
     eps <- conditions[s, ]$epsilons
     current_pi <- conditions[s, ]$pi
     current_rho <- conditions[s, ]$rho
@@ -70,7 +71,8 @@ results <- bettermc::mclapply(seq_len(nrow(conditions)), function(s) {
         nr, nc,
         current_pi, current_rho,
         alpha_assortative, 3,
-        model = model_to_test
+        model = model_to_test,
+        return_memberships = TRUE
     )
 
     assortative_incidence <- lapply(
@@ -98,7 +100,8 @@ results <- bettermc::mclapply(seq_len(nrow(conditions)), function(s) {
         nr, nc,
         current_pi, current_rho,
         alpha_core_periphery, 3,
-        model = model_to_test
+        model = model_to_test,
+        return_memberships = TRUE
     )
 
     core_periphery_incidence <- lapply(
@@ -126,7 +129,8 @@ results <- bettermc::mclapply(seq_len(nrow(conditions)), function(s) {
         nr, nc,
         current_pi, current_rho,
         alpha_disassortative, 3,
-        model = model_to_test
+        model = model_to_test,
+        return_memberships = TRUE
     )
 
     disassortative_incidence <- lapply(
@@ -184,31 +188,40 @@ results <- bettermc::mclapply(seq_len(nrow(conditions)), function(s) {
         colsbm_model = model_to_test,
         global_opts = list(
             nb_cores = parallel::detectCores() - 1, verbosity = 2,
-            plot_details = 0#,
-            #parallelization_vector = c(FALSE, FALSE, FALSE)
+            plot_details = 0 # ,
+            # parallelization_vector = c(FALSE, FALSE, FALSE)
         ),
         silent_parallelization = TRUE
     )
-    toc()
-    return(
-        list(
-        epsilon = eps,
-        repetitions = repetitions,
-        list_of_clusterings = list_collection,
-        real_block_memberships = list(
-            row = real_row_clustering,
-            col = real_col_clustering
+
+    best_partitions <- unlist(extract_best_bipartite_partition(list_collection))
+    clustering <- unlist(lapply(seq_along(best_partitions), function(col_idx) {
+        setNames(
+            rep(col_idx, best_partitions[[col_idx]]$M),
+            best_partitions[[col_idx]]$net_id
         )
-    ))
-},
-mc.cores = parallel::detectCores() - 1,
-mc.progress = TRUE,
-mc.retry = -1
+    }))
+    # ARI computation
+    clustering <- clustering[order(names(clustering))]
+    ari <- aricode::ARI(rep(c(1, 2, 3), each = 3), clustering)
+
+    toc()
+    cat(paste("Finished", s))
+    return(
+        data.frame(epsilon = eps, model = model_to_test, ARI = ari)
+    )
+}
+# ,
+# mc.cores = parallel::detectCores() - 1,
+# mc.progress = TRUE,
+# mc.retry = -1
 )
 
-saveRDS(results, file = paste0(
+data_frame_result <- do.call("rbind", results)
+
+saveRDS(data_frame_result, file = paste0(
     "simulation/data/",
-    "simulated_collection_clustering_",
+    "simulated_collection_data_clustering_",
     model_to_test, "_",
     format(Sys.time(), "%d-%m-%y-%X"),
     ".Rds"
