@@ -227,7 +227,7 @@ kable(proportion_preferred_table,
 #| fig.height = 4,
 #| dpi=300
 
-proportion_preferred_data %>% ggplot() +
+plot <- proportion_preferred_data %>% ggplot() +
     aes(
         x = epsilon_alpha, y = prop_model, color = preferred_model,
         fill = preferred_model
@@ -237,12 +237,12 @@ proportion_preferred_data %>% ggplot() +
         color = guide_legend(title = "Preferred Model")
     ) +
     scale_x_continuous(breaks = seq(from = 0.0, to = 0.24, by = 0.03)) +
-    scale_color_okabe_ito() +
-    scale_fill_okabe_ito() +
-    xlab(TeX("$\\epsilon_{\\alpha}$")) +
+        scale_color_okabe_ito() +
+        scale_fill_okabe_ito() +
+        xlab(TeX("$\\epsilon_{\\alpha}$")) +
         ylab("Model proportions") +
         geom_col(position = "stack")
-
+print(plot)
 ```
 
 \paragraph{Results} For the model comparison, when $\eps[\alpha]$ is small 

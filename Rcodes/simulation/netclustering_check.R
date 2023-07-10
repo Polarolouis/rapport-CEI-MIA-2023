@@ -10,7 +10,7 @@ if (!exists("model_to_test")) {
 }
 
 if (!exists("repetitions")) {
-    repetitions <- seq.int(3)
+    repetitions <- seq.int(30)
 }
 
 nr <- 75
@@ -32,7 +32,7 @@ if (identical(arg, character(0))) {
 
 conditions <- tidyr::crossing(epsilons, pi, rho, repetitions)
 
-results <- lapply(seq_len(nrow(conditions)), function(s) {
+results <- bettermc::mclapply(seq_len(nrow(conditions)), function(s) {
     eps <- conditions[s, ]$epsilons
     current_pi <- conditions[s, ]$pi
     current_rho <- conditions[s, ]$rho
@@ -195,6 +195,9 @@ results <- lapply(seq_len(nrow(conditions)), function(s) {
     )
 
     best_partitions <- unlist(extract_best_bipartite_partition(list_collection))
+    if (!is(best_partitions, "list")) {
+        best_partitions <- list(best_partitions)
+    }
     clustering <- unlist(lapply(seq_along(best_partitions), function(col_idx) {
         setNames(
             rep(col_idx, best_partitions[[col_idx]]$M),
@@ -206,15 +209,13 @@ results <- lapply(seq_len(nrow(conditions)), function(s) {
     ari <- aricode::ARI(rep(c(1, 2, 3), each = 3), clustering)
 
     toc()
-    cat(paste("Finished", s))
     return(
         data.frame(epsilon = eps, model = model_to_test, ARI = ari)
     )
-}
-# ,
-# mc.cores = parallel::detectCores() - 1,
-# mc.progress = TRUE,
-# mc.retry = -1
+},
+mc.cores = parallel::detectCores() - 1,
+mc.progress = TRUE,
+mc.retry = -1
 )
 
 data_frame_result <- do.call("rbind", results)
