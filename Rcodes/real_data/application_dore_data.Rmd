@@ -1,2 +1,0 @@
-# Application to \cite{doreRelativeEffectsAnthropogenic2021} data
-\label{sec:application-to-dorerelativeeffectsanthropogenic2021-data}

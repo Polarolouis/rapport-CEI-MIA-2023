@@ -1,0 +1,157 @@
+# Application to \cite{doreRelativeEffectsAnthropogenic2021} data
+\label{sec:application-to-dorerelativeeffectsanthropogenic2021-data}
+
+```{r, setup, include=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = FALSE, dpi = 300)
+```
+
+```{r}
+# import fix
+if (getwd() == "/home/polarolouis/Nextcloud/Documents/APT/CEI/Stage Recherche Mathématiques/Depuis PC Portable/Stage MIA 2023/rapport-MIA-2023") {
+    path_to_add <- "Rcodes/real_data/"
+} else {
+    path_to_add <- ""
+}
+```
+
+```{r require_lib, echo = FALSE, include=FALSE, warning=FALSE}
+require("tidyverse")
+require("knitr")
+require("colSBM")
+require("ggplot2")
+require("patchwork")
+source(paste0(path_to_add, "temporary_plot.R"))
+```
+
+```{r better_collection_extraction, echo = FALSE, warning=FALSE}
+extract_unlist_reorder <- function(clustering_data_path) {
+    clustering <- readRDS(clustering_data_path)
+    if (!is.list(clustering)) {
+        clustering <- list(clustering)
+    }
+    best_partition <- extract_best_bipartite_partition(clustering)
+    best_partition_unlist <- unlist(best_partition)
+    if (!is.list(best_partition_unlist)) {
+        best_partition_unlist <- list(best_partition_unlist)
+    }
+    size <- length(best_partition_unlist)
+    return(setNames(lapply(best_partition_unlist, function(collection) {
+        reorder_parameters(collection)
+    }), paste(rep("Collection", size), seq_len(size))))
+}
+```
+
+```{r load data, echo = FALSE, include = FALSE, warning=FALSE}
+# All results
+iid_unlist <- extract_unlist_reorder(paste0(path_to_add, "data/dore_collection_clustering_nb_run1_iid_123networks_24-05-23-21:40:42.Rds"))
+```
+
+Here we apply the network clustering procedure (we refer to it as *netclustering*)
+to the data from \cite{doreRelativeEffectsAnthropogenic2021}. These data are
+plant-pollinator bipartite networks from differents areas and times.
+
+In a second part we will use additional information for the networks to
+try to identify the impact and correlations with the observed structures.
+
+## Netclustering with the $iid\text{-}colBiSBM$ model
+We obtained the more interpretable results with $iid\text{-}colBiSBM$ model.
+This resulted in `r length(iid_unlist)` collections to partition the $M = 123$
+networks.
+
+```{r meso-plots, echo = FALSE, results='asis'}
+#| fig.cap=sapply(seq_along(iid_unlist), function(idx) paste0("Collection N°", idx)),
+##| fig.cap = "Structure of the collections in the partition and respective proportions of blocks",
+##| fig.subcap = sapply(seq_along(iid_unlist), function(idx) paste0("Collection N°", idx)),
+#| fig.asp = 0.5
+
+
+meso_print <- function(unlisted_partition) {
+    for (idx in seq_along(unlisted_partition)) {
+        print(plot(unlisted_partition[[idx]], type = "meso", mixture = TRUE) + ggtitle(paste("Collection ", idx)))
+        cat("\\newline")
+    }
+}
+meso_print(iid_unlist)
+
+```
+
+In all the obtained collections the structure is the classical nested structure.
+As this is a well-known structure for plant-pollinator data this tends to 
+indicate that we are not going in a wrong direction.
+
+The \nth{3} collection consists of only one network, indicating that for this
+model, the small76 network was really different of all the others. 
+One reason might be that it's the oldest network and maybe the data collection
+protocol is different.
+
+## Comparison with additional information
+
+```{r supinfo, echo = FALSE}
+supinfo <- readxl::read_xlsx(paste0(path_to_add, "data/supinfo.xlsx"), sheet = 2)
+interaction_data <- read.table(file = paste0(path_to_add, "data/interaction-data.txt"), sep = "\t", header = TRUE)
+
+seq_ids_network_aggreg <- unique(interaction_data$id_network_aggreg)
+incidence_matrices <- readRDS(file = paste0(path_to_add, "data/dore-matrices.Rds"))
+names_aggreg_networks <- names(incidence_matrices)
+vectorClusteringNet <- numeric(nrow(supinfo))
+for (k in 1:length(iid_unlist)) {
+    idclust <- match(iid_unlist[[k]]$net_id, names_aggreg_networks)
+    supinfoclust <- match(seq_ids_network_aggreg[idclust], supinfo$Idweb)
+    vectorClusteringNet[supinfoclust] <- k
+}
+```
+
+Using supplementary information we obtain the following boxplots.
+
+A
+
+```{r boxplot-function, echo = FALSE}
+supinfo_boxplot <- function(parameter, pretty_name) {
+    return(ggplot(supinfo) +
+        aes(
+            x = vectorClusteringNet, y = parameter,
+            fill = as.factor(vectorClusteringNet), group = as.factor(vectorClusteringNet)
+        ) +
+        geom_boxplot() +
+        labs(
+            x = "Collection number", y = pretty_name,
+            fill = "Collection number"
+        ))
+}
+```
+
+```{r boxplots_annual_timespan, echo = FALSE}
+#| fig.cap = "\\label{fig:boxplot-annual-time-span}Boxplot of annual time span in function of the collection number"
+ggplot(supinfo) +
+    aes(x = vectorClusteringNet, y = Annual_time_span,
+    fill = as.factor(vectorClusteringNet), group = as.factor(vectorClusteringNet)) +
+    geom_boxplot() +
+        labs(
+            x = "Collection number", y = "Annual time span",
+            fill = "Collection number"
+        )
+```
+
+The annual time span is the number of days the sampling period lasted. So we can
+thus see in figure \ref{fig:boxplot-annual-time-span} that collections 1 and 4 were
+sampled for a larger period of time than collections 2 and 5.
+This could explain observed differences in the structure detected : the 
+"checkerboard" appearance of the alpha matrices representations may represent 
+interactions that only occurs at a given period of time.
+Thus the shorter time period doesn't capture such interactions.
+
+```{r boxplot_rainfall, echo = FALSE}
+#| fig.cap = "\\label{fig:boxplot-total-rainfall}Boxplot of total rainfall in function of the collection number"
+supinfo_boxplot(supinfo$Tot_Rainfall_IPCC, "Total rainfall")
+```
+
+There seems to be the same trend for the total rainfall.
+
+```{r boxplot_sampling_effort, echo = FALSE}
+#| fig.cap = "\\label{fig:boxplot-sampling-effort}Boxplot of the sampling effort in function of the collection number"
+supinfo_boxplot(supinfo$Sampling_effort, "Sampling effort")
+```
+
+The sampling effort seems to be quite higher for collection 5 and a little
+higher for collection 2. And collection 1 and 4 have the inverse trend. The
+dichotomy between collections 1,4 and 2,5 seems to still hold.

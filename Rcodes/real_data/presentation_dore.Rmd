@@ -1,18 +1,5 @@
----
-title: "Présentation de l'application de colSBM sur Doré et al. 2020"
-output:
-    html_document:
-        toc: true
-        theme: united
-    pdf_document:
-      keep_tex: true
----
-
 ```{r, setup, include=FALSE, warning=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
-options(knitr.table.format = function() {
-  if (knitr::is_latex_output()) "latex" else "pandoc"
-})
 ```
 
 ```{r require_lib, echo = FALSE, include=FALSE, warning=FALSE}
@@ -47,13 +34,13 @@ knit_print.latex <- function(x, ...) {
 # Now, define a method as_latex for matrix
 as_latex.matrix <- function(x, ...) {
   as_latex(c(
-    "\\begin{bmatrix}",
+    "\\begin{pmatrix}",
     paste(
       t(x),
       rep(c(rep("&", nrow(x) - 1), "\\\\"), ncol(x)),
       collapse = ""
     ),
-    "\\end{bmatrix}"
+    "\\end{pmatrix}"
   ))
 }
 
@@ -82,10 +69,17 @@ extract_unlist_reorder <- function(clustering_data_path) {
 
 meso_print <- function(unlisted_partition) {
   for (idx in seq_along(unlisted_partition)) {
-    cat(paste("\n\n\n\nPour la collection", idx, "\n\n"))
+    cat(paste("\\subsubsection{Pour la collection", idx, "}"))
     print(plot(unlisted_partition[[idx]], type = "meso", mixture = TRUE))
-    cat("\n\n")
-    print(knitr::kable(unlisted_partition[[idx]]$net_id, col.names = "Networks"))
+    cat("\\newline \\tiny")
+    print(knitr::kable(unlisted_partition[[idx]]$net_id,
+      col.names = "Networks",
+      format = "latex",
+      position = "!h",
+      booktabs = TRUE
+    ))
+    cat("\\normalsize\\newline")
+    cat(knitr::knit_print(unlisted_partition[[idx]]$alpha))
   }
 }
 
@@ -251,12 +245,17 @@ pi_unlist <- extract_unlist_reorder("data/dore_collection_clustering_nb_run1_pi_
 
 pirho_unlist <- extract_unlist_reorder("data/dore_collection_clustering_nb_run1_pirho_123networks_26-05-23-19:22:55.Rds")
 ```
+# Application to \cite{doreRelativeEffectsAnthropogenic2021} data
+\label{sec:application-to-dorerelativeeffectsanthropogenic2021-data}
 
-## Clustering avec le modèle iid
-Avec le modèle *iid* nous obtenons les `r length(iid_unlist)` collections et
-les structures suivantes:
+## Clustering with model iid
+With the *iid-colBiSBM* we obtain `r length(iid_unlist)` collections with the 
+following structures:
 
-```{r iid_meso_plot, echo = FALSE, message=FALSE, results="asis", fig.cap=paste(names(iid_unlist), rep("- iid",length(iid_unlist))), warning=FALSE}
+```{r iid_meso_plot, echo = FALSE, message=FALSE, results="asis", warning=FALSE}
+#| fig.cap=paste(names(iid_unlist), rep("- iid",length(iid_unlist))),
+#| fig.asp = 0.5,
+#| dpi = 300
 meso_print(iid_unlist)
 ```
 
@@ -352,7 +351,7 @@ iid_taxonomy_long %>%
 ```
 
 
-## Clustering avec le modèle pi
+## Clustering with model pi
 Avec le modèle *pi* nous obtenons les `r length(pi_unlist)` collections et
 les structures suivantes:
 
@@ -410,7 +409,7 @@ taxonomy_plot(
 )
 ```
 
-## Clustering avec le modèle rho
+## Clustering with model rho
 Avec le modèle *rho* nous obtenons les `r length(rho_unlist)` collections et
 les structures suivantes:
 
@@ -468,7 +467,7 @@ taxonomy_plot(
 )
 ```
 
-## Clustering avec le modèle pirho
+## Clustering with model pirho
 Avec le modèle *pirho* nous obtenons les `r length(pirho_unlist)` collections et
 les structures suivantes:
 

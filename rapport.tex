@@ -15,6 +15,7 @@
 \usepackage[citecolor=blueind,urlcolor=blue,bookmarks=false,hypertexnames=true]{hyperref}  % pour les hyperliens dans le document
 \usepackage{tocbibind} % Pour avoir des index pour table des matières, biblio
 \usepackage{tikz} % For graph plots
+\usepackage[super]{nth}
 \usepackage{caption} % Figures
 \usepackage{subcaption} % And Subfigures
 \usepackage{longtable}
@@ -1077,10 +1078,8 @@ analysis can be found on the report repository at
 \include{Rcodes/simulation/netclustering_analyze}
 
 \chapter{Applications}
-\include{Rcodes/real_data/application_dore_data}
-% \include{Rcodes/real_data/presentation_dore}
+\include{Rcodes/real_data/application_dore}
 \subsection{Completing raw data using CoOPLBM \parencite{anakokDisentanglingStructureEcological2022}}
-
 \include{Rcodes/real_data/CoOPLBM_completion_analyze}
 
 \printbibliography
