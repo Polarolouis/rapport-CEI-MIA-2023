@@ -3,13 +3,25 @@ output:
   md_document:
     citation_package: biblatex
 ---
+\subsection{Completing raw data using CoOPLBM~\parencite{anakokDisentanglingStructureEcological2022}}
+```{r, setup, include=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = FALSE, dpi = 300)
+```
 
 ```{r libraries, echo = FALSE, include=FALSE}
 require("colSBM")
-require(aricode)
+require("aricode")
+require("ggplot2")
 ```
 
 ```{r useful_functions, echo = FALSE}
+
+if (getwd() == "/home/polarolouis/Nextcloud/Documents/APT/CEI/Stage Recherche Mathématiques/Depuis PC Portable/Stage MIA 2023/rapport-MIA-2023") {
+    path_to_add <- "Rcodes/real_data/"
+} else {
+    path_to_add <- ""
+}
+
 extract_unlist <- function(data) {
   readRDS(data) |>
     extract_best_bipartite_partition() |>
@@ -71,10 +83,10 @@ extract_full_reorder <- function(model_collections_list, target) {
 ```{r data_importation, echo = FALSE}
 # Uncompleted
 uncompleted_model_list <- list(
-  "iid" = extract_unlist("data/dore_uncompleted_collection_clustering_nb_run_1_iid_70_networks_08-06-23-16:31:17.Rds"),
-  "pi" = extract_unlist("data/dore_uncompleted_collection_clustering_nb_run_1_pi_70_networks_08-06-23-16:52:16.Rds"),
-  "rho" = extract_unlist("data/dore_uncompleted_collection_clustering_nb_run_1_rho_70_networks_08-06-23-16:49:58.Rds"),
-  "pirho" = extract_unlist("data/dore_uncompleted_collection_clustering_nb_run_1_pirho_70_networks_08-06-23-16:41:33.Rds")
+  "iid" = extract_unlist(paste0(path_to_add, "data/dore_uncompleted_collection_clustering_nb_run_1_iid_70_networks_08-06-23-16:31:17.Rds")),
+  "pi" = extract_unlist(paste0(path_to_add, "data/dore_uncompleted_collection_clustering_nb_run_1_pi_70_networks_08-06-23-16:52:16.Rds")),
+  "rho" = extract_unlist(paste0(path_to_add, "data/dore_uncompleted_collection_clustering_nb_run_1_rho_70_networks_08-06-23-16:49:58.Rds")),
+  "pirho" = extract_unlist(paste0(path_to_add, "data/dore_uncompleted_collection_clustering_nb_run_1_pirho_70_networks_08-06-23-16:41:33.Rds"))
 )
 
 # Below we will need to have the netid in the same order so we choose to use the
@@ -86,28 +98,28 @@ uncompleted_clusterings <- extract_full_reorder(uncompleted_model_list, netid_or
 
 # 0.2 threshold
 point_2_model_list <- list(
-  "iid" = extract_unlist("data/dore_point_2_completed_collection_clustering_nb_run_1_iid_70_networks_07-06-23-18:40:10.Rds"),
-  "pi" = extract_unlist("data/dore_point_2_completed_collection_clustering_nb_run_1_pi_70_networks_07-06-23-19:22:19.Rds"),
-  "rho" = extract_unlist("data/dore_point_2_completed_collection_clustering_nb_run_1_rho_70_networks_07-06-23-20:03:53.Rds"),
-  "pirho" = extract_unlist("data/dore_point_2_completed_collection_clustering_nb_run_1_pirho_70_networks_07-06-23-21:09:12.Rds")
+  "iid" = extract_unlist(paste0(path_to_add, "data/dore_point_2_completed_collection_clustering_nb_run_1_iid_70_networks_07-06-23-18:40:10.Rds")),
+  "pi" = extract_unlist(paste0(path_to_add, "data/dore_point_2_completed_collection_clustering_nb_run_1_pi_70_networks_07-06-23-19:22:19.Rds")),
+  "rho" = extract_unlist(paste0(path_to_add, "data/dore_point_2_completed_collection_clustering_nb_run_1_rho_70_networks_07-06-23-20:03:53.Rds")),
+  "pirho" = extract_unlist(paste0(path_to_add, "data/dore_point_2_completed_collection_clustering_nb_run_1_pirho_70_networks_07-06-23-21:09:12.Rds"))
 )
 point_2_clusterings <- extract_full_reorder(point_2_model_list, netid_order)
 
 # 0.5 threshold
 point_5_model_list <- list(
-  "iid" = extract_unlist("data/dore_point_5_completed_collection_clustering_nb_run_1_iid_70_networks_07-06-23-19:19:53.Rds"),
-  "pi" = extract_unlist("data/dore_point_5_completed_collection_clustering_nb_run_1_pi_70_networks_07-06-23-21:31:20.Rds"),
-  "rho" = extract_unlist("data/dore_point_5_completed_collection_clustering_nb_run_1_rho_70_networks_07-06-23-21:03:50.Rds"),
-  "pirho" = extract_unlist("data/dore_point_5_completed_collection_clustering_nb_run_1_pirho_70_networks_07-06-23-21:13:10.Rds")
+  "iid" = extract_unlist(paste0(path_to_add, "data/dore_point_5_completed_collection_clustering_nb_run_1_iid_70_networks_07-06-23-19:19:53.Rds")),
+  "pi" = extract_unlist(paste0(path_to_add, "data/dore_point_5_completed_collection_clustering_nb_run_1_pi_70_networks_07-06-23-21:31:20.Rds")),
+  "rho" = extract_unlist(paste0(path_to_add, "data/dore_point_5_completed_collection_clustering_nb_run_1_rho_70_networks_07-06-23-21:03:50.Rds")),
+  "pirho" = extract_unlist(paste0(path_to_add, "data/dore_point_5_completed_collection_clustering_nb_run_1_pirho_70_networks_07-06-23-21:13:10.Rds"))
 )
 point_5_clusterings <- extract_full_reorder(point_5_model_list, netid_order)
 
 # Uniform re-sampled
 random_model_list <- list(
-  "iid" = extract_unlist("data/dore_random_completed_collection_clustering_nb_run_1_iid_70_networks_07-06-23-21:44:14.Rds"),
-  "pi" = extract_unlist("data/dore_random_completed_collection_clustering_nb_run_1_pi_70_networks_07-06-23-22:52:47.Rds"),
-  "rho" = extract_unlist("data/dore_random_completed_collection_clustering_nb_run_1_rho_70_networks_08-06-23-18:16:04.Rds"),
-  "pirho" = extract_unlist("data/dore_random_completed_collection_clustering_nb_run_1_pirho_70_networks_07-06-23-23:07:08.Rds")
+  "iid" = extract_unlist(paste0(path_to_add, "data/dore_random_completed_collection_clustering_nb_run_1_iid_70_networks_07-06-23-21:44:14.Rds")),
+  "pi" = extract_unlist(paste0(path_to_add, "data/dore_random_completed_collection_clustering_nb_run_1_pi_70_networks_07-06-23-22:52:47.Rds")),
+  "rho" = extract_unlist(paste0(path_to_add, "data/dore_random_completed_collection_clustering_nb_run_1_rho_70_networks_08-06-23-18:16:04.Rds")),
+  "pirho" = extract_unlist(paste0(path_to_add, "data/dore_random_completed_collection_clustering_nb_run_1_pirho_70_networks_07-06-23-23:07:08.Rds"))
 )
 random_clusterings <- extract_full_reorder(random_model_list, netid_order)
 ```
@@ -116,8 +128,11 @@ random_clusterings <- extract_full_reorder(random_model_list, netid_order)
 
 After performing a netclustering on the raw data, we will see if the detect
 structure resulting in the clustering comes from the sampling effort. To test
-this we will use the CoOPLBM model by
-\cite{anakokDisentanglingStructureEcological2022} to complete the data.
+this we will use the CoOPLBM model by~\cite{anakokDisentanglingStructureEcological2022} to complete the data.
+
+\emph{Note:}~\cite{anakokDisentanglingStructureEcological2022} provided data
+for the networks for which the method was applicable, this explains that 
+there are fewer networks in the collections. 
 
 The CoOPLBM model assumes that the observed incidence matrix $R$ is an
 element-wise product of an $M$ matrix following an LBM and an $N$ matrix which
@@ -149,17 +164,20 @@ $$X_{ij} = \begin{cases}
 ARI_netclustering_models <- function(
     clustering_compare,
     uncompleted_clustering = uncompleted_clustering,
-    models = c("iid", "pi", "rho", "pirho")) {
-  sapply(models, function(model) {
-    ARI(
-      uncompleted_clusterings[
-        which(uncompleted_clusterings$model == model),
-      ]$collection_id,
-      clustering_compare[
-        which(clustering_compare$model == model),
-      ]$collection_id
-    )
-  })
+    models = c("iid", "pi", "rho", "pirho"),
+    models_names = c("$iid\\text{-}colSBM$", "$\\pi\\text{-}colSBM$", "$\\rho\\text{-}colSBM$", "$\\pi\\rho\\text{-}colSBM$")) {
+      out <- sapply(models, function(model) {
+        ARI(
+          uncompleted_clusterings[
+            which(uncompleted_clusterings$model == model),
+          ]$collection_id,
+          clustering_compare[
+            which(clustering_compare$model == model),
+          ]$collection_id
+        )
+      })
+  names(out) <- models_names
+  out
 }
 ```
 
@@ -168,18 +186,69 @@ Here, the completion threshold is set to $0.5$.
 First we will compute an ARI on the collection id given by the raw data and the
 completed matrix.
 
-```{r 0.5_ARI, echo = FALSE, results="asis"}
+```{r 0.5_ARI, echo = FALSE}
 knitr::kable(ARI_netclustering_models(point_5_clusterings),
-  col.names = c("ARI with uncompleted data")
+  col.names = c("ARI with uncompleted data"),
+  escape = FALSE,
+  booktabs = TRUE,
+  digits = 2,
+  position = "h!",
+  caption = "\\label{tab:ari-table-0-5-completed} Table of ARI between 0.5 completed data and uncompleted data"
 )
 ```
 
-In the above table, one can see the network clustering obtained after applying
-CoOPLBM has not much in common with the clustering of the uncompleted data.
+In the table \ref{tab:ari-table-0-5-completed}, one can see the network clustering obtained after applying
+CoOPLBM has not much in common with the clustering of the uncompleted data. Thus
+we can think that the completion changed significantly the interactions in 
+the collections.
 
 ##### Number of sub-collections and details of each sub-collection
 ```{r 0.5_partition_numbers, echo = FALSE}
 ```
+
+##### Supplementary information
+
+```{r supinfo, echo = FALSE}
+supinfo <- readxl::read_xlsx(paste0(path_to_add, "data/supinfo.xlsx"), sheet = 2)
+interaction_data <- read.table(file = paste0(path_to_add, "data/interaction-data.txt"), sep = "\t", header = TRUE)
+
+seq_ids_network_aggreg <- unique(interaction_data$id_network_aggreg)
+incidence_matrices <- readRDS(file = paste0(path_to_add, "data/dore-matrices.Rds"))
+names_aggreg_networks <- names(incidence_matrices)
+get_vector_clustering_net <- function(unlisted_model) {
+  vectorClusteringNet <- numeric(nrow(supinfo))
+  for (k in 1:length(unlisted_model)) {
+    idclust <- match(unlisted_model[[k]]$net_id, names_aggreg_networks)
+    supinfoclust <- match(seq_ids_network_aggreg[idclust], supinfo$Idweb)
+    vectorClusteringNet[supinfoclust] <- k
+  }
+  vectorClusteringNet
+  # [! vectorClusteringNet %in% 0] # Filtering the network not present in uncompleted data
+}
+```
+
+```{r boxplot-function, echo = FALSE}
+supinfo_boxplot <- function(supinfo_vector, parameter, pretty_name) {
+    return(ggplot(supinfo) +
+        aes(
+          x = factor(supinfo_vector), y = parameter,
+          fill = as.factor(supinfo_vector), group = as.factor(supinfo_vector)
+        ) +
+        geom_boxplot() +
+          theme(axis.text.x = element_text(angle = 90, vjust = 0.5)) +
+        labs(
+            x = "Collection number", y = pretty_name,
+            fill = "Collection number"
+        ))
+}
+```
+
+```{r, supinfo_point_5}
+supinfo_point_5_iid <- get_vector_clustering_net(point_5_model_list[["iid"]])
+```
+
+
+
 
 ### 0.2 completed threshold
 
@@ -187,7 +256,12 @@ The $0.2$ threshold adds a lot of interactions compared to raw matrix.
 
 ```{r 0.2_ARI, echo = FALSE, results="asis"}
 knitr::kable(ARI_netclustering_models(point_2_clusterings),
-  col.names = c("ARI with uncompleted data")
+  col.names = c("ARI with uncompleted data"),
+  escape = FALSE,
+  booktabs = TRUE,
+  digits = 2,
+  position = "h!",
+  caption = "\\label{tab:ari-table-0-2-completed} Table of ARI between 0.2 completed data and uncompleted data"
 )
 ```
 
@@ -202,6 +276,12 @@ $$\mathbb{P}(X_{i,j} = 1) = M_{i,j} $$
 
 ```{r random_ARI, echo = FALSE, results="asis"}
 knitr::kable(ARI_netclustering_models(random_clusterings),
-  col.names = c("ARI with uncompleted data")
+  col.names = c("ARI with uncompleted data"),
+  escape = FALSE,
+  booktabs = TRUE,
+  digits = 2,
+  position = "h!",
+  caption = "\\label{tab:ari-table-random-completed} Table of ARI between
+  randomly completed data and uncompleted data"
 )
 ```

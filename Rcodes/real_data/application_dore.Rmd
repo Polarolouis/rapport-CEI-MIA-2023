@@ -103,7 +103,6 @@ for (k in 1:length(iid_unlist)) {
 
 Using supplementary information we obtain the following boxplots.
 
-A
 
 ```{r boxplot-function, echo = FALSE}
 supinfo_boxplot <- function(parameter, pretty_name) {

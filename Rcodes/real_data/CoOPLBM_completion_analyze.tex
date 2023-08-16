@@ -1,11 +1,18 @@
+\subsection{Completing raw data using CoOPLBM~\parencite{anakokDisentanglingStructureEcological2022}}
+
 \hypertarget{context-of-this-analysis}{%
 \subsubsection{Context of this
 analysis}\label{context-of-this-analysis}}
 
 After performing a netclustering on the raw data, we will see if the
 detect structure resulting in the clustering comes from the sampling
-effort. To test this we will use the CoOPLBM model by
-\cite{anakokDisentanglingStructureEcological2022} to complete the data.
+effort. To test this we will use the CoOPLBM model
+by\textasciitilde{}\cite{anakokDisentanglingStructureEcological2022} to
+complete the data.
+
+\emph{Note:}\textasciitilde{}\cite{anakokDisentanglingStructureEcological2022}
+provided data for the networks for which the method was applicable, this
+explains that there are fewer networks in the collections.
 
 The CoOPLBM model assumes that the observed incidence matrix \(R\) is an
 element-wise product of an \(M\) matrix following an LBM and an \(N\)
@@ -49,42 +56,55 @@ Here, the completion threshold is set to \(0.5\).
 First we will compute an ARI on the collection id given by the raw data
 and the completed matrix.
 
-\begin{longtable}[]{@{}lr@{}}
-\toprule
-& ARI with uncompleted data\tabularnewline
-\midrule
-\endhead
-iid & 0.1142823\tabularnewline
-pi & 0.0263660\tabularnewline
-rho & 0.0933340\tabularnewline
-pirho & 0.2158747\tabularnewline
-\bottomrule
-\end{longtable}
+\begin{table}[h!]
 
-In the above table, one can see the network clustering obtained after
-applying CoOPLBM has not much in common with the clustering of the
-uncompleted data.
+\caption{\label{tab:0.5_ARI}\label{tab:ari-table-0-5-completed} Table of ARI between 0.5 completed data and uncompleted data}
+\centering
+\begin{tabular}[t]{lr}
+\toprule
+  & ARI with uncompleted data\\
+\midrule
+$iid\text{-}colSBM$ & 0.11\\
+$\pi\text{-}colSBM$ & 0.03\\
+$\rho\text{-}colSBM$ & 0.09\\
+$\pi\rho\text{-}colSBM$ & 0.22\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+In the table \ref{tab:ari-table-0-5-completed}, one can see the network
+clustering obtained after applying CoOPLBM has not much in common with
+the clustering of the uncompleted data. Thus we can think that the
+completion changed significantly the interactions in the collections.
 
 \hypertarget{number-of-sub-collections-and-details-of-each-sub-collection}{%
 \subparagraph{Number of sub-collections and details of each
 sub-collection}\label{number-of-sub-collections-and-details-of-each-sub-collection}}
+
+\hypertarget{supplementary-information}{%
+\subparagraph{Supplementary
+information}\label{supplementary-information}}
 
 \hypertarget{completed-threshold-1}{%
 \subsubsection{0.2 completed threshold}\label{completed-threshold-1}}
 
 The \(0.2\) threshold adds a lot of interactions compared to raw matrix.
 
-\begin{longtable}[]{@{}lr@{}}
+\begin{table}[h!]
+
+\caption{\label{tab:0.2_ARI}\label{tab:ari-table-0-2-completed} Table of ARI between 0.2 completed data and uncompleted data}
+\centering
+\begin{tabular}[t]{lr}
 \toprule
-& ARI with uncompleted data\tabularnewline
+  & ARI with uncompleted data\\
 \midrule
-\endhead
-iid & 0.0429465\tabularnewline
-pi & 0.0330057\tabularnewline
-rho & 0.0187305\tabularnewline
-pirho & 0.0357728\tabularnewline
+$iid\text{-}colSBM$ & 0.04\\
+$\pi\text{-}colSBM$ & 0.03\\
+$\rho\text{-}colSBM$ & 0.02\\
+$\pi\rho\text{-}colSBM$ & 0.04\\
 \bottomrule
-\end{longtable}
+\end{tabular}
+\end{table}
 
 Same as for \(0.5\), after applying CoOPLBM the obtained clustering
 doesn't match the uncompleted data.
@@ -97,14 +117,19 @@ The \(M\) matrix is used to sample a new \(X\) matrix which elements are
 the realisation of Bernoulli distributions of probability \(M_{i,j}\).
 \[\mathbb{P}(X_{i,j} = 1) = M_{i,j} \]
 
-\begin{longtable}[]{@{}lr@{}}
+\begin{table}[h!]
+
+\caption{\label{tab:random_ARI}\label{tab:ari-table-random-completed} Table of ARI between
+  randomly completed data and uncompleted data}
+\centering
+\begin{tabular}[t]{lr}
 \toprule
-& ARI with uncompleted data\tabularnewline
+  & ARI with uncompleted data\\
 \midrule
-\endhead
-iid & 0.0148172\tabularnewline
-pi & 0.0265793\tabularnewline
-rho & 0.0051536\tabularnewline
-pirho & 0.0152299\tabularnewline
+$iid\text{-}colSBM$ & 0.01\\
+$\pi\text{-}colSBM$ & 0.03\\
+$\rho\text{-}colSBM$ & 0.01\\
+$\pi\rho\text{-}colSBM$ & 0.02\\
 \bottomrule
-\end{longtable}
+\end{tabular}
+\end{table}
