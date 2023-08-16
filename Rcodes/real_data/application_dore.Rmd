@@ -154,4 +154,6 @@ supinfo_boxplot(supinfo$Sampling_effort, "Sampling effort")
 
 The sampling effort seems to be quite higher for collection 5 and a little
 higher for collection 2. And collection 1 and 4 have the inverse trend. The
-dichotomy between collections 1,4 and 2,5 seems to still hold.
+separation between collections 1,4 and 2,5 seems to still hold. And the sampling
+effort is related to the sampling time that is why it's higher for the 
+collections that were sampled for a shorter time period.
